@@ -14,21 +14,21 @@ jobs:
 
     steps:
       - name: Checkout
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Setup node
-        uses: actions/setup-node@v20.17.0
+        uses: actions/setup-node@v3
         with:
           node-version: 20.17.0
           registry-url: https://registry.npmjs.org
         env:
           envFile: .env
 
-      - name: install dependencies
+      - name: Install dependencies
         run: npm install
 
-      - name: build
+      - name: Build
         run: npm run build
 
-      - name: publish
+      - name: Publish
         run: npm publish
