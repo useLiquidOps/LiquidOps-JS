@@ -1,12 +1,61 @@
 {
   "name": "liquidops",
-  "version": "0.1.0",
-  "module": "index.ts",
-  "type": "module",
-  "devDependencies": {
-    "@types/bun": "latest"
+  "version": "1.1.0",
+  "author": "Lorimer Jenkins (lorimer@liquidops.io), Marton Lederer (marton@liquidops.io)",
+  "license": "MIT",
+  "description": "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
+  "homepage": "https://liquidops.io",
+  "bugs": {
+    "url": "https://github.com/Othent/KMS-JS-new/issues"
   },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "Arweave",
+    "LiquidOps",
+    "Community Labs",
+    "AO",
+    "Defi",
+    "AR",
+    "Lending",
+    "Borrowing"
+  ],
+  "scripts": {
+    "build": "bun run prettier && tsup src/index.ts --format cjs,esm --dts",
+    "dev": "bun run build && bun link",
+    "test": "bun test",
+    "prettier": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/useLiquidOps/package.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist/",
+    "src/",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "tsup": "^8.0.1",
+    "@types/bun": "^1.0.2",
+    "@types/node": "^20.2.5",
+    "prettier": "^3.0.3",
+    "ts-jest": "^29.1.1",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.4"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
   }
 }

@@ -1,2 +1,3 @@
-# package
-LiquidOps client package
+# LiquidOps Typescript Package
+
+LiquidOps interactions package
