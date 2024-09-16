@@ -1,6 +1,6 @@
 {
   "name": "liquidops",
-  "version": "1.1.0",
+  "version": "0.1.0",
   "author": "Lorimer Jenkins (lorimer@liquidops.io), Marton Lederer (marton@liquidops.io)",
   "license": "MIT",
   "description": "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
@@ -22,10 +22,11 @@
     "Borrowing"
   ],
   "scripts": {
+    "dev": "bun run build && bun run link",
     "build": "bun run prettier && tsup src/index.ts --format cjs,esm --dts",
-    "dev": "bun run build && bun link",
     "test": "bun test",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "link": "bun link"
   },
   "repository": {
     "type": "git",

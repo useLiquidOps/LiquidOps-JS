@@ -1,4 +1,4 @@
 // functions
-export * from "./lib/lend";
+export * from "./lib/lend/lend";
 // types
-export * from "./types/lend";
+export * from "./types/lend/lend";
