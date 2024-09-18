@@ -1,0 +1,164 @@
+diff --git a/node_modules/@permaweb/aoconnect/dist/index.js b/node_modules/@permaweb/aoconnect/dist/index.js
+index d1e4eb7..53e7f46 100644
+--- a/node_modules/@permaweb/aoconnect/dist/index.js
++++ b/node_modules/@permaweb/aoconnect/dist/index.js
+@@ -190,35 +190,6 @@ function deployUnmonitorWith({ fetch: fetch2, MU_URL: MU_URL2, logger: _logger }
+     ).map((res) => ({ res, messageId: signedDataItem.id }))
+   ).toPromise();
+ }
+-function deployAssignWith({ fetch: fetch2, MU_URL: MU_URL2, logger: _logger }) {
+-  const logger = _logger.child("deployAssign");
+-  return (args) => {
+-    return of(args).chain(fromPromise(
+-      async ({ process: process2, message: message2, baseLayer, exclude }) => fetch2(
+-        `${MU_URL2}?process-id=${process2}&assign=${message2}${baseLayer ? "&base-layer" : ""}${exclude ? "&exclude=" + exclude.join(",") : ""}`,
+-        {
+-          method: "POST",
+-          headers: {
+-            "Content-Type": "application/octet-stream",
+-            Accept: "application/json"
+-          }
+-        }
+-      )
+-    )).bichain(
+-      (err) => Rejected(new Error(`Error while communicating with MU: ${JSON.stringify(err)}`)),
+-      fromPromise(
+-        async (res) => {
+-          if (res.ok)
+-            return res.json();
+-          throw new Error(`${res.status}: ${await res.text()}`);
+-        }
+-      )
+-    ).bimap(
+-      logger.tap("Error encountered when writing assignment via MU"),
+-      logger.tap("Successfully wrote assignment via MU")
+-    ).map((res) => ({ res, assignmentId: res.id })).toPromise();
+-  };
+-}
+ 
+ // src/client/ao-cu.js
+ function dryrunFetchWith({ fetch: fetch2, CU_URL: CU_URL2, logger }) {
+@@ -547,7 +518,7 @@ var queryResultsSchema = z3.function().args(z3.object({
+   from: z3.string().optional(),
+   to: z3.string().optional(),
+   sort: z3.enum(["ASC", "DESC"]).default("ASC"),
+-  limit: z3.number().optional()
++  limit: z3.string().optional()
+ })).returns(z3.promise(z3.object({
+   edges: z3.array(z3.object({
+     cursor: z3.string(),
+@@ -579,16 +550,6 @@ var deployProcessSchema = z3.function().args(z3.object({
+     processId: z3.string()
+   }).passthrough()
+ ));
+-var deployAssignSchema = z3.function().args(z3.object({
+-  process: z3.string(),
+-  message: z3.string(),
+-  baseLayer: z3.boolean().optional(),
+-  exclude: z3.array(z3.string()).optional()
+-})).returns(z3.promise(
+-  z3.object({
+-    assignmentId: z3.string()
+-  }).passthrough()
+-));
+ var deployMonitorSchema = deployMessageSchema;
+ var loadProcessMetaSchema = z3.function().args(z3.object({
+   suUrl: z3.string().url(),
+@@ -880,7 +841,7 @@ var inputSchema2 = z6.object({
+   from: z6.string().optional(),
+   to: z6.string().optional(),
+   sort: z6.enum(["ASC", "DESC"]).default("ASC"),
+-  limit: z6.number().optional()
++  limit: z6.string().optional()
+ });
+ function verifyInputWith2() {
+   return (ctx) => {
+@@ -892,7 +853,7 @@ function verifyInputWith2() {
+ function queryWith({ queryResults }) {
+   queryResults = fromPromise(queryResultsSchema.implement(queryResults));
+   return (ctx) => {
+-    return of({ process: ctx.process, from: ctx.from, to: ctx.to, sort: ctx.sort, limit: ctx.limit }).chain(queryResults);
++    return of({ process: ctx.process, from: ctx.from, to: ctx.to, sort: ctx.sort }).chain(queryResults);
+   };
+ }
+ 
+@@ -900,8 +861,8 @@ function queryWith({ queryResults }) {
+ function resultsWith(env) {
+   const verifyInput = verifyInputWith2(env);
+   const query = queryWith(env);
+-  return ({ process: process2, from, to, sort, limit }) => {
+-    return of({ process: process2, from, to, sort, limit }).chain(verifyInput).chain(query).map(
++  return ({ process: process2, from, to, sort }) => {
++    return of({ process: process2, from, to, sort }).chain(verifyInput).chain(query).map(
+       env.logger.tap(
+         'readResults result for message "%s": %O',
+         process2
+@@ -956,28 +917,6 @@ function convert({ process: process2, data, tags, anchor, ...rest }) {
+   };
+ }
+ 
+-// src/lib/assign/index.js
+-import { identity as identity7 } from "ramda";
+-
+-// src/lib/assign/send-assign.js
+-import { assoc as assoc6 } from "ramda";
+-function sendAssignWith(env) {
+-  const deployAssign = deployAssignSchema.implement(env.deployAssign);
+-  return (ctx) => {
+-    return of(ctx).chain(fromPromise(
+-      ({ process: process2, message: message2, baseLayer, exclude }) => deployAssign({ process: process2, message: message2, baseLayer, exclude })
+-    )).map((res) => assoc6("assignmentId", res.assignmentId, ctx));
+-  };
+-}
+-
+-// src/lib/assign/index.js
+-function assignWith(env) {
+-  const sendAssign = sendAssignWith(env);
+-  return ({ process: process2, message: message2, baseLayer, exclude }) => {
+-    return of({ process: process2, message: message2, baseLayer, exclude }).chain(sendAssign).map((ctx) => ctx.assignmentId).bimap(errFrom, identity7).toPromise();
+-  };
+-}
+-
+ // src/index.common.js
+ var DEFAULT_GATEWAY_URL = "https://arweave.net";
+ var DEFAULT_MU_URL = "https://mu.ao-testnet.xyz";
+@@ -1048,16 +987,7 @@ function connect({
+     dryrunFetch: dryrunFetchWith({ fetch, CU_URL: CU_URL2, logger: dryrunLogger }),
+     logger: dryrunLogger
+   });
+-  const assignLogger = logger.child("assign");
+-  const assign2 = assignWith({
+-    deployAssign: deployAssignWith({
+-      fetch,
+-      MU_URL: MU_URL2,
+-      logger: assignLogger
+-    }),
+-    logger: messageLogger
+-  });
+-  return { result: result2, results: results2, message: message2, spawn: spawn2, monitor: monitor2, unmonitor: unmonitor2, dryrun: dryrun2, assign: assign2 };
++  return { result: result2, results: results2, message: message2, spawn: spawn2, monitor: monitor2, unmonitor: unmonitor2, dryrun: dryrun2 };
+ }
+ 
+ // src/client/node/wallet.js
+@@ -1066,8 +996,7 @@ __export(wallet_exports, {
+   createDataItemSigner: () => createDataItemSigner
+ });
+ import * as WarpArBundles from "warp-arbundles";
+-var pkg = WarpArBundles.default ? WarpArBundles.default : WarpArBundles;
+-var { createData, ArweaveSigner } = pkg;
++let { createData, ArweaveSigner } = WarpArBundles;
+ function createDataItemSigner(wallet) {
+   const signer = async ({ data, tags, target, anchor }) => {
+     const signer2 = new ArweaveSigner(wallet);
+@@ -1085,10 +1014,9 @@ var GATEWAY_URL = process.env.GATEWAY_URL || void 0;
+ var MU_URL = process.env.MU_URL || void 0;
+ var CU_URL = process.env.CU_URL || void 0;
+ var GRAPHQL_URL = process.env.GRAPHQL_URL || void 0;
+-var { result, results, message, spawn, monitor, unmonitor, dryrun, assign } = connect({ GATEWAY_URL, MU_URL, CU_URL, GRAPHQL_URL });
++var { result, results, message, spawn, monitor, unmonitor, dryrun } = connect({ GATEWAY_URL, MU_URL, CU_URL, GRAPHQL_URL });
+ var createDataItemSigner2 = wallet_exports.createDataItemSigner;
+ export {
+-  assign,
+   connect,
+   createDataItemSigner2 as createDataItemSigner,
+   dryrun,

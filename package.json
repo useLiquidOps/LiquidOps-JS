@@ -26,7 +26,10 @@
     "build": "bun run prettier && tsup src/index.ts --format cjs,esm --dts",
     "test": "bun test",
     "prettier": "prettier --write .",
-    "link": "bun link"
+    "link": "bun link",
+    "patch:aoconnect": "bunx patch-package @permaweb/aoconnect",
+    "patch:aoscheduler": "bunx patch-package @permaweb/ao-scheduler-utils",
+    "postinstall": "patch-package"
   },
   "repository": {
     "type": "git",
@@ -42,15 +45,21 @@
     "package.json",
     "README.md"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "@permaweb/ao-scheduler-utils": "^0.0.24",
+    "@permaweb/aoconnect": "^0.0.59",
+    "ao-tokens": "^0.0.4",
+    "ar-gql": "^2.0.2",
+    "arbundles": "^0.11.2",
+    "patch-package": "^8.0.0"
+  },
   "devDependencies": {
     "tsup": "^8.0.1",
-    "@types/bun": "^1.0.2",
-    "@types/node": "^20.2.5",
     "prettier": "^3.0.3",
     "ts-jest": "^29.1.1",
     "tslib": "^2.5.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "bun-types": "^1.1.27"
   },
   "exports": {
     ".": {
