@@ -30,7 +30,7 @@ bun i liquidops
 Here's a simple lending example to get you started:
 
 ```typescript
-import { LiquidOps } from 'liquidops'
+import LiquidOps from 'liquidops'
 
 const client = new LiquidOps(window.arweaveWallet);
 
