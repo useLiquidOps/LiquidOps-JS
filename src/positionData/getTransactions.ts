@@ -1,7 +1,7 @@
 import { getTags } from "../arweave/getTags";
 import { Transaction } from "../arweave/getTags";
 
-export const getRecentTransactions = async (
+export const getTransactions = async (
   walletAddress: string,
   action: "Borrow" | "Pay-Interest" | "Repay" | "Lend" | "Un-Lend",
   poolID: string,

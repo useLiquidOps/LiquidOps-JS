@@ -1,6 +1,6 @@
 import { Transaction } from "../arweave/getTags";
 
-export async function getCurrentDeposits(
+export async function getLent(
   lendTransactions: Transaction[],
   unLendTransactions: Transaction[]
 ): Promise<depositItem[]> {

@@ -1,6 +1,6 @@
 import { sendMessage } from "../ao/sendMessage";
 
-export async function getPoolLiquidity(poolID: string) {
+export async function getLiquidity(poolID: string) {
   try {
     // const message = await sendMessage(
     //   poolID,

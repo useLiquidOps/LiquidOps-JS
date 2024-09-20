@@ -1,6 +1,6 @@
 import { Transaction } from "../arweave/getTags";
 
-export async function getCurrentLoans(
+export async function getBorrowed(
   borrowTransactions: Transaction[],
   repayTransactions: Transaction[]
 ): Promise<loanItem[]> {
