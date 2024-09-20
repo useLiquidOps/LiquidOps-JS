@@ -1,7 +1,7 @@
 import { sendMessage } from "../ao/sendMessage";
 // @ts-ignore
 import { Token } from "ao-tokens";
-import { getPrice } from "../processData/getPrice";
+import { getPrice } from "../poolData/getPrice";
 
 export async function borrow(
   poolID: string,

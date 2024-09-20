@@ -1,13 +1,13 @@
 import { sendMessage } from "../ao/sendMessage";
 // @ts-ignore
 import { Token } from "ao-tokens";
-import { getPrice } from "../processData/getPrice";
+import { getPrice } from "../poolData/getPrice";
 
 export async function payInterest(
   poolID: string,
   poolTokenID: string,
   quantity: number,
-  borrowID: string,
+  borrowID: string
 ) {
   try {
     const USDPrice = await getPrice(poolTokenID);
@@ -27,7 +27,7 @@ export async function payInterest(
       },
       "",
       "Pay-Interest",
-      poolTokenID,
+      poolTokenID
     );
   } catch (error) {
     console.log(error);
