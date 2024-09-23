@@ -1,25 +1,22 @@
 import { sendMessage } from "../ao/sendMessage";
-// @ts-ignore
 import { Token } from "ao-tokens";
-import { getPrice } from "../poolData/getPrice";
+import { aoUtils } from "..";
 
-export async function borrow(
+export interface Borrow {
   poolID: string,
   poolTokenID: string,
-  quantity: number
+  quantity: number,
+}
+
+export async function borrow(
+  aoUtils: aoUtils,
+  {poolID, poolTokenID, quantity}: Borrow,
 ) {
   try {
-    const USDPrice = await getPrice(poolTokenID);
-    const USDworth = quantity * USDPrice;
-    const twoTimesCollateral = 0.452386338;
     const token = await Token("ycQaQxjRf5IDg26kNJBlwfPjzZqLob_wJDVBu3DYxVw");
-    const amountToSend = token.Quantity.fromNumber(twoTimesCollateral);
+    const amountToSend = token.Quantity.fromNumber(quantity);
 
-    // TODO: delete later
-    // @ts-ignore
-    const ticker = tokenInfo.find((tag) => tag.address === poolTokenID);
-
-    return await sendMessage(
+    return await sendMessage(aoUtils,
       "ycQaQxjRf5IDg26kNJBlwfPjzZqLob_wJDVBu3DYxVw",
       {
         Target: "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",
@@ -28,11 +25,11 @@ export async function borrow(
         Recipient: poolID,
         "X-Action": "Borrow",
         "borrowed-quantity": JSON.stringify(quantity),
-        "borrowed-address": ticker?.name,
+        "borrowed-address": poolTokenID,
       },
       "",
       "Borrow",
-      "ycQaQxjRf5IDg26kNJBlwfPjzZqLob_wJDVBu3DYxVw"
+      "ycQaQxjRf5IDg26kNJBlwfPjzZqLob_wJDVBu3DYxVw",
     );
   } catch (error) {
     console.log(error);

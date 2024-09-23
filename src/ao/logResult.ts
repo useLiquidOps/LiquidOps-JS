@@ -1,6 +1,7 @@
-import { message, createDataItemSigner } from "@permaweb/aoconnect";
+import { aoUtils } from "..";
 
 export async function logResult(
+  aoUtils: aoUtils,
   Error: any,
   ID: string,
   processID: string,
@@ -20,12 +21,10 @@ export async function logResult(
   }
 
   try {
-    await message({
+    await aoUtils.message({
       process: processID,
       tags: tags,
-      // TODO: remove
-      // @ts-ignore (Add wallet kit later)
-      signer: createDataItemSigner(window.arweaveWallet),
+      signer: aoUtils.signer,
       data: "",
     });
   } catch (error) {

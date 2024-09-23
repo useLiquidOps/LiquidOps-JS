@@ -1,24 +1,27 @@
 import { sendMessage } from "../ao/sendMessage";
-// @ts-ignore
 import { Token } from "ao-tokens";
+import { aoUtils } from "..";
 
-export async function unLend(
+export interface UnLend {
   poolID: string,
   quantity: number,
   poolTokenID: string,
+}
+
+export async function unLend(
+  aoUtils: aoUtils,
+  {poolID, quantity, poolTokenID}: UnLend,
 ) {
   try {
-    // // TODO: fix POOL ID token balance issue
-    // const token = await Token(poolID);
-    // const amountToSend = token.Quantity.fromNumber(quantity);
+    const token = await Token(poolID);
+    const amountToSend = token.Quantity.fromNumber(quantity);
 
-    return await sendMessage(
+    return await sendMessage(aoUtils,
       poolID,
       {
         Target: poolID,
         Action: "Burn",
-        // Quantity: amountToSend.raw.toString(),
-        Quantity: JSON.stringify(quantity * 1000000000000),
+        Quantity: amountToSend.raw.toString()
       },
       "",
       "Un-Lend",

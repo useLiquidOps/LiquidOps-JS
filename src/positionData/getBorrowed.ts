@@ -1,25 +1,30 @@
 import { Transaction } from "../arweave/getTags";
 
-export async function getBorrowed(
+export interface GetBorrowed {
   borrowTransactions: Transaction[],
-  repayTransactions: Transaction[]
+  repayTransactions: Transaction[],
+}
+
+export async function getBorrowed(
+  {borrowTransactions,
+  repayTransactions}: GetBorrowed
 ): Promise<loanItem[]> {
   const loanPromises = borrowTransactions.map(async (token) => {
     const ticker = token.tags.find(
-      (tag) => tag.name === "borrowed-address"
+      (tag) => tag.name === "borrowed-address",
     )?.value;
     const tokenItem = tokenInfo.find((token) => token.name === ticker);
     let balance = token.tags.find(
-      (tag) => tag.name === "borrowed-quantity"
+      (tag) => tag.name === "borrowed-quantity",
     )?.value;
     const timestamp = token.tags.find((tag) => tag.name === "timestamp")?.value;
     const repayments = repayTransactions.filter(
       (repay) =>
-        repay.tags.find((tag) => tag.name === "Borrow-Id")?.value === token.id
+        repay.tags.find((tag) => tag.name === "Borrow-Id")?.value === token.id,
     );
     repayments.forEach((repay) => {
       const repayAmount = repay.tags.find(
-        (tag) => tag.name === "borrowed-quantity"
+        (tag) => tag.name === "borrowed-quantity",
       )?.value;
       if (balance && repayAmount) {
         balance = (parseInt(balance) - parseInt(repayAmount)).toString();

@@ -1,8 +1,12 @@
 import { Transaction } from "../arweave/getTags";
 
-export async function getLent(
+export interface GetLent {
   lendTransactions: Transaction[],
-  unLendTransactions: Transaction[]
+  unLendTransactions: Transaction[],
+}
+
+export async function getLent( {lendTransactions, unLendTransactions}: GetLent
+  
 ): Promise<depositItem[]> {
   let totalLendAmount = 0;
   let totalUnlendAmount = 0;
@@ -16,7 +20,7 @@ export async function getLent(
 
   unLendTransactions.forEach((token) => {
     const unLendAmount = token.tags.find(
-      (tag) => tag.name === "Quantity"
+      (tag) => tag.name === "Quantity",
     )?.value;
     if (unLendAmount) {
       totalUnlendAmount += parseInt(unLendAmount);

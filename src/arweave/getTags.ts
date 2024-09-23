@@ -13,7 +13,7 @@ export async function getTags(
   walletAddress: string,
 ): Promise<{ node: Transaction }[]> {
   try {
-    const gql = arGql({endpointUrl: "https://arweave.net/graphql"});
+    const gql = arGql({ endpointUrl: "https://arweave.net/graphql" });
     const query = `
     query GetTransactions($tags: [TagFilter!], $walletAddress: String!) {
       transactions(

@@ -1,84 +1,104 @@
-import { lend } from "./lend/lend";
-import { unLend } from "./lend/unLend";
-import { borrow } from "./borrow/borrow";
-import { repay } from "./borrow/repay";
-import { payInterest } from "./borrow/payInterest";
-import { getAPY } from "./poolData/getAPY";
-import { getBalance } from "./poolData/getBalance";
-import { getLiquidity } from "./poolData/getLiquidity";
-import { getLent } from "./positionData/getLent";
-import { getBorrowed } from "./positionData/getBorrowed";
-import { getTransactions } from "./positionData/getTransactions";
+// LO functions
+import { lend, Lend } from "./lend/lend";
+import { unLend, UnLend } from "./lend/unLend";
+import { borrow, Borrow } from "./borrow/borrow";
+import { repay, Repay } from "./borrow/repay";
+import { payInterest, PayInterest } from "./borrow/payInterest";
+import { getAPY, GetAPY } from "./poolData/getAPY";
+import { getBalance, GetBalance } from "./poolData/getBalance";
+import { getLiquidity, GetLiquidity } from "./poolData/getLiquidity";
+import { getLent, GetLent } from "./positionData/getLent";
+import { getBorrowed, GetBorrowed } from "./positionData/getBorrowed";
+import { getTransactions, GetTransactions } from "./positionData/getTransactions";
+// LO helpful data
 import { oTokens } from "./ao/processData";
+// AO misc types/functions
+import { Services } from "@permaweb/aoconnect/dist/index.common";
+import { connectToAO } from "./ao/connect";
+import { SpawnProcess } from "@permaweb/aoconnect/dist/lib/spawn";
+import { SendMessage } from "@permaweb/aoconnect/dist/lib/message";
+import { ReadResult } from "@permaweb/aoconnect/dist/lib/result";
+// AO helpful functions
 import { createDataItemSigner as createDataItemSignerNode } from "@permaweb/aoconnect/dist/client/node/wallet";
 import { createDataItemSigner as createDataItemSignerWeb } from "@permaweb/aoconnect/browser";
 
-interface customConfigs {
-  customGateway?: string;
-  customSU?: string;
-  customMU?: string;
-  customCU?: string;
-  tags?: Array<{ name: string; value: string }>;
+export interface aoUtils {
+
+    spawn: SpawnProcess;
+    message: SendMessage;
+    result: ReadResult;
+    signer:
+    | typeof createDataItemSignerNode
+    | typeof createDataItemSignerWeb;
+
 }
 
 class LiquidOps {
-  private aoSigner: typeof createDataItemSignerNode | typeof createDataItemSignerWeb;
-  private configs: customConfigs;
+  private aoUtils: aoUtils
 
-  constructor(signer: typeof createDataItemSignerNode | typeof createDataItemSignerWeb, configs: customConfigs = {}) {
-    this.aoSigner = signer;
-    this.configs = configs;
+  constructor(
+    signer: typeof createDataItemSignerNode | typeof createDataItemSignerWeb,
+    configs: Services = {},
+  ) {
+    if (!signer) {
+      throw new Error("Please specify a ao createDataItemSigner signer");
+    }
+    
+    const {spawn, message, result} = connectToAO(configs)
+    this.aoUtils = {
+        spawn,
+        message,
+        result,
+        signer,
+      };
+    
   }
 
-  if (!this.signer) {
-    throw new Error('Please specify a ao createDataItemSigner signer')
+  async lend(params: Lend) {
+    return lend(this.aoUtils, params);
   }
 
-  async lend(): Promise<any> {
-    return lend(this.aoSigner, this.configs);
+  async unLend(params: UnLend): Promise<any> {
+    return unLend(this.aoUtils, params);
   }
 
-  async unLend(): Promise<any> {
-    return unLend(this.aoSigner, this.configs);
+  async borrow(params: Borrow): Promise<any> {
+    return borrow(this.aoUtils, params);
   }
 
-  async borrow(): Promise<any> {
-    return borrow(this.aoSigner, this.configs);
+  async repay(params: Repay): Promise<any> {
+    return repay(this.aoUtils, params);
   }
 
-  async repay(): Promise<any> {
-    return repay(this.aoSigner, this.configs);
+  async payInterest(params: PayInterest): Promise<any> {
+    return payInterest(this.aoUtils, params);
   }
 
-  async payInterest(): Promise<any> {
-    return payInterest(this.aoSigner, this.configs);
+  async getAPY(params: GetAPY): Promise<number> {
+    return getAPY(this.aoUtils, params);
   }
 
-  async getAPY(): Promise<number> {
-    return getAPY(this.configs);
+  async getBalance(params: GetBalance): Promise<number> {
+    return getBalance(params);
   }
 
-  async getBalance(): Promise<number> {
-    return getBalance(this.aoSigner, this.configs);
+  async getLiquidity(params: GetLiquidity): Promise<number> {
+    return getLiquidity(this.aoUtils, params);
   }
 
-  async getLiquidity(): Promise<number> {
-    return getLiquidity(this.configs);
+  async getLent(params: GetLent): Promise<any> {
+    return getLent(params);
   }
 
-  async getLent(): Promise<number> {
-    return getLent(this.aoSigner, this.configs);
+  async getBorrowed(params: GetBorrowed): Promise<any> {
+    return getBorrowed(params);
   }
 
-  async getBorrowed(): Promise<number> {
-    return getBorrowed(this.aoSigner, this.configs);
+  async getTransactions(params: GetTransactions): Promise<any[]> {
+    return getTransactions(params);
   }
 
-  async getTransactions(): Promise<any[]> {
-    return getTransactions(this.aoSigner, this.configs);
-  }
-
-  static oTokens = oTokens
+  static oTokens = oTokens;
 }
 
 export { createDataItemSignerNode, createDataItemSignerWeb };

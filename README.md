@@ -17,6 +17,7 @@ Or using yarn:
 ```bash
 yarn add liquidops
 ```
+
 Or using bun:
 
 ```bash
@@ -30,16 +31,16 @@ bun i liquidops
 Here's a simple lending example to get you started:
 
 ```typescript
-import LiquidOps from 'liquidops'
+import LiquidOps from "liquidops";
 
 const client = new LiquidOps(window.arweaveWallet);
 
 const lendRes = await LiquidOps.lend({
-    amount: 100,
-    token: LiquidOps.oTokens.wAR
-})
+  amount: 100,
+  token: LiquidOps.oTokens.wAR,
+});
 
-console.log(lendRes)
+console.log(lendRes);
 
 // {
 //  "blah": "6jdzO4FzS4EVaQVcLBEmxm6uN5-1tqBXW24Pzp6JsRQ",
@@ -73,13 +74,13 @@ Lending on LiquidOps
 ### lend()
 
 ```typescript
-example
+example;
 ```
 
 ### unLend()
 
 ```typescript
-example
+example;
 ```
 
 ---
@@ -91,19 +92,19 @@ Borrowing on LiquidOps
 ### borrow()
 
 ```typescript
-example
+example;
 ```
 
 ### repay()
 
 ```typescript
-example
+example;
 ```
 
 ### payInterest()
 
 ```typescript
-example
+example;
 ```
 
 ---
@@ -115,19 +116,19 @@ LiquidOps pool data
 ### getAPY()
 
 ```typescript
-example
+example;
 ```
 
 ### getBalance()
 
 ```typescript
-example
+example;
 ```
 
 ### getLiquidity()
 
 ```typescript
-example
+example;
 ```
 
 ---
@@ -139,19 +140,19 @@ LiquidOps position data
 ### getLent()
 
 ```typescript
-example
+example;
 ```
 
 ### getBorrowed()
 
 ```typescript
-example
+example;
 ```
 
 ### getTransactions()
 
 ```typescript
-example
+example;
 ```
 
 ---

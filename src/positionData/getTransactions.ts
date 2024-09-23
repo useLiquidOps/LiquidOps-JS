@@ -1,14 +1,18 @@
 import { getTags } from "../arweave/getTags";
 import { Transaction } from "../arweave/getTags";
 
-export const getTransactions = async (
+export interface GetTransactions {
   walletAddress: string,
   action: "Borrow" | "Pay-Interest" | "Repay" | "Lend" | "Un-Lend",
   poolID: string,
-  poolTokenID?: string
+  poolTokenID?: string,
+}
+
+export const getTransactions = async (
+  {walletAddress, action, poolID, poolTokenID}: GetTransactions
 ): Promise<Transaction[]> => {
   const tags = [
-    { name: "Protocol-Name", values: "Name" },
+    { name: "Protocol-Name", values: "LiquidOps" },
     { name: "SDK", values: "aoconnect" },
   ];
 
@@ -40,7 +44,7 @@ export const getTransactions = async (
   const getTagsReq = await getTags(tags, walletAddress);
   const transactions: Transaction[] = getTagsReq.map(({ node }) => node);
   const transactionIds: string[] = transactions.map(
-    (transaction) => transaction.id
+    (transaction) => transaction.id,
   );
 
   const getMessageStatusReq = await getTags(
@@ -48,10 +52,10 @@ export const getTransactions = async (
       { name: "resultID", values: transactionIds },
       { name: "action", values: action },
     ],
-    walletAddress
+    walletAddress,
   );
   const getMessageStatusReqTxns: Transaction[] = getMessageStatusReq.map(
-    ({ node }) => node
+    ({ node }) => node,
   );
 
   return combineTransactionsAndStatuses(transactions, getMessageStatusReqTxns);
@@ -59,12 +63,12 @@ export const getTransactions = async (
 
 function combineTransactionsAndStatuses(
   transactions: Transaction[],
-  statusTransactions: Transaction[]
+  statusTransactions: Transaction[],
 ): Transaction[] {
   const statusTransactionsMap = new Map<string, Transaction>();
   statusTransactions.forEach((statusTransaction) => {
     const resultID = statusTransaction.tags.find(
-      (tag) => tag.name === "resultID"
+      (tag) => tag.name === "resultID",
     )?.value;
     if (resultID) {
       statusTransactionsMap.set(resultID, statusTransaction);
@@ -75,13 +79,13 @@ function combineTransactionsAndStatuses(
     const statusTransaction = statusTransactionsMap.get(transaction.id);
     if (statusTransaction) {
       const errorTag = statusTransaction.tags.find(
-        (tag) => tag.name === "Error"
+        (tag) => tag.name === "Error",
       );
       if (errorTag) {
         transaction.tags.push(errorTag);
       }
       const tickerTag = statusTransaction.tags.find(
-        (tag) => tag.name === "tokenID"
+        (tag) => tag.name === "tokenID",
       );
       if (tickerTag) {
         transaction.tags.push(tickerTag);

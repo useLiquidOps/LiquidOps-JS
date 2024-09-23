@@ -1,17 +1,23 @@
 import { sendMessage } from "../ao/sendMessage";
 import { Token } from "ao-tokens";
+import { aoUtils } from "..";
 
-export async function repay(
+export interface Repay {
   poolID: string,
   poolTokenID: string,
   quantity: number,
-  borrowID: string
+  borrowID: string,
+}
+
+export async function repay(
+  aoUtils: aoUtils,
+  {poolID, poolTokenID, quantity, borrowID}: Repay,
 ) {
   try {
     const token = await Token("42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k");
     const amountToSend = token.Quantity.fromNumber(quantity);
 
-    return await sendMessage(
+    return await sendMessage(aoUtils,
       "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",
       {
         Target: "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",
@@ -25,7 +31,7 @@ export async function repay(
       },
       "",
       "Repay",
-      "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k"
+      "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",
     );
   } catch (error) {
     console.log(error);

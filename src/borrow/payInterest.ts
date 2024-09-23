@@ -1,21 +1,23 @@
 import { sendMessage } from "../ao/sendMessage";
-// @ts-ignore
 import { Token } from "ao-tokens";
-import { getPrice } from "../poolData/getPrice";
+import { aoUtils } from "..";
 
-export async function payInterest(
+export interface PayInterest {
   poolID: string,
   poolTokenID: string,
   quantity: number,
-  borrowID: string
+  borrowID: string,
+}
+
+export async function payInterest(
+  aoUtils: aoUtils,
+  {poolID, poolTokenID, quantity, borrowID}: PayInterest,
 ) {
   try {
-    const USDPrice = await getPrice(poolTokenID);
-    const USDworth = quantity * USDPrice;
     const token = await Token("42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k");
-    const amountToSend = token.Quantity.fromNumber(USDworth);
+    const amountToSend = token.Quantity.fromNumber(quantity);
 
-    return await sendMessage(
+    return await sendMessage(aoUtils,
       poolTokenID,
       {
         Target: poolTokenID,
@@ -27,7 +29,7 @@ export async function payInterest(
       },
       "",
       "Pay-Interest",
-      poolTokenID
+      poolTokenID,
     );
   } catch (error) {
     console.log(error);
