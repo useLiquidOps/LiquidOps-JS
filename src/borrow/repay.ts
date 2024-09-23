@@ -3,21 +3,22 @@ import { Token } from "ao-tokens";
 import { aoUtils } from "..";
 
 export interface Repay {
-  poolID: string,
-  poolTokenID: string,
-  quantity: number,
-  borrowID: string,
+  poolID: string;
+  poolTokenID: string;
+  quantity: number;
+  borrowID: string;
 }
 
 export async function repay(
   aoUtils: aoUtils,
-  {poolID, poolTokenID, quantity, borrowID}: Repay,
+  { poolID, poolTokenID, quantity, borrowID }: Repay,
 ) {
   try {
     const token = await Token("42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k");
     const amountToSend = token.Quantity.fromNumber(quantity);
 
-    return await sendMessage(aoUtils,
+    return await sendMessage(
+      aoUtils,
       "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",
       {
         Target: "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",

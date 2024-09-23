@@ -3,20 +3,21 @@ import { Token } from "ao-tokens";
 import { aoUtils } from "..";
 
 export interface Borrow {
-  poolID: string,
-  poolTokenID: string,
-  quantity: number,
+  poolID: string;
+  poolTokenID: string;
+  quantity: number;
 }
 
 export async function borrow(
   aoUtils: aoUtils,
-  {poolID, poolTokenID, quantity}: Borrow,
+  { poolID, poolTokenID, quantity }: Borrow,
 ) {
   try {
     const token = await Token("ycQaQxjRf5IDg26kNJBlwfPjzZqLob_wJDVBu3DYxVw");
     const amountToSend = token.Quantity.fromNumber(quantity);
 
-    return await sendMessage(aoUtils,
+    return await sendMessage(
+      aoUtils,
       "ycQaQxjRf5IDg26kNJBlwfPjzZqLob_wJDVBu3DYxVw",
       {
         Target: "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",

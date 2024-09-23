@@ -9,12 +9,15 @@ import { getBalance, GetBalance } from "./poolData/getBalance";
 import { getLiquidity, GetLiquidity } from "./poolData/getLiquidity";
 import { getLent, GetLent } from "./positionData/getLent";
 import { getBorrowed, GetBorrowed } from "./positionData/getBorrowed";
-import { getTransactions, GetTransactions } from "./positionData/getTransactions";
+import {
+  getTransactions,
+  GetTransactions,
+} from "./positionData/getTransactions";
 // LO helpful data
 import { oTokens } from "./ao/processData";
 // AO misc types/functions
-import { Services } from "@permaweb/aoconnect/dist/index.common";
 import { connectToAO } from "./ao/connect";
+import { Services } from "@permaweb/aoconnect/dist/index.common";
 import { SpawnProcess } from "@permaweb/aoconnect/dist/lib/spawn";
 import { SendMessage } from "@permaweb/aoconnect/dist/lib/message";
 import { ReadResult } from "@permaweb/aoconnect/dist/lib/result";
@@ -23,18 +26,14 @@ import { createDataItemSigner as createDataItemSignerNode } from "@permaweb/aoco
 import { createDataItemSigner as createDataItemSignerWeb } from "@permaweb/aoconnect/browser";
 
 export interface aoUtils {
-
-    spawn: SpawnProcess;
-    message: SendMessage;
-    result: ReadResult;
-    signer:
-    | typeof createDataItemSignerNode
-    | typeof createDataItemSignerWeb;
-
+  spawn: SpawnProcess;
+  message: SendMessage;
+  result: ReadResult;
+  signer: typeof createDataItemSignerNode | typeof createDataItemSignerWeb;
 }
 
 class LiquidOps {
-  private aoUtils: aoUtils
+  private aoUtils: aoUtils;
 
   constructor(
     signer: typeof createDataItemSignerNode | typeof createDataItemSignerWeb,
@@ -43,15 +42,14 @@ class LiquidOps {
     if (!signer) {
       throw new Error("Please specify a ao createDataItemSigner signer");
     }
-    
-    const {spawn, message, result} = connectToAO(configs)
+
+    const { spawn, message, result } = connectToAO(configs);
     this.aoUtils = {
-        spawn,
-        message,
-        result,
-        signer,
-      };
-    
+      spawn,
+      message,
+      result,
+      signer,
+    };
   }
 
   async lend(params: Lend) {

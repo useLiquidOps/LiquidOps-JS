@@ -1,13 +1,14 @@
 import { Transaction } from "../arweave/getTags";
 
 export interface GetLent {
-  lendTransactions: Transaction[],
-  unLendTransactions: Transaction[],
+  lendTransactions: Transaction[];
+  unLendTransactions: Transaction[];
 }
 
-export async function getLent( {lendTransactions, unLendTransactions}: GetLent
-  
-): Promise<depositItem[]> {
+export async function getLent({
+  lendTransactions,
+  unLendTransactions,
+}: GetLent): Promise<depositItem[]> {
   let totalLendAmount = 0;
   let totalUnlendAmount = 0;
 

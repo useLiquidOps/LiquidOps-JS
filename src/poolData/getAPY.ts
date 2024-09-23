@@ -2,15 +2,13 @@ import { sendMessage } from "../ao/sendMessage";
 import { aoUtils } from "..";
 
 export interface GetAPY {
-  poolID: string
+  poolID: string;
 }
 
-export async function getAPY(
-  aoUtils: aoUtils,
-  {poolID}: GetAPY,
-) {
+export async function getAPY(aoUtils: aoUtils, { poolID }: GetAPY) {
   try {
-    const message = await sendMessage(aoUtils,
+    const message = await sendMessage(
+      aoUtils,
       poolID,
       {
         Target: poolID,

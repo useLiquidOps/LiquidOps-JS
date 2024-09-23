@@ -2,15 +2,18 @@ import { getTags } from "../arweave/getTags";
 import { Transaction } from "../arweave/getTags";
 
 export interface GetTransactions {
-  walletAddress: string,
-  action: "Borrow" | "Pay-Interest" | "Repay" | "Lend" | "Un-Lend",
-  poolID: string,
-  poolTokenID?: string,
+  walletAddress: string;
+  action: "Borrow" | "Pay-Interest" | "Repay" | "Lend" | "Un-Lend";
+  poolID: string;
+  poolTokenID?: string;
 }
 
-export const getTransactions = async (
-  {walletAddress, action, poolID, poolTokenID}: GetTransactions
-): Promise<Transaction[]> => {
+export const getTransactions = async ({
+  walletAddress,
+  action,
+  poolID,
+  poolTokenID,
+}: GetTransactions): Promise<Transaction[]> => {
   const tags = [
     { name: "Protocol-Name", values: "LiquidOps" },
     { name: "SDK", values: "aoconnect" },

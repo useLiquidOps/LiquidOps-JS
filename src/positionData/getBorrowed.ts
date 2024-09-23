@@ -1,14 +1,14 @@
 import { Transaction } from "../arweave/getTags";
 
 export interface GetBorrowed {
-  borrowTransactions: Transaction[],
-  repayTransactions: Transaction[],
+  borrowTransactions: Transaction[];
+  repayTransactions: Transaction[];
 }
 
-export async function getBorrowed(
-  {borrowTransactions,
-  repayTransactions}: GetBorrowed
-): Promise<loanItem[]> {
+export async function getBorrowed({
+  borrowTransactions,
+  repayTransactions,
+}: GetBorrowed): Promise<loanItem[]> {
   const loanPromises = borrowTransactions.map(async (token) => {
     const ticker = token.tags.find(
       (tag) => tag.name === "borrowed-address",
