@@ -2,9 +2,8 @@ import { logResult } from "./logResult";
 import { aoUtils } from "..";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 
-
 export interface SendMessageRes extends MessageResult {
-  id: string
+  id: string;
 }
 
 export async function sendMessage(
@@ -41,8 +40,7 @@ export async function sendMessage(
 
     await logResult(aoUtils, Error, id, processID, action, tokenID);
 
-    return { id, Messages, Spawns, Output, Error }
-
+    return { id, Messages, Spawns, Output, Error };
   } catch (error) {
     console.log(error);
     throw new Error("Error reading ao message result");

@@ -4,13 +4,13 @@ import { aoUtils } from "..";
 
 export interface UnLend {
   poolID: string;
-  quantity: number;
   poolTokenID: string;
+  quantity: number;
 }
 
 export async function unLend(
   aoUtils: aoUtils,
-  { poolID, quantity, poolTokenID }: UnLend,
+  { poolID, poolTokenID, quantity }: UnLend,
 ): Promise<SendMessageRes> {
   try {
     const token = await Token(poolID);

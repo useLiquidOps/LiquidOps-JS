@@ -31,13 +31,17 @@ bun i liquidops
 Here's a simple lending example to get you started:
 
 ```typescript
-import LiquidOps from "liquidops";
+import LiquidOps, { createDataItemSignerNode } from "liquidops";
 
-const client = new LiquidOps(window.arweaveWallet);
+const JWK = process.env.JWK;
+const signer = await createDataItemSignerNode(JWK);
 
-const lendRes = await LiquidOps.lend({
-  amount: 100,
-  token: LiquidOps.oTokens.wAR,
+const client = new LiquidOps(signer);
+
+const lendRes = await client.lend({
+  poolID: LiquidOps.oTokens.wAR,
+  poolTokenID: "",
+  quantity: 10,
 });
 
 console.log(lendRes);
@@ -55,13 +59,16 @@ console.log(lendRes);
 
 The SDK can be configured with the following options:
 
+WHAT ARE OTOKENS? (When interacting with LiquidOps you use oTokens which stand for operation tokens.)
+
 ```typescript
 const client = new LiquidOps(window.arweaveWallet, {
-    customGateway: 'https://',
-    customSU: 'https://',
-    customMU: 'https://',
-    customCU: 'https://',
-    tags [{ name: 'App-Name', value: 'Example-App' }],
+    "GATEWAY_URL": "",
+    "GRAPHQL_URL": "",
+    "GRAPHQL_MAX_RETRIES": "",
+    "GRAPHQL_RETRY_BACKOFF": "",
+    "MU_URL": "",
+    "CU_URL": ""
 });
 ```
 

@@ -1,12 +1,17 @@
 import { Token } from "ao-tokens";
+import { aoUtils } from "..";
 
 export interface GetBalance {
-  walletAddress: string;
   tokenAddress: string;
 }
 
-export async function getBalance({ walletAddress, tokenAddress }: GetBalance): Promise<number> {
+export async function getBalance(
+  aoUtils: aoUtils,
+  { tokenAddress }: GetBalance,
+
+): Promise<number> {
   try {
+    const walletAddress = aoUtils.signer.id // TODO - get wallet address from signer
     const token = await Token(tokenAddress);
     const balance = await token.getBalance(walletAddress);
     return Number(balance.raw.toString());

@@ -13,7 +13,6 @@ export interface BorrowedItem extends Transaction {
   name: string;
 }
 
-
 export async function getBorrowed({
   borrowTransactions,
   repayTransactions,

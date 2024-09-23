@@ -8,7 +8,11 @@ import { getAPY, GetAPY } from "./poolData/getAPY";
 import { getBalance, GetBalance } from "./poolData/getBalance";
 import { getLiquidity, GetLiquidity } from "./poolData/getLiquidity";
 import { getLent, GetLent, LentItem } from "./positionData/getLent";
-import { getBorrowed, GetBorrowed, BorrowedItem } from "./positionData/getBorrowed";
+import {
+  getBorrowed,
+  GetBorrowed,
+  BorrowedItem,
+} from "./positionData/getBorrowed";
 import {
   getTransactions,
   GetTransactions,
@@ -79,7 +83,7 @@ class LiquidOps {
   }
 
   async getBalance(params: GetBalance): Promise<number> {
-    return getBalance(params);
+    return getBalance(this.aoUtils, params);
   }
 
   async getLiquidity(params: GetLiquidity): Promise<number> {

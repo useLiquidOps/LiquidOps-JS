@@ -5,7 +5,10 @@ export interface GetLiquidity {
   poolID: string;
 }
 
-export async function getLiquidity(aoUtils: aoUtils, { poolID }: GetLiquidity): Promise<number> {
+export async function getLiquidity(
+  aoUtils: aoUtils,
+  { poolID }: GetLiquidity,
+): Promise<number> {
   try {
     const message = await sendMessage(
       aoUtils,
