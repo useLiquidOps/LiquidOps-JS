@@ -18,7 +18,7 @@ import {
   GetTransactions,
 } from "./positionData/getTransactions";
 // LO helpful data
-import { oTokens } from "./ao/processData";
+import { oTokens, tokens } from "./ao/processData";
 // AO misc types/functions
 import { connectToAO } from "./ao/connect";
 import { Services } from "@permaweb/aoconnect/dist/index.common";
@@ -103,6 +103,7 @@ class LiquidOps {
   }
 
   static oTokens = oTokens;
+  static tokens = tokens;
 }
 
 export { createDataItemSignerNode, createDataItemSignerWeb };
