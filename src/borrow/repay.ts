@@ -1,7 +1,5 @@
 import { sendMessage } from "../ao/sendMessage";
-// @ts-ignore
 import { Token } from "ao-tokens";
-import { getPrice } from "../poolData/getPrice";
 
 export async function repay(
   poolID: string,
@@ -10,15 +8,8 @@ export async function repay(
   borrowID: string
 ) {
   try {
-    const USDPrice = await getPrice(poolTokenID);
-    const USDworth = quantity * USDPrice;
-    const twoTimesCollateral = USDworth * 2;
     const token = await Token("42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k");
-    const amountToSend = token.Quantity.fromNumber(twoTimesCollateral);
-
-    // TODO: delete later
-    // @ts-ignore
-    const ticker = tokenInfo.find((tag) => tag.address === poolTokenID);
+    const amountToSend = token.Quantity.fromNumber(quantity);
 
     return await sendMessage(
       "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",
@@ -30,7 +21,7 @@ export async function repay(
         "X-Action": "Repay",
         "Borrow-Id": borrowID,
         "borrowed-quantity": JSON.stringify(quantity),
-        "borrowed-address": ticker?.name,
+        "borrowed-address": poolTokenID,
       },
       "",
       "Repay",

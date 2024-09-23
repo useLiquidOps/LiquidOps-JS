@@ -10,7 +10,8 @@ import { getLent } from "./positionData/getLent";
 import { getBorrowed } from "./positionData/getBorrowed";
 import { getTransactions } from "./positionData/getTransactions";
 import { oTokens } from "./ao/processData";
-import { ArweaveSigner } from "arbundles";
+import { createDataItemSigner as createDataItemSignerNode } from "@permaweb/aoconnect/dist/client/node/wallet";
+import { createDataItemSigner as createDataItemSignerWeb } from "@permaweb/aoconnect/browser";
 
 interface customConfigs {
   customGateway?: string;
@@ -21,36 +22,36 @@ interface customConfigs {
 }
 
 class LiquidOps {
-  private signer: ArweaveSigner;
+  private aoSigner: typeof createDataItemSignerNode | typeof createDataItemSignerWeb;
   private configs: customConfigs;
 
-  constructor(signer: ArweaveSigner, configs: customConfigs = {}) {
-    this.signer = signer;
+  constructor(signer: typeof createDataItemSignerNode | typeof createDataItemSignerWeb, configs: customConfigs = {}) {
+    this.aoSigner = signer;
     this.configs = configs;
   }
 
   if (!this.signer) {
-    throw new Error('Please specify a arweave signer.')
+    throw new Error('Please specify a ao createDataItemSigner signer')
   }
 
   async lend(): Promise<any> {
-    return lend(this.signer, this.configs);
+    return lend(this.aoSigner, this.configs);
   }
 
   async unLend(): Promise<any> {
-    return unLend(this.signer, this.configs);
+    return unLend(this.aoSigner, this.configs);
   }
 
   async borrow(): Promise<any> {
-    return borrow(this.signer, this.configs);
+    return borrow(this.aoSigner, this.configs);
   }
 
   async repay(): Promise<any> {
-    return repay(this.signer, this.configs);
+    return repay(this.aoSigner, this.configs);
   }
 
   async payInterest(): Promise<any> {
-    return payInterest(this.signer, this.configs);
+    return payInterest(this.aoSigner, this.configs);
   }
 
   async getAPY(): Promise<number> {
@@ -58,7 +59,7 @@ class LiquidOps {
   }
 
   async getBalance(): Promise<number> {
-    return getBalance(this.signer, this.configs);
+    return getBalance(this.aoSigner, this.configs);
   }
 
   async getLiquidity(): Promise<number> {
@@ -66,18 +67,19 @@ class LiquidOps {
   }
 
   async getLent(): Promise<number> {
-    return getLent(this.signer, this.configs);
+    return getLent(this.aoSigner, this.configs);
   }
 
   async getBorrowed(): Promise<number> {
-    return getBorrowed(this.signer, this.configs);
+    return getBorrowed(this.aoSigner, this.configs);
   }
 
   async getTransactions(): Promise<any[]> {
-    return getTransactions(this.signer, this.configs);
+    return getTransactions(this.aoSigner, this.configs);
   }
 
   static oTokens = oTokens
 }
 
-export default { LiquidOps, ArweaveSigner };
+export { createDataItemSignerNode, createDataItemSignerWeb };
+export default LiquidOps;
