@@ -1,4 +1,4 @@
-import { sendMessage } from "../ao/sendMessage";
+import { sendMessage, SendMessageRes } from "../ao/sendMessage";
 import { Token } from "ao-tokens";
 import { aoUtils } from "..";
 
@@ -11,7 +11,7 @@ export interface UnLend {
 export async function unLend(
   aoUtils: aoUtils,
   { poolID, quantity, poolTokenID }: UnLend,
-) {
+): Promise<SendMessageRes> {
   try {
     const token = await Token(poolID);
     const amountToSend = token.Quantity.fromNumber(quantity);

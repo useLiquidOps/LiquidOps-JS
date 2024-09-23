@@ -1,5 +1,11 @@
 import { logResult } from "./logResult";
 import { aoUtils } from "..";
+import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+
+
+export interface SendMessageRes extends MessageResult {
+  id: string
+}
 
 export async function sendMessage(
   aoUtils: aoUtils,
@@ -8,15 +14,15 @@ export async function sendMessage(
   data: string,
   action: string,
   tokenID: string,
-) {
+): Promise<SendMessageRes> {
   const convertedTags = convertToArray(tags);
   convertedTags.push({ name: "Protocol-Name", value: "LiquidOps" });
   const timestamp = Date.now().toString(); // TODO: remove client timestamp use ao instead
   convertedTags.push({ name: "timestamp", value: timestamp });
 
-  let sendMessageID;
+  let id;
   try {
-    sendMessageID = await aoUtils.message({
+    id = await aoUtils.message({
       process: processID,
       tags: convertedTags,
       signer: aoUtils.signer,
@@ -29,15 +35,14 @@ export async function sendMessage(
 
   try {
     const { Messages, Spawns, Output, Error } = await aoUtils.result({
-      message: sendMessageID,
+      message: id,
       process: processID,
     });
 
-    await logResult(aoUtils, Error, sendMessageID, processID, action, tokenID);
+    await logResult(aoUtils, Error, id, processID, action, tokenID);
 
-    if (action === "Get-Reserve" || "Get-APY") {
-      return { Messages, Spawns, Output, Error };
-    }
+    return { id, Messages, Spawns, Output, Error }
+
   } catch (error) {
     console.log(error);
     throw new Error("Error reading ao message result");

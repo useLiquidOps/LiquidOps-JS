@@ -1,4 +1,4 @@
-import { sendMessage } from "../ao/sendMessage";
+import { sendMessage, SendMessageRes } from "../ao/sendMessage";
 import { Token } from "ao-tokens";
 import { aoUtils } from "..";
 
@@ -11,7 +11,7 @@ export interface Borrow {
 export async function borrow(
   aoUtils: aoUtils,
   { poolID, poolTokenID, quantity }: Borrow,
-) {
+): Promise<SendMessageRes> {
   try {
     const token = await Token("ycQaQxjRf5IDg26kNJBlwfPjzZqLob_wJDVBu3DYxVw");
     const amountToSend = token.Quantity.fromNumber(quantity);

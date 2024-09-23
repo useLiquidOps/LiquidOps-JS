@@ -5,7 +5,7 @@ export interface GetBalance {
   tokenAddress: string;
 }
 
-export async function getBalance({ walletAddress, tokenAddress }: GetBalance) {
+export async function getBalance({ walletAddress, tokenAddress }: GetBalance): Promise<number> {
   try {
     const token = await Token(tokenAddress);
     const balance = await token.getBalance(walletAddress);

@@ -5,10 +5,19 @@ export interface GetBorrowed {
   repayTransactions: Transaction[];
 }
 
+export interface BorrowedItem extends Transaction {
+  balance: string;
+  timestamp: string;
+  iconPath: string;
+  ticker: string;
+  name: string;
+}
+
+
 export async function getBorrowed({
   borrowTransactions,
   repayTransactions,
-}: GetBorrowed): Promise<loanItem[]> {
+}: GetBorrowed): Promise<BorrowedItem[]> {
   const loanPromises = borrowTransactions.map(async (token) => {
     const ticker = token.tags.find(
       (tag) => tag.name === "borrowed-address",
@@ -46,12 +55,5 @@ export async function getBorrowed({
   });
 
   const results = await Promise.all(loanPromises);
-  return results.filter((loan): loan is loanItem => loan !== undefined);
-}
-export interface loanItem extends Transaction {
-  balance: string;
-  timestamp: string;
-  iconPath: string;
-  ticker: string;
-  name: string;
+  return results.filter((loan): loan is BorrowedItem => loan !== undefined);
 }

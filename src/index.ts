@@ -7,8 +7,8 @@ import { payInterest, PayInterest } from "./borrow/payInterest";
 import { getAPY, GetAPY } from "./poolData/getAPY";
 import { getBalance, GetBalance } from "./poolData/getBalance";
 import { getLiquidity, GetLiquidity } from "./poolData/getLiquidity";
-import { getLent, GetLent } from "./positionData/getLent";
-import { getBorrowed, GetBorrowed } from "./positionData/getBorrowed";
+import { getLent, GetLent, LentItem } from "./positionData/getLent";
+import { getBorrowed, GetBorrowed, BorrowedItem } from "./positionData/getBorrowed";
 import {
   getTransactions,
   GetTransactions,
@@ -21,6 +21,8 @@ import { Services } from "@permaweb/aoconnect/dist/index.common";
 import { SpawnProcess } from "@permaweb/aoconnect/dist/lib/spawn";
 import { SendMessage } from "@permaweb/aoconnect/dist/lib/message";
 import { ReadResult } from "@permaweb/aoconnect/dist/lib/result";
+import { SendMessageRes } from "./ao/sendMessage";
+import { Transaction } from "./arweave/getTags";
 // AO helpful functions
 import { createDataItemSigner as createDataItemSignerNode } from "@permaweb/aoconnect/dist/client/node/wallet";
 import { createDataItemSigner as createDataItemSignerWeb } from "@permaweb/aoconnect/browser";
@@ -52,23 +54,23 @@ class LiquidOps {
     };
   }
 
-  async lend(params: Lend) {
+  async lend(params: Lend): Promise<SendMessageRes> {
     return lend(this.aoUtils, params);
   }
 
-  async unLend(params: UnLend): Promise<any> {
+  async unLend(params: UnLend): Promise<SendMessageRes> {
     return unLend(this.aoUtils, params);
   }
 
-  async borrow(params: Borrow): Promise<any> {
+  async borrow(params: Borrow): Promise<SendMessageRes> {
     return borrow(this.aoUtils, params);
   }
 
-  async repay(params: Repay): Promise<any> {
+  async repay(params: Repay): Promise<SendMessageRes> {
     return repay(this.aoUtils, params);
   }
 
-  async payInterest(params: PayInterest): Promise<any> {
+  async payInterest(params: PayInterest): Promise<SendMessageRes> {
     return payInterest(this.aoUtils, params);
   }
 
@@ -84,15 +86,15 @@ class LiquidOps {
     return getLiquidity(this.aoUtils, params);
   }
 
-  async getLent(params: GetLent): Promise<any> {
+  async getLent(params: GetLent): Promise<LentItem[]> {
     return getLent(params);
   }
 
-  async getBorrowed(params: GetBorrowed): Promise<any> {
+  async getBorrowed(params: GetBorrowed): Promise<BorrowedItem[]> {
     return getBorrowed(params);
   }
 
-  async getTransactions(params: GetTransactions): Promise<any[]> {
+  async getTransactions(params: GetTransactions): Promise<Transaction[]> {
     return getTransactions(params);
   }
 

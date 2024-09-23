@@ -1,4 +1,4 @@
-import { sendMessage } from "../ao/sendMessage";
+import { sendMessage, SendMessageRes } from "../ao/sendMessage";
 import { Token } from "ao-tokens";
 import { aoUtils } from "..";
 
@@ -12,7 +12,7 @@ export interface PayInterest {
 export async function payInterest(
   aoUtils: aoUtils,
   { poolID, poolTokenID, quantity, borrowID }: PayInterest,
-) {
+): Promise<SendMessageRes> {
   try {
     const token = await Token("42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k");
     const amountToSend = token.Quantity.fromNumber(quantity);

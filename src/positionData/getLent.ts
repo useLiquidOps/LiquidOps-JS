@@ -5,10 +5,19 @@ export interface GetLent {
   unLendTransactions: Transaction[];
 }
 
+export interface LentItem {
+  balance: string;
+  iconPath: string;
+  ticker: string;
+  name: string;
+  target: string;
+}
+
+
 export async function getLent({
   lendTransactions,
   unLendTransactions,
-}: GetLent): Promise<depositItem[]> {
+}: GetLent): Promise<LentItem[]> {
   let totalLendAmount = 0;
   let totalUnlendAmount = 0;
 
@@ -45,12 +54,4 @@ export async function getLent({
   }
 
   return [];
-}
-
-export interface depositItem {
-  balance: string;
-  iconPath: string;
-  ticker: string;
-  name: string;
-  target: string;
 }

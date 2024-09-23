@@ -5,7 +5,7 @@ export interface GetAPY {
   poolID: string;
 }
 
-export async function getAPY(aoUtils: aoUtils, { poolID }: GetAPY) {
+export async function getAPY(aoUtils: aoUtils, { poolID }: GetAPY): Promise<number> {
   try {
     const message = await sendMessage(
       aoUtils,
