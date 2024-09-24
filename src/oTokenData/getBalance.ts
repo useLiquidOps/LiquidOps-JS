@@ -1,5 +1,4 @@
 import { Token } from "ao-tokens";
-import { aoUtils } from "..";
 
 export interface GetBalance {
   tokenAddress: string;
@@ -7,7 +6,6 @@ export interface GetBalance {
 }
 
 export async function getBalance(
-  aoUtils: aoUtils,
   { tokenAddress, walletAddress }: GetBalance,
 ): Promise<number> {
   try {
@@ -15,6 +13,7 @@ export async function getBalance(
     const balance = await token.getBalance(walletAddress);
     return Number(balance.raw.toString());
   } catch (error) {
-    return 0; // TODO: fix protocol balance issue when pool ID deployed
+    console.log(error);
+    throw new Error("Error getting balance");
   }
 }

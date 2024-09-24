@@ -39,7 +39,6 @@ import { SpawnProcess } from "@permaweb/aoconnect/dist/lib/spawn";
 import { SendMessage } from "@permaweb/aoconnect/dist/lib/message";
 import { ReadResult } from "@permaweb/aoconnect/dist/lib/result";
 import { SendMessageRes } from "./ao/sendMessage";
-import { Transaction } from "./arweave/getTags";
 // AO helpful functions
 import { createDataItemSigner as createDataItemSignerNode } from "@permaweb/aoconnect/dist/client/node/wallet";
 import { createDataItemSigner as createDataItemSignerWeb } from "@permaweb/aoconnect/browser";
@@ -50,6 +49,7 @@ export interface aoUtils {
   message: SendMessage;
   result: ReadResult;
   signer: aoconnectTypes["signer"];
+  configs: Services
 }
 
 class LiquidOps {
@@ -66,6 +66,7 @@ class LiquidOps {
       message,
       result,
       signer,
+      configs
     };
   }
 
@@ -100,7 +101,7 @@ class LiquidOps {
   }
 
   async getBalance(params: GetBalance): Promise<number> {
-    return getBalance(this.aoUtils, params);
+    return getBalance(params);
   }
 
   async getPrice(params: GetPrice): Promise<number> {

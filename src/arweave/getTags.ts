@@ -1,4 +1,5 @@
 import { arGql } from "ar-gql";
+import { aoUtils } from "..";
 
 export interface Transaction {
   id: string;
@@ -9,11 +10,13 @@ export interface Transaction {
 }
 
 export async function getTags(
+  aoUtils: aoUtils,
   tags: { name: string; values: string | string[] }[],
   walletAddress: string,
 ): Promise<{ node: Transaction }[]> {
   try {
-    const gql = arGql({ endpointUrl: "https://arweave.net/graphql" });
+    const gqlEndpoint = aoUtils.configs.GRAPHQL_URL || "https://arweave.net/graphql";
+    const gql = arGql({ endpointUrl: gqlEndpoint });
     const query = `
     query GetTransactions($tags: [TagFilter!], $walletAddress: String!) {
       transactions(
