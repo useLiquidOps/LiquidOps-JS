@@ -11,16 +11,6 @@ import {
   GetReserves,
   GetReservesRes,
 } from "./oTokenData/getReserves";
-import { getLent, GetLent, LentItem } from "./getTransactions/lentTransactions";
-import {
-  getBorrowed,
-  GetBorrowed,
-  BorrowedItem,
-} from "./getTransactions/borrowedTransactions";
-import {
-  getTransactions,
-  GetTransactions,
-} from "./getTransactions/allTransactions";
 import { getPrice, GetPrice } from "./oTokenData/getPrice";
 import { getInfo, GetInfo, GetInfoRes } from "./oTokenData/getInfo";
 import { transfer, Transfer, TransferRes } from "./utils/transfer";
@@ -65,10 +55,7 @@ export interface aoUtils {
 class LiquidOps {
   private aoUtils: aoUtils;
 
-  constructor(
-    signer: aoconnectTypes["signer"],
-    configs: Services = {},
-  ) {
+  constructor(signer: aoconnectTypes["signer"], configs: Services = {}) {
     if (!signer) {
       throw new Error("Please specify a ao createDataItemSigner signer");
     }
@@ -138,20 +125,6 @@ class LiquidOps {
 
   async getBalances(params: GetBalances): Promise<GetBalancesRes> {
     return getBalances(this.aoUtils, params);
-  }
-
-  // position data
-
-  async getLent(params: GetLent): Promise<LentItem[]> {
-    return getLent(params);
-  }
-
-  async getBorrowed(params: GetBorrowed): Promise<BorrowedItem[]> {
-    return getBorrowed(params);
-  }
-
-  async getTransactions(params: GetTransactions): Promise<Transaction[]> {
-    return getTransactions(params);
   }
 
   // utils
