@@ -97,7 +97,7 @@ function combineTransactionsAndStatuses(
     return transaction;
   });
 
-  combinedTransactions.sort((a, b) => {
+  combinedTransactions.sort((a, b) => { // TODO: rework timestamp to txn timestamp
     const timestampA = getTimestamp(a);
     const timestampB = getTimestamp(b);
     return timestampB - timestampA;

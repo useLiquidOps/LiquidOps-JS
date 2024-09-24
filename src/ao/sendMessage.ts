@@ -16,8 +16,6 @@ export async function sendMessage(
 ): Promise<SendMessageRes> {
   const convertedTags = convertToArray(tags);
   convertedTags.push({ name: "Protocol-Name", value: "LiquidOps" });
-  const timestamp = Date.now().toString(); // TODO: remove client timestamp use ao instead
-  convertedTags.push({ name: "timestamp", value: timestamp });
 
   let id;
   try {

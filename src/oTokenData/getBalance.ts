@@ -3,14 +3,14 @@ import { aoUtils } from "..";
 
 export interface GetBalance {
   tokenAddress: string;
+  walletAddress: string;
 }
 
 export async function getBalance(
   aoUtils: aoUtils,
-  { tokenAddress }: GetBalance,
+  { tokenAddress, walletAddress }: GetBalance,
 ): Promise<number> {
   try {
-    const walletAddress = aoUtils.signer.id; // TODO - get wallet address from signer
     const token = await Token(tokenAddress);
     const balance = await token.getBalance(walletAddress);
     return Number(balance.raw.toString());

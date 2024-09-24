@@ -35,7 +35,11 @@ import {
   GetBalances,
   GetBalancesRes,
 } from "./oTokenData/getBalances";
-import { getAllPositions, GetAllPositions, GetAllPositionsRes } from "./protocolData/getAllPositions";
+import {
+  getAllPositions,
+  GetAllPositions,
+  GetAllPositionsRes,
+} from "./protocolData/getAllPositions";
 // LO helpful data
 import { oTokens, tokens } from "./ao/processData";
 // AO misc types/functions
@@ -49,19 +53,20 @@ import { Transaction } from "./arweave/getTags";
 // AO helpful functions
 import { createDataItemSigner as createDataItemSignerNode } from "@permaweb/aoconnect/dist/client/node/wallet";
 import { createDataItemSigner as createDataItemSignerWeb } from "@permaweb/aoconnect/browser";
+import { Types as aoconnectTypes } from "@permaweb/aoconnect/dist/dal";
 
 export interface aoUtils {
   spawn: SpawnProcess;
   message: SendMessage;
   result: ReadResult;
-  signer: typeof createDataItemSignerNode | typeof createDataItemSignerWeb;
+  signer: aoconnectTypes["signer"];
 }
 
 class LiquidOps {
   private aoUtils: aoUtils;
 
   constructor(
-    signer: typeof createDataItemSignerNode | typeof createDataItemSignerWeb,
+    signer: aoconnectTypes["signer"],
     configs: Services = {},
   ) {
     if (!signer) {
