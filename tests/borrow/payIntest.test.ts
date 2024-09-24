@@ -15,7 +15,7 @@ test("payInterest function", async () => {
     poolID: LiquidOps.oTokens.wAR,
     poolTokenID: "",
     quantity: 10,
-    borrowID: ""
+    borrowID: "",
   });
 
   console.log(res);

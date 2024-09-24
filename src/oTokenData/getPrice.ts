@@ -17,7 +17,7 @@ export async function getPrice(
       {
         Target: poolID,
         Action: "Get-Price",
-        Quantity: quantity
+        Quantity: quantity,
       },
       "",
       "Get-Price",

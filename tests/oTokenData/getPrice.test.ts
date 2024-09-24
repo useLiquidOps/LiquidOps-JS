@@ -13,7 +13,7 @@ test("getPrice function", async () => {
 
   const res = await client.getPrice({
     poolID: LiquidOps.oTokens.wAR,
-    quantity: 1
+    quantity: 1,
   });
 
   console.log(res);

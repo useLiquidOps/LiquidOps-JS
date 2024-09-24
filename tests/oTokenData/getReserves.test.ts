@@ -12,7 +12,7 @@ test("getReserves function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.getReserves({
-    poolID: LiquidOps.oTokens.wAR
+    poolID: LiquidOps.oTokens.wAR,
   });
 
   console.log(res);

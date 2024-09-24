@@ -6,7 +6,11 @@ import { repay, Repay } from "./borrow/repay";
 import { payInterest, PayInterest } from "./borrow/payInterest";
 import { getAPY, GetAPY } from "./oTokenData/getAPY";
 import { getBalance, GetBalance } from "./oTokenData/getBalance";
-import { getReserves, GetReserves, GetReservesRes } from "./oTokenData/getReserves";
+import {
+  getReserves,
+  GetReserves,
+  GetReservesRes,
+} from "./oTokenData/getReserves";
 import { getLent, GetLent, LentItem } from "./getTransactions/lentTransactions";
 import {
   getBorrowed,
@@ -20,6 +24,17 @@ import {
 import { getPrice, GetPrice } from "./oTokenData/getPrice";
 import { getInfo, GetInfo, GetInfoRes } from "./oTokenData/getInfo";
 import { transfer, Transfer, TransferRes } from "./utils/transfer";
+import { getConfig, GetConfig, GetConfigRes } from "./oTokenData/getConfig";
+import {
+  getPosition,
+  GetPosition,
+  GetPositionRes,
+} from "./oTokenData/getPosition";
+import {
+  getBalances,
+  GetBalances,
+  GetBalancesRes,
+} from "./oTokenData/getBalances";
 // LO helpful data
 import { oTokens, tokens } from "./ao/processData";
 // AO misc types/functions
@@ -46,7 +61,7 @@ class LiquidOps {
 
   constructor(
     signer: typeof createDataItemSignerNode | typeof createDataItemSignerWeb,
-    configs: Services = {}
+    configs: Services = {},
   ) {
     if (!signer) {
       throw new Error("Please specify a ao createDataItemSigner signer");
@@ -105,6 +120,18 @@ class LiquidOps {
 
   async getReserves(params: GetReserves): Promise<GetReservesRes> {
     return getReserves(this.aoUtils, params);
+  }
+
+  async getConfig(params: GetConfig): Promise<GetConfigRes> {
+    return getConfig(this.aoUtils, params);
+  }
+
+  async getPosition(params: GetPosition): Promise<GetPositionRes> {
+    return getPosition(this.aoUtils, params);
+  }
+
+  async getBalances(params: GetBalances): Promise<GetBalancesRes> {
+    return getBalances(this.aoUtils, params);
   }
 
   // position data

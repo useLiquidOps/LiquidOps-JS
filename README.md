@@ -63,12 +63,12 @@ WHAT ARE OTOKENS? (When interacting with LiquidOps you use oTokens which stand f
 
 ```typescript
 const client = new LiquidOps(window.arweaveWallet, {
-    "GATEWAY_URL": "",
-    "GRAPHQL_URL": "",
-    "GRAPHQL_MAX_RETRIES": "",
-    "GRAPHQL_RETRY_BACKOFF": "",
-    "MU_URL": "",
-    "CU_URL": ""
+  GATEWAY_URL: "",
+  GRAPHQL_URL: "",
+  GRAPHQL_MAX_RETRIES: "",
+  GRAPHQL_RETRY_BACKOFF: "",
+  MU_URL: "",
+  CU_URL: "",
 });
 ```
 

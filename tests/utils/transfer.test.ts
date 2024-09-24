@@ -14,7 +14,7 @@ test("transfer function", async () => {
   const res = await client.transfer({
     poolID: LiquidOps.oTokens.wAR,
     recipient: "",
-    quantity: 1
+    quantity: 1,
   });
 
   console.log(res);

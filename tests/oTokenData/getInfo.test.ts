@@ -12,7 +12,7 @@ test("getInfo function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.getInfo({
-    poolID: LiquidOps.oTokens.wAR
+    poolID: LiquidOps.oTokens.wAR,
   });
 
   console.log(res);

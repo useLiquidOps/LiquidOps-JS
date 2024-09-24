@@ -12,7 +12,7 @@ export const getTransactions = async ({
   poolID,
   poolTokenID,
   walletAddress,
-  action
+  action,
 }: GetTransactions): Promise<Transaction[]> => {
   const tags = [
     { name: "Protocol-Name", values: "LiquidOps" },

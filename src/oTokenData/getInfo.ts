@@ -6,11 +6,11 @@ export interface GetInfo {
 }
 
 export interface GetInfoRes {
-    Name: string;
-    Ticker: string;
-    Logo: string;
-    Denomination: string;
-  }
+  Name: string;
+  Ticker: string;
+  Logo: string;
+  Denomination: string;
+}
 
 export async function getInfo(
   aoUtils: aoUtils,

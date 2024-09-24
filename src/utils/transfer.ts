@@ -2,8 +2,8 @@ import { sendMessage } from "../ao/sendMessage";
 import { aoUtils } from "..";
 
 export interface Transfer {
-  poolID: string
-    recipient: string;
+  poolID: string;
+  recipient: string;
   quantity: number;
 }
 
@@ -23,14 +23,14 @@ export async function transfer(
         Target: poolID,
         Action: "Transfer",
         Recipient: recipient,
-        Quantity: quantity
+        Quantity: quantity,
       },
       "",
       "Transfer",
       poolID,
     );
-    const res = message?.Messages[0]
-    return res
+    const res = message?.Messages[0];
+    return res;
   } catch (error) {
     console.log(error);
 

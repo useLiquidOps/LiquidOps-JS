@@ -1,40 +1,37 @@
 import { sendMessage } from "../ao/sendMessage";
 import { aoUtils } from "..";
 
-export interface GetReserves {
+export interface GetBalances {
   poolID: string;
 }
 
-export interface GetReservesRes {
-  Target: string;
-  Action: string;
-  Available: number;
-  Lent: number;
+export interface GetBalancesRes {
+  // TODO
 }
 
-export async function getReserves(
+export async function getBalances(
   aoUtils: aoUtils,
-  { poolID }: GetReserves,
-): Promise<GetReservesRes> {
+  { poolID }: GetBalances,
+): Promise<GetBalancesRes> {
   try {
     const message = await sendMessage(
       aoUtils,
       poolID,
       {
         Target: poolID,
-        Action: "Get-Reserve",
+        Action: "Balances",
       },
       "",
-      "Get-Reserve",
+      "Balances",
       poolID,
     );
     const res = message?.Messages[0].Tags.find(
-      (token: any) => token.name === "Reserves",
+      (token: any) => token.name === "Balances",
     );
     return res.value;
   } catch (error) {
     console.log(error);
 
-    throw new Error("Error getting reserves");
+    throw new Error("Error getting balances");
   }
 }
