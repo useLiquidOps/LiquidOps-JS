@@ -35,6 +35,7 @@ import {
   GetBalances,
   GetBalancesRes,
 } from "./oTokenData/getBalances";
+import { getAllPositions, GetAllPositions, GetAllPositionsRes } from "./protocolData/getAllPositions";
 // LO helpful data
 import { oTokens, tokens } from "./ao/processData";
 // AO misc types/functions
@@ -152,6 +153,12 @@ class LiquidOps {
 
   async transfer(params: Transfer): Promise<TransferRes> {
     return transfer(this.aoUtils, params);
+  }
+
+  // protocol data
+
+  async getAllPositions(params: GetAllPositions): Promise<GetAllPositionsRes> {
+    return getAllPositions(this.aoUtils, params);
   }
 
   // process data
