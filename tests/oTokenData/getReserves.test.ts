@@ -1,7 +1,7 @@
 import { expect, test, mock } from "bun:test";
 import LiquidOps, { createDataItemSignerNode } from "../../src";
 
-test("getLiquidity function", async () => {
+test("getReserves function", async () => {
   if (!process.env.JWK) {
     throw new Error("Please specify a JWK in the .env file");
   }
@@ -11,8 +11,8 @@ test("getLiquidity function", async () => {
 
   const client = new LiquidOps(signer);
 
-  const res = await client.getLiquidity({
-    poolID: ""
+  const res = await client.getReserves({
+    poolID: LiquidOps.oTokens.wAR
   });
 
   console.log(res);

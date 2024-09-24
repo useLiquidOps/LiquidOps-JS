@@ -4,19 +4,22 @@ import { unLend, UnLend } from "./lend/unLend";
 import { borrow, Borrow } from "./borrow/borrow";
 import { repay, Repay } from "./borrow/repay";
 import { payInterest, PayInterest } from "./borrow/payInterest";
-import { getAPY, GetAPY } from "./poolData/getAPY";
-import { getBalance, GetBalance } from "./poolData/getBalance";
-import { getLiquidity, GetLiquidity } from "./poolData/getLiquidity";
-import { getLent, GetLent, LentItem } from "./positionData/getLent";
+import { getAPY, GetAPY } from "./oTokenData/getAPY";
+import { getBalance, GetBalance } from "./oTokenData/getBalance";
+import { getReserves, GetReserves, GetReservesRes } from "./oTokenData/getReserves";
+import { getLent, GetLent, LentItem } from "./getTransactions/lentTransactions";
 import {
   getBorrowed,
   GetBorrowed,
   BorrowedItem,
-} from "./positionData/getBorrowed";
+} from "./getTransactions/borrowedTransactions";
 import {
   getTransactions,
   GetTransactions,
-} from "./positionData/getTransactions";
+} from "./getTransactions/allTransactions";
+import { getPrice, GetPrice } from "./oTokenData/getPrice";
+import { getInfo, GetInfo, GetInfoRes } from "./oTokenData/getInfo";
+import { transfer, Transfer, TransferRes } from "./utils/transfer";
 // LO helpful data
 import { oTokens, tokens } from "./ao/processData";
 // AO misc types/functions
@@ -43,7 +46,7 @@ class LiquidOps {
 
   constructor(
     signer: typeof createDataItemSignerNode | typeof createDataItemSignerWeb,
-    configs: Services = {},
+    configs: Services = {}
   ) {
     if (!signer) {
       throw new Error("Please specify a ao createDataItemSigner signer");
@@ -58,6 +61,8 @@ class LiquidOps {
     };
   }
 
+  // lend
+
   async lend(params: Lend): Promise<SendMessageRes> {
     return lend(this.aoUtils, params);
   }
@@ -65,6 +70,8 @@ class LiquidOps {
   async unLend(params: UnLend): Promise<SendMessageRes> {
     return unLend(this.aoUtils, params);
   }
+
+  // borrow
 
   async borrow(params: Borrow): Promise<SendMessageRes> {
     return borrow(this.aoUtils, params);
@@ -78,6 +85,8 @@ class LiquidOps {
     return payInterest(this.aoUtils, params);
   }
 
+  // oTokenData
+
   async getAPY(params: GetAPY): Promise<number> {
     return getAPY(this.aoUtils, params);
   }
@@ -86,9 +95,19 @@ class LiquidOps {
     return getBalance(this.aoUtils, params);
   }
 
-  async getLiquidity(params: GetLiquidity): Promise<number> {
-    return getLiquidity(this.aoUtils, params);
+  async getPrice(params: GetPrice): Promise<number> {
+    return getPrice(this.aoUtils, params);
   }
+
+  async getInfo(params: GetInfo): Promise<GetInfoRes> {
+    return getInfo(this.aoUtils, params);
+  }
+
+  async getReserves(params: GetReserves): Promise<GetReservesRes> {
+    return getReserves(this.aoUtils, params);
+  }
+
+  // position data
 
   async getLent(params: GetLent): Promise<LentItem[]> {
     return getLent(params);
@@ -101,6 +120,14 @@ class LiquidOps {
   async getTransactions(params: GetTransactions): Promise<Transaction[]> {
     return getTransactions(params);
   }
+
+  // utils
+
+  async transfer(params: Transfer): Promise<TransferRes> {
+    return transfer(this.aoUtils, params);
+  }
+
+  // process data
 
   static oTokens = oTokens;
   static tokens = tokens;
