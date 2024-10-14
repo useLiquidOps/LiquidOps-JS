@@ -12,7 +12,7 @@ test("lend function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.lend({
-    token: 'wAR',
+    token: "wAR",
     quantity: BigInt(10),
   });
 

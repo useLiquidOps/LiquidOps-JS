@@ -12,7 +12,7 @@ test("getAPY function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.getAPY({
-    token: 'wAR'
+    token: "wAR",
   });
 
   expect(res).toBeTypeOf("number");

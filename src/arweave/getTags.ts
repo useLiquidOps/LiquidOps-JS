@@ -42,10 +42,11 @@ export async function getTags(
     }
   `;
 
+    tags.push({ name: "Protocol-Name", values: ["LiquidOps"] });
     const response = await gql.run(query, { tags, walletAddress });
     return response.data.transactions.edges;
   } catch (error) {
     console.log(error);
-    throw new Error("Error retrieving graphQL data");
+    throw new Error("Error retrieving arweave GraphQL data");
   }
 }

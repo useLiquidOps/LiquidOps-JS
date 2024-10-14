@@ -12,8 +12,8 @@ test("getConfig function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.getConfig({
-    token: 'wAR'
+    token: "wAR",
   });
 
-  expect(res.Token).toBeTypeOf('string');
+  expect(res.Token).toBeTypeOf("string");
 });

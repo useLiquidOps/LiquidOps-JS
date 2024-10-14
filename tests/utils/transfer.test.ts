@@ -13,8 +13,8 @@ test("transfer function", async () => {
 
   const res = await client.transfer({
     tokenAddress: LiquidOps.tokens.wAR,
-    recipient: '',
-    quantity: BigInt(10)
+    recipient: "",
+    quantity: BigInt(10),
   });
 
   expect(res).toBe(1); // TODO

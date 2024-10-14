@@ -12,8 +12,8 @@ test("getAllPositions function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.getAllPositions({
-    token: 'wAR'
+    token: "wAR",
   });
 
-  expect(res).toBe(1); // TODO 
+  expect(res).toBe(1); // TODO
 });

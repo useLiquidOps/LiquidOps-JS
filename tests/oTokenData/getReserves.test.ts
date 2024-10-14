@@ -12,7 +12,7 @@ test("getReserves function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.getReserves({
-    token: 'wAR'
+    token: "wAR",
   });
 
   expect(res.Target).toBeTypeOf("string");

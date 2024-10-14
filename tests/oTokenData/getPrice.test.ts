@@ -12,7 +12,7 @@ test("getPrice function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.getPrice({
-    token: 'wAR',
+    token: "wAR",
     quantity: BigInt(10),
   });
 

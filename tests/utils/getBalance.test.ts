@@ -12,9 +12,9 @@ test("getBalance function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.getBalance({
-    tokenAddress: '',
-    walletAddress: ''
+    tokenAddress: "",
+    walletAddress: "",
   });
 
-  expect(res).toBeTypeOf('number');
+  expect(res).toBeTypeOf("number");
 });

@@ -12,7 +12,7 @@ test("getBalances function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.getBalances({
-    token: 'wAR'
+    token: "wAR",
   });
 
   expect(res).toBe(1); // TODO

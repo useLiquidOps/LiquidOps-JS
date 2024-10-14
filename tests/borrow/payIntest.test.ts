@@ -12,7 +12,7 @@ test("payInterest function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.payInterest({
-    token: 'wAR',
+    token: "wAR",
     quantity: BigInt(10),
     borrowID: "", // TODO
   });

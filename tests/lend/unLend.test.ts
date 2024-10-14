@@ -12,7 +12,7 @@ test("unLend function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.unLend({
-    token: 'wAR',
+    token: "wAR",
     quantity: BigInt(10),
   });
 
