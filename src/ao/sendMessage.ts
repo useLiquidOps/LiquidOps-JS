@@ -9,12 +9,14 @@ export interface SendMessageRes extends MessageResult {
 export async function sendMessage(
   aoUtils: aoUtils,
   processID: string,
-  tags: any,
+  messageTags: {
+    [key: string]: string | number | boolean | object;
+  },
   data: string,
   action: string,
   tokenID: string,
 ): Promise<SendMessageRes> {
-  const convertedTags = convertToArray(tags);
+  const convertedTags = messageTagsToArray(messageTags);
   convertedTags.push({ name: "Protocol-Name", value: "LiquidOps" });
 
   let id;
@@ -45,7 +47,7 @@ export async function sendMessage(
   }
 }
 
-function convertToArray(obj: any): any {
+function messageTagsToArray(obj: any): any {
   return Object.entries(obj).map(([name, value]) => ({
     name,
     value,
