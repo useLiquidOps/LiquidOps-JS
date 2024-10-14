@@ -12,7 +12,7 @@ test("getTransactions function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.getTransactions({
-    walletAddress: ''
+    walletAddress: "",
   });
 
   expect(res[0]).toBeTypeOf("string"); // TODO, change to expect type to be type and import the type?
