@@ -12,7 +12,7 @@ export async function sendMessage(
   messageTags: {
     [key: string]: string | number | boolean | object;
   },
-  action: string
+  action: string,
 ): Promise<SendMessageRes> {
   const convertedMessageTags = messageTagsToArray(messageTags);
   convertedMessageTags.push({ name: "Protocol-Name", value: "LiquidOps" });
@@ -23,7 +23,7 @@ export async function sendMessage(
       process: processID,
       tags: convertedMessageTags,
       signer: aoUtils.signer,
-      data: '',
+      data: "",
     });
   } catch (error) {
     console.log(error);
