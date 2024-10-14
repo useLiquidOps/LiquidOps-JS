@@ -5,7 +5,7 @@ import { borrow, Borrow } from "./borrow/borrow";
 import { repay, Repay } from "./borrow/repay";
 import { payInterest, PayInterest } from "./borrow/payInterest";
 import { getAPY, GetAPY } from "./oTokenData/getAPY";
-import { getBalance, GetBalance } from "./oTokenData/getBalance";
+import { getBalance, GetBalance } from "./utils/getBalance";
 import {
   getReserves,
   GetReserves,
@@ -49,7 +49,7 @@ export interface aoUtils {
   message: SendMessage;
   result: ReadResult;
   signer: aoconnectTypes["signer"];
-  configs: Services
+  configs: Services;
 }
 
 class LiquidOps {
@@ -66,8 +66,22 @@ class LiquidOps {
       message,
       result,
       signer,
-      configs
+      configs,
     };
+  }
+
+  // borrow
+
+  async borrow(params: Borrow): Promise<SendMessageRes> {
+    return borrow(this.aoUtils, params);
+  }
+
+  async payInterest(params: PayInterest): Promise<SendMessageRes> {
+    return payInterest(this.aoUtils, params);
+  }
+
+  async repay(params: Repay): Promise<SendMessageRes> {
+    return repay(this.aoUtils, params);
   }
 
   // lend
@@ -80,64 +94,50 @@ class LiquidOps {
     return unLend(this.aoUtils, params);
   }
 
-  // borrow
-
-  async borrow(params: Borrow): Promise<SendMessageRes> {
-    return borrow(this.aoUtils, params);
-  }
-
-  async repay(params: Repay): Promise<SendMessageRes> {
-    return repay(this.aoUtils, params);
-  }
-
-  async payInterest(params: PayInterest): Promise<SendMessageRes> {
-    return payInterest(this.aoUtils, params);
-  }
-
   // oTokenData
 
   async getAPY(params: GetAPY): Promise<number> {
     return getAPY(this.aoUtils, params);
   }
 
-  async getBalance(params: GetBalance): Promise<number> {
-    return getBalance(params);
-  }
-
-  async getPrice(params: GetPrice): Promise<number> {
-    return getPrice(this.aoUtils, params);
-  }
-
-  async getInfo(params: GetInfo): Promise<GetInfoRes> {
-    return getInfo(this.aoUtils, params);
-  }
-
-  async getReserves(params: GetReserves): Promise<GetReservesRes> {
-    return getReserves(this.aoUtils, params);
+  async getBalances(params: GetBalances): Promise<GetBalancesRes> {
+    return getBalances(this.aoUtils, params);
   }
 
   async getConfig(params: GetConfig): Promise<GetConfigRes> {
     return getConfig(this.aoUtils, params);
   }
 
+  async getInfo(params: GetInfo): Promise<GetInfoRes> {
+    return getInfo(this.aoUtils, params);
+  }
+
   async getPosition(params: GetPosition): Promise<GetPositionRes> {
     return getPosition(this.aoUtils, params);
   }
 
-  async getBalances(params: GetBalances): Promise<GetBalancesRes> {
-    return getBalances(this.aoUtils, params);
+  async getPrice(params: GetPrice): Promise<number> {
+    return getPrice(this.aoUtils, params);
   }
 
-  // utils
-
-  async transfer(params: Transfer): Promise<TransferRes> {
-    return transfer(this.aoUtils, params);
+  async getReserves(params: GetReserves): Promise<GetReservesRes> {
+    return getReserves(this.aoUtils, params);
   }
 
   // protocol data
 
   async getAllPositions(params: GetAllPositions): Promise<GetAllPositionsRes> {
     return getAllPositions(this.aoUtils, params);
+  }
+
+  // utils
+
+  async getBalance(params: GetBalance): Promise<number> {
+    return getBalance(params);
+  }
+
+  async transfer(params: Transfer): Promise<TransferRes> {
+    return transfer(this.aoUtils, params);
   }
 
   // process data

@@ -1,8 +1,9 @@
 import { sendMessage } from "../ao/sendMessage";
 import { aoUtils } from "..";
+import { oTokens, SupportedTokens } from "../ao/processData";
 
 export interface GetConfig {
-  poolID: string;
+  token: SupportedTokens;
 }
 
 export interface GetConfigRes {
@@ -16,19 +17,21 @@ export interface GetConfigRes {
 
 export async function getConfig(
   aoUtils: aoUtils,
-  { poolID }: GetConfig,
+  { token }: GetConfig,
 ): Promise<GetConfigRes> {
   try {
+    const oTokenID = oTokens[token];
+
     const message = await sendMessage(
       aoUtils,
-      poolID,
+      oTokenID,
       {
-        Target: poolID,
+        Target: oTokenID,
         Action: "Get-Config",
       },
       "",
       "Get-Config",
-      poolID,
+      oTokenID,
     );
     const res = message?.Messages[0].Tags.find(
       (token: any) => token.name === "Get-Config",

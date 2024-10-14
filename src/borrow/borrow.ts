@@ -1,33 +1,35 @@
 import { sendMessage, SendMessageRes } from "../ao/sendMessage";
 import { aoUtils } from "..";
+import { oTokens, tokens, SupportedTokens } from "../ao/processData";
 
 export interface Borrow {
-  poolID: string;
-  poolTokenID: string;
+  token: SupportedTokens;
   quantity: BigInt;
 }
 
 export async function borrow(
   aoUtils: aoUtils,
-  { poolID, poolTokenID, quantity }: Borrow,
+  { token, quantity }: Borrow,
 ): Promise<SendMessageRes> {
   try {
+    const tokenID = tokens[token];
+    const oTokenID = oTokens[token];
 
     return await sendMessage(
       aoUtils,
-      "ycQaQxjRf5IDg26kNJBlwfPjzZqLob_wJDVBu3DYxVw",
+      tokenID,
       {
-        Target: "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",
+        Target: tokenID,
         Action: "Transfer",
         Quantity: JSON.stringify(quantity),
-        Recipient: poolID,
+        Recipient: oTokenID,
         "X-Action": "Borrow",
         "borrowed-quantity": JSON.stringify(quantity),
-        "borrowed-address": poolTokenID,
+        "borrowed-address": tokenID,
       },
       "",
       "Borrow",
-      "ycQaQxjRf5IDg26kNJBlwfPjzZqLob_wJDVBu3DYxVw",
+      tokenID,
     );
   } catch (error) {
     console.log(error);

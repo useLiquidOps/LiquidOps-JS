@@ -1,25 +1,28 @@
 import { sendMessage } from "../ao/sendMessage";
 import { aoUtils } from "..";
+import { oTokens, SupportedTokens } from "../ao/processData";
 
 export interface GetAPY {
-  poolID: string;
+  token: SupportedTokens;
 }
 
 export async function getAPY(
   aoUtils: aoUtils,
-  { poolID }: GetAPY,
+  { token }: GetAPY,
 ): Promise<number> {
   try {
+    const oTokenID = oTokens[token];
+
     const message = await sendMessage(
       aoUtils,
-      poolID,
+      oTokenID,
       {
-        Target: poolID,
+        Target: oTokenID,
         Action: "Get-APY",
       },
       "",
       "Get-APY",
-      poolID,
+      oTokenID,
     );
     const APY = message?.Messages[0].Tags.find(
       (token: any) => token.name === "APY",

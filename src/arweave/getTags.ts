@@ -15,7 +15,8 @@ export async function getTags(
   walletAddress: string,
 ): Promise<{ node: Transaction }[]> {
   try {
-    const gqlEndpoint = aoUtils.configs.GRAPHQL_URL || "https://arweave.net/graphql";
+    const gqlEndpoint =
+      aoUtils.configs.GRAPHQL_URL || "https://arweave.net/graphql";
     const gql = arGql({ endpointUrl: gqlEndpoint });
     const query = `
     query GetTransactions($tags: [TagFilter!], $walletAddress: String!) {

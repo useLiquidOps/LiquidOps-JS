@@ -2,7 +2,7 @@ import { sendMessage } from "../ao/sendMessage";
 import { aoUtils } from "..";
 
 export interface Transfer {
-  poolID: string;
+  tokenAddress: string;
   recipient: string;
   quantity: BigInt;
 }
@@ -13,21 +13,21 @@ export interface TransferRes {
 
 export async function transfer(
   aoUtils: aoUtils,
-  { poolID, recipient, quantity }: Transfer,
+  { tokenAddress, recipient, quantity }: Transfer,
 ): Promise<TransferRes> {
   try {
     const message = await sendMessage(
       aoUtils,
-      poolID,
+      tokenAddress,
       {
-        Target: poolID,
+        Target: tokenAddress,
         Action: "Transfer",
         Recipient: recipient,
         Quantity: JSON.stringify(quantity),
       },
       "",
       "Transfer",
-      poolID,
+      tokenAddress,
     );
     const res = message?.Messages[0];
     return res;

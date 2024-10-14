@@ -1,27 +1,30 @@
 import { sendMessage } from "../ao/sendMessage";
 import { aoUtils } from "..";
+import { oTokens, SupportedTokens } from "../ao/processData";
 
 export interface GetPrice {
-  poolID: string;
+  token: SupportedTokens;
   quantity: BigInt;
 }
 
 export async function getPrice(
   aoUtils: aoUtils,
-  { poolID, quantity }: GetPrice,
+  { token, quantity }: GetPrice,
 ): Promise<number> {
   try {
+    const oTokenID = oTokens[token];
+
     const message = await sendMessage(
       aoUtils,
-      poolID,
+      oTokenID,
       {
-        Target: poolID,
+        Target: oTokenID,
         Action: "Get-Price",
         Quantity: JSON.stringify(quantity),
       },
       "",
       "Get-Price",
-      poolID,
+      oTokenID,
     );
     const price = message?.Messages[0].Tags.find(
       (token: any) => token.name === "price",

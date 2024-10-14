@@ -1,8 +1,9 @@
 import { sendMessage } from "../ao/sendMessage";
 import { aoUtils } from "..";
+import { oTokens, SupportedTokens } from "../ao/processData";
 
 export interface GetInfo {
-  poolID: string;
+  token: SupportedTokens;
 }
 
 export interface GetInfoRes {
@@ -14,19 +15,21 @@ export interface GetInfoRes {
 
 export async function getInfo(
   aoUtils: aoUtils,
-  { poolID }: GetInfo,
+  { token }: GetInfo,
 ): Promise<GetInfoRes> {
+  const oTokenID = oTokens[token];
+
   try {
     const message = await sendMessage(
       aoUtils,
-      poolID,
+      oTokenID,
       {
-        Target: poolID,
+        Target: oTokenID,
         Action: "Info",
       },
       "",
       "Info",
-      poolID,
+      oTokenID,
     );
     const info = message?.Messages[0].Tags.find(
       (token: any) => token.name === "Info",

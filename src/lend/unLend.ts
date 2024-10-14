@@ -1,29 +1,31 @@
 import { sendMessage, SendMessageRes } from "../ao/sendMessage";
 import { aoUtils } from "..";
+import { oTokens, tokens, SupportedTokens } from "../ao/processData";
 
 export interface UnLend {
-  poolID: string;
-  poolTokenID: string;
+  token: SupportedTokens;
   quantity: BigInt;
 }
 
 export async function unLend(
   aoUtils: aoUtils,
-  { poolID, poolTokenID, quantity }: UnLend,
+  { token, quantity }: UnLend,
 ): Promise<SendMessageRes> {
   try {
+    const tokenID = tokens[token];
+    const oTokenID = oTokens[token];
 
     return await sendMessage(
       aoUtils,
-      poolID,
+      oTokenID,
       {
-        Target: poolID,
+        Target: oTokenID,
         Action: "Burn",
         Quantity: JSON.stringify(quantity),
       },
       "",
       "Un-Lend",
-      poolTokenID,
+      tokenID,
     );
   } catch (error) {
     console.log(error);

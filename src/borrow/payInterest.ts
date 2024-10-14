@@ -1,33 +1,35 @@
 import { sendMessage, SendMessageRes } from "../ao/sendMessage";
 import { aoUtils } from "..";
+import { oTokens, tokens, SupportedTokens } from "../ao/processData";
 
 export interface PayInterest {
-  poolID: string;
-  poolTokenID: string;
+  token: SupportedTokens;
   quantity: BigInt;
-  borrowID: string;
+  borrowID: string; // TODO: talk to Marton
 }
 
 export async function payInterest(
   aoUtils: aoUtils,
-  { poolID, poolTokenID, quantity, borrowID }: PayInterest,
+  { token, quantity, borrowID }: PayInterest,
 ): Promise<SendMessageRes> {
   try {
+    const tokenID = tokens[token];
+    const oTokenID = oTokens[token];
 
     return await sendMessage(
       aoUtils,
-      poolTokenID,
+      tokenID,
       {
-        Target: poolTokenID,
+        Target: tokenID,
         Action: "Transfer",
         Quantity: JSON.stringify(quantity),
-        Recipient: poolID,
+        Recipient: oTokenID,
         "X-Action": "Pay-Interest",
         "Borrow-Id": borrowID,
       },
       "",
       "Pay-Interest",
-      poolTokenID,
+      tokenID,
     );
   } catch (error) {
     console.log(error);

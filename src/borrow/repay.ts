@@ -1,35 +1,37 @@
 import { sendMessage, SendMessageRes } from "../ao/sendMessage";
 import { aoUtils } from "..";
+import { oTokens, tokens, SupportedTokens } from "../ao/processData";
 
 export interface Repay {
-  poolID: string;
-  poolTokenID: string;
+  token: SupportedTokens;
   quantity: BigInt;
   borrowID: string;
 }
 
 export async function repay(
   aoUtils: aoUtils,
-  { poolID, poolTokenID, quantity, borrowID }: Repay,
+  { token, quantity, borrowID }: Repay,
 ): Promise<SendMessageRes> {
   try {
+    const tokenID = tokens[token];
+    const oTokenID = oTokens[token];
 
     return await sendMessage(
       aoUtils,
-      "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",
+      tokenID,
       {
-        Target: "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",
+        Target: tokenID,
         Action: "Transfer",
         Quantity: JSON.stringify(quantity),
-        Recipient: poolID,
+        Recipient: oTokenID,
         "X-Action": "Repay",
         "Borrow-Id": borrowID,
         "borrowed-quantity": JSON.stringify(quantity),
-        "borrowed-address": poolTokenID,
+        "borrowed-address": tokenID,
       },
       "",
       "Repay",
-      "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",
+      tokenID,
     );
   } catch (error) {
     console.log(error);

@@ -1,8 +1,9 @@
 import { sendMessage } from "../ao/sendMessage";
 import { aoUtils } from "..";
+import { oTokens, SupportedTokens } from "../ao/processData";
 
 export interface GetAllPositions {
-  poolID: string;
+  token: SupportedTokens;
 }
 
 export interface GetAllPositionsRes {
@@ -11,19 +12,21 @@ export interface GetAllPositionsRes {
 
 export async function getAllPositions(
   aoUtils: aoUtils,
-  { poolID }: GetAllPositions,
+  { token }: GetAllPositions,
 ): Promise<GetAllPositionsRes> {
   try {
+    const oTokenID = oTokens[token];
+
     const message = await sendMessage(
       aoUtils,
-      poolID,
+      oTokenID,
       {
-        Target: poolID,
+        Target: oTokenID,
         Action: "Get-Position",
       },
       "",
       "Get-Position",
-      poolID,
+      oTokenID,
     );
     const res = message?.Messages[0].Tags.find(
       (token: any) => token.name === "Get-Position",
