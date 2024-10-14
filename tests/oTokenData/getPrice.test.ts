@@ -1,4 +1,4 @@
-import { expect, test, mock } from "bun:test";
+import { expect, test } from "bun:test";
 import LiquidOps, { createDataItemSignerNode } from "../../src";
 
 test("getPrice function", async () => {
@@ -12,11 +12,9 @@ test("getPrice function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.getPrice({
-    poolID: LiquidOps.oTokens.wAR,
-    quantity: 1,
+    token: 'wAR',
+    quantity: BigInt(10),
   });
 
-  console.log(res);
-
-  expect(res).toBe(1);
+  expect(res).toBeTypeOf("number");
 });

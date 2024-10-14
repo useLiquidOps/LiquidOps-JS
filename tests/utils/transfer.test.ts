@@ -1,4 +1,4 @@
-import { expect, test, mock } from "bun:test";
+import { expect, test } from "bun:test";
 import LiquidOps, { createDataItemSignerNode } from "../../src";
 
 test("transfer function", async () => {
@@ -12,12 +12,10 @@ test("transfer function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.transfer({
-    poolID: LiquidOps.oTokens.wAR,
-    recipient: "",
-    quantity: 1,
+    tokenAddress: LiquidOps.tokens.wAR,
+    recipient: '',
+    quantity: BigInt(10)
   });
 
-  console.log(res);
-
-  expect(res).toBe(1);
+  expect(res).toBe(1); // TODO
 });

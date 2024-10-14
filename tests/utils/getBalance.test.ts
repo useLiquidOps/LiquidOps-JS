@@ -1,4 +1,4 @@
-import { expect, test, mock } from "bun:test";
+import { expect, test } from "bun:test";
 import LiquidOps, { createDataItemSignerNode } from "../../src";
 
 test("getBalance function", async () => {
@@ -12,10 +12,9 @@ test("getBalance function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.getBalance({
-    tokenAddress: LiquidOps.oTokens.wAR,
+    tokenAddress: '',
+    walletAddress: ''
   });
 
-  console.log(res);
-
-  expect(res).toBe(1);
+  expect(res).toBeTypeOf('number');
 });
