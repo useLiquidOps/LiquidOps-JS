@@ -24,7 +24,6 @@ export async function getAllPositions(
         Target: oTokenID,
         Action: "Get-Position",
       },
-      "",
       "Get-Position",
       oTokenID,
     );

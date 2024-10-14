@@ -27,7 +27,6 @@ export async function getReserves(
         Target: oTokenID,
         Action: "Get-Reserve",
       },
-      "",
       "Get-Reserve",
       oTokenID,
     );

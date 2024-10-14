@@ -27,7 +27,6 @@ export async function payInterest(
         "X-Action": "Pay-Interest",
         "Borrow-Id": borrowID,
       },
-      "",
       "Pay-Interest",
       tokenID,
     );

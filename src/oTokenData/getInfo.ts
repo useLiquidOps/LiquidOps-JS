@@ -27,7 +27,6 @@ export async function getInfo(
         Target: oTokenID,
         Action: "Info",
       },
-      "",
       "Info",
       oTokenID,
     );

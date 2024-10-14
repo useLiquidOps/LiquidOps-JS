@@ -22,7 +22,6 @@ export async function getPrice(
         Action: "Get-Price",
         Quantity: JSON.stringify(quantity),
       },
-      "",
       "Get-Price",
       oTokenID,
     );

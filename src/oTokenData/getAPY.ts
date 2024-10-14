@@ -20,7 +20,6 @@ export async function getAPY(
         Target: oTokenID,
         Action: "Get-APY",
       },
-      "",
       "Get-APY",
       oTokenID,
     );

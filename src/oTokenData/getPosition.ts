@@ -24,7 +24,6 @@ export async function getPosition(
         Target: oTokenID,
         Action: "Get-Position",
       },
-      "",
       "Get-Position",
       oTokenID,
     );

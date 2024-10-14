@@ -29,7 +29,6 @@ export async function getConfig(
         Target: oTokenID,
         Action: "Get-Config",
       },
-      "",
       "Get-Config",
       oTokenID,
     );

@@ -12,7 +12,6 @@ export async function sendMessage(
   messageTags: {
     [key: string]: string | number | boolean | object;
   },
-  data: string,
   action: string,
   tokenID: string,
 ): Promise<SendMessageRes> {
@@ -25,7 +24,7 @@ export async function sendMessage(
       process: processID,
       tags: convertedMessageTags,
       signer: aoUtils.signer,
-      data: data,
+      data: '',
     });
   } catch (error) {
     console.log(error);

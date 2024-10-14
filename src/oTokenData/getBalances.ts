@@ -24,7 +24,6 @@ export async function getBalances(
         Target: oTokenID,
         Action: "Balances",
       },
-      "",
       "Balances",
       oTokenID,
     );
