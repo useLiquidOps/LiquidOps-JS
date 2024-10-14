@@ -2,6 +2,11 @@
 import { lend, Lend } from "./functions/lend/lend";
 import { unLend, UnLend } from "./functions/lend/unLend";
 import { borrow, Borrow } from "./functions/borrow/borrow";
+import {
+  getTransactions,
+  GetTransactions,
+} from "./functions/getTransactions/getTransactions";
+import { Transaction } from "./arweave/getTags";
 import { repay, Repay } from "./functions/borrow/repay";
 import { payInterest, PayInterest } from "./functions/borrow/payInterest";
 import { getAPY, GetAPY } from "./functions/oTokenData/getAPY";
@@ -14,7 +19,11 @@ import {
 import { getPrice, GetPrice } from "./functions/oTokenData/getPrice";
 import { getInfo, GetInfo, GetInfoRes } from "./functions/oTokenData/getInfo";
 import { transfer, Transfer, TransferRes } from "./functions/utils/transfer";
-import { getConfig, GetConfig, GetConfigRes } from "./functions/oTokenData/getConfig";
+import {
+  getConfig,
+  GetConfig,
+  GetConfigRes,
+} from "./functions/oTokenData/getConfig";
 import {
   getPosition,
   GetPosition,
@@ -82,6 +91,14 @@ class LiquidOps {
 
   async repay(params: Repay): Promise<SendMessageRes> {
     return repay(this.aoUtils, params);
+  }
+
+  // getTransactions
+
+  async getTransactions(
+    params: GetTransactions,
+  ): Promise<{ node: Transaction }[]> {
+    return getTransactions(this.aoUtils, params);
   }
 
   // lend

@@ -13,7 +13,7 @@ export interface TransferRes {
 
 export async function transfer(
   aoUtils: aoUtils,
-  { tokenAddress, recipient, quantity }: Transfer
+  { tokenAddress, recipient, quantity }: Transfer,
 ): Promise<TransferRes> {
   try {
     const message = await sendMessage(aoUtils, {
