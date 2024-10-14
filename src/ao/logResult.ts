@@ -6,11 +6,13 @@ export async function logResult(
   ID: string,
   processID: string,
   action: string,
+  xAction: string,
   tokenID: string,
 ) {
   const tags = [
     { name: "resultID", value: ID },
     { name: "action", value: action },
+    { name: "xAction", value: xAction },
     { name: "tokenID", value: tokenID },
   ];
 

@@ -25,7 +25,6 @@ export async function lend(
         Recipient: oTokenID,
         "X-Action": "Lend",
       },
-      "Lend",
     );
   } catch (error) {
     console.log(error);

@@ -27,7 +27,6 @@ export async function borrow(
         "borrowed-quantity": JSON.stringify(quantity),
         "borrowed-address": tokenID,
       },
-      "Borrow",
     );
   } catch (error) {
     console.log(error);

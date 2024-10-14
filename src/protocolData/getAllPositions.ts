@@ -24,7 +24,6 @@ export async function getAllPositions(
         Target: oTokenID,
         Action: "Get-Position",
       },
-      "Get-Position",
     );
     const res = message?.Messages[0].Tags.find(
       (token: any) => token.name === "Get-Position",

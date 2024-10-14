@@ -10,9 +10,9 @@ export async function sendMessage(
   aoUtils: aoUtils,
   processID: string,
   messageTags: {
+    // TODO message tags
     [key: string]: string | number | boolean | object;
   },
-  action: string,
 ): Promise<SendMessageRes> {
   const convertedMessageTags = messageTagsToArray(messageTags);
   convertedMessageTags.push({ name: "Protocol-Name", value: "LiquidOps" });
@@ -36,7 +36,11 @@ export async function sendMessage(
       process: processID,
     });
 
-    await logResult(aoUtils, Error, id, processID, action, processID);
+    const action = messageTags["Action"]
+    const xAction = messageTags["X-Action"]
+
+    // @ts-ignore, action is always string
+    await logResult(aoUtils, Error, id, processID, action, xAction, processID);
 
     return { id, Messages, Spawns, Output, Error };
   } catch (error) {

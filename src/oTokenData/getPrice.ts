@@ -22,7 +22,6 @@ export async function getPrice(
         Action: "Get-Price",
         Quantity: JSON.stringify(quantity),
       },
-      "Get-Price",
     );
     const price = message?.Messages[0].Tags.find(
       (token: any) => token.name === "price",

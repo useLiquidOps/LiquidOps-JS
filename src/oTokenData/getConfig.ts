@@ -29,7 +29,6 @@ export async function getConfig(
         Target: oTokenID,
         Action: "Get-Config",
       },
-      "Get-Config",
     );
     const res = message?.Messages[0].Tags.find(
       (token: any) => token.name === "Get-Config",

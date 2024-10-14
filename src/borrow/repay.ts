@@ -29,7 +29,6 @@ export async function repay(
         "borrowed-quantity": JSON.stringify(quantity),
         "borrowed-address": tokenID,
       },
-      "Repay",
     );
   } catch (error) {
     console.log(error);
