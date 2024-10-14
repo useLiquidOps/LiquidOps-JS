@@ -1,11 +1,10 @@
 import { sendMessage, SendMessageRes } from "../ao/sendMessage";
-import { Token } from "ao-tokens";
 import { aoUtils } from "..";
 
 export interface Lend {
   poolID: string;
   poolTokenID: string;
-  quantity: number;
+  quantity: BigInt;
 }
 
 export async function lend(
@@ -13,16 +12,13 @@ export async function lend(
   { poolID, poolTokenID, quantity }: Lend,
 ): Promise<SendMessageRes> {
   try {
-    const token = await Token(poolTokenID);
-    const amountToSend = token.Quantity.fromNumber(quantity);
-
     return await sendMessage(
       aoUtils,
       poolTokenID,
       {
         Target: poolTokenID,
         Action: "Transfer",
-        Quantity: amountToSend.raw.toString(),
+        Quantity: JSON.stringify(quantity),
         Recipient: poolID,
         "X-Action": "Lend",
       },

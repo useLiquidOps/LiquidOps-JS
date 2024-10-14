@@ -3,7 +3,7 @@ import { aoUtils } from "..";
 
 export interface GetPrice {
   poolID: string;
-  quantity: number;
+  quantity: BigInt;
 }
 
 export async function getPrice(
@@ -17,7 +17,7 @@ export async function getPrice(
       {
         Target: poolID,
         Action: "Get-Price",
-        Quantity: quantity,
+        Quantity: JSON.stringify(quantity),
       },
       "",
       "Get-Price",

@@ -4,7 +4,7 @@ import { aoUtils } from "..";
 export interface Transfer {
   poolID: string;
   recipient: string;
-  quantity: number;
+  quantity: BigInt;
 }
 
 export interface TransferRes {
@@ -23,7 +23,7 @@ export async function transfer(
         Target: poolID,
         Action: "Transfer",
         Recipient: recipient,
-        Quantity: quantity,
+        Quantity: JSON.stringify(quantity),
       },
       "",
       "Transfer",

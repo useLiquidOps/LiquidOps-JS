@@ -1,11 +1,10 @@
 import { sendMessage, SendMessageRes } from "../ao/sendMessage";
-import { Token } from "ao-tokens";
 import { aoUtils } from "..";
 
 export interface Borrow {
   poolID: string;
   poolTokenID: string;
-  quantity: number;
+  quantity: BigInt;
 }
 
 export async function borrow(
@@ -13,8 +12,6 @@ export async function borrow(
   { poolID, poolTokenID, quantity }: Borrow,
 ): Promise<SendMessageRes> {
   try {
-    const token = await Token("ycQaQxjRf5IDg26kNJBlwfPjzZqLob_wJDVBu3DYxVw");
-    const amountToSend = token.Quantity.fromNumber(quantity);
 
     return await sendMessage(
       aoUtils,
@@ -22,7 +19,7 @@ export async function borrow(
       {
         Target: "42F7zlKZ53Ph9BCW8DJvxM7PMuqOwL-UsoxBqzAw46k",
         Action: "Transfer",
-        Quantity: amountToSend.raw.toString(),
+        Quantity: JSON.stringify(quantity),
         Recipient: poolID,
         "X-Action": "Borrow",
         "borrowed-quantity": JSON.stringify(quantity),
