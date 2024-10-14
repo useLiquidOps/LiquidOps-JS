@@ -1,15 +1,16 @@
-import { sendMessage, SendMessageRes } from "../ao/sendMessage";
-import { aoUtils } from "..";
-import { oTokens, tokens, SupportedTokens } from "../ao/processData";
+import { sendMessage, SendMessageRes } from "../../ao/sendMessage";
+import { aoUtils } from "../..";
+import { oTokens, tokens, SupportedTokens } from "../../ao/processData";
 
-export interface Borrow {
+export interface Repay {
   token: SupportedTokens;
   quantity: BigInt;
+  borrowID: string;
 }
 
-export async function borrow(
+export async function repay(
   aoUtils: aoUtils,
-  { token, quantity }: Borrow,
+  { token, quantity, borrowID }: Repay,
 ): Promise<SendMessageRes> {
   try {
     const tokenID = tokens[token];
@@ -20,12 +21,13 @@ export async function borrow(
       Action: "Transfer",
       Quantity: JSON.stringify(quantity),
       Recipient: oTokenID,
-      "X-Action": "Borrow",
+      "X-Action": "Repay",
+      "Borrow-Id": borrowID,
       "borrowed-quantity": JSON.stringify(quantity),
       "borrowed-address": tokenID,
     });
   } catch (error) {
     console.log(error);
-    throw new Error("Error in borrow message");
+    throw new Error("Error in repay message");
   }
 }

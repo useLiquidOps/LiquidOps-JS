@@ -1,35 +1,35 @@
 // LO functions
-import { lend, Lend } from "./lend/lend";
-import { unLend, UnLend } from "./lend/unLend";
-import { borrow, Borrow } from "./borrow/borrow";
-import { repay, Repay } from "./borrow/repay";
-import { payInterest, PayInterest } from "./borrow/payInterest";
-import { getAPY, GetAPY } from "./oTokenData/getAPY";
-import { getBalance, GetBalance } from "./utils/getBalance";
+import { lend, Lend } from "./functions/lend/lend";
+import { unLend, UnLend } from "./functions/lend/unLend";
+import { borrow, Borrow } from "./functions/borrow/borrow";
+import { repay, Repay } from "./functions/borrow/repay";
+import { payInterest, PayInterest } from "./functions/borrow/payInterest";
+import { getAPY, GetAPY } from "./functions/oTokenData/getAPY";
+import { getBalance, GetBalance } from "./functions/utils/getBalance";
 import {
   getReserves,
   GetReserves,
   GetReservesRes,
-} from "./oTokenData/getReserves";
-import { getPrice, GetPrice } from "./oTokenData/getPrice";
-import { getInfo, GetInfo, GetInfoRes } from "./oTokenData/getInfo";
-import { transfer, Transfer, TransferRes } from "./utils/transfer";
-import { getConfig, GetConfig, GetConfigRes } from "./oTokenData/getConfig";
+} from "./functions/oTokenData/getReserves";
+import { getPrice, GetPrice } from "./functions/oTokenData/getPrice";
+import { getInfo, GetInfo, GetInfoRes } from "./functions/oTokenData/getInfo";
+import { transfer, Transfer, TransferRes } from "./functions/utils/transfer";
+import { getConfig, GetConfig, GetConfigRes } from "./functions/oTokenData/getConfig";
 import {
   getPosition,
   GetPosition,
   GetPositionRes,
-} from "./oTokenData/getPosition";
+} from "./functions/oTokenData/getPosition";
 import {
   getBalances,
   GetBalances,
   GetBalancesRes,
-} from "./oTokenData/getBalances";
+} from "./functions/oTokenData/getBalances";
 import {
   getAllPositions,
   GetAllPositions,
   GetAllPositionsRes,
-} from "./protocolData/getAllPositions";
+} from "./functions/protocolData/getAllPositions";
 // LO helpful data
 import { oTokens, tokens } from "./ao/processData";
 // AO misc types/functions

@@ -1,6 +1,6 @@
-import { sendMessage, SendMessageRes } from "../ao/sendMessage";
-import { aoUtils } from "..";
-import { oTokens, tokens, SupportedTokens } from "../ao/processData";
+import { sendMessage, SendMessageRes } from "../../ao/sendMessage";
+import { aoUtils } from "../..";
+import { oTokens, tokens, SupportedTokens } from "../../ao/processData";
 
 export interface UnLend {
   token: SupportedTokens;

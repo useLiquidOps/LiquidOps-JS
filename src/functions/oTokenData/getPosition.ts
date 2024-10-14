@@ -1,6 +1,6 @@
-import { sendMessage } from "../ao/sendMessage";
-import { aoUtils } from "..";
-import { oTokens, SupportedTokens } from "../ao/processData";
+import { sendMessage } from "../../ao/sendMessage";
+import { aoUtils } from "../..";
+import { oTokens, SupportedTokens } from "../../ao/processData";
 
 export interface GetPosition {
   token: SupportedTokens;
