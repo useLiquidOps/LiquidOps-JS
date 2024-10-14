@@ -22,8 +22,7 @@ export async function sendMessage(
     id = await aoUtils.message({
       process: processID,
       tags: convertedMessageTags,
-      signer: aoUtils.signer,
-      data: "",
+      signer: aoUtils.signer
     });
   } catch (error) {
     console.log(error);
