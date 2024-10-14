@@ -23,7 +23,6 @@ export async function getPrice(
         Quantity: JSON.stringify(quantity),
       },
       "Get-Price",
-      oTokenID,
     );
     const price = message?.Messages[0].Tags.find(
       (token: any) => token.name === "price",

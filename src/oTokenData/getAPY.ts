@@ -21,7 +21,6 @@ export async function getAPY(
         Action: "Get-APY",
       },
       "Get-APY",
-      oTokenID,
     );
     const APY = message?.Messages[0].Tags.find(
       (token: any) => token.name === "APY",

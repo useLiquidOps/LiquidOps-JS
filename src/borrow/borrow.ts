@@ -28,7 +28,6 @@ export async function borrow(
         "borrowed-address": tokenID,
       },
       "Borrow",
-      tokenID,
     );
   } catch (error) {
     console.log(error);

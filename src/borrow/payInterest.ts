@@ -28,7 +28,6 @@ export async function payInterest(
         "Borrow-Id": borrowID,
       },
       "Pay-Interest",
-      tokenID,
     );
   } catch (error) {
     console.log(error);

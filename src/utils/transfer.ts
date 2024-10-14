@@ -26,7 +26,6 @@ export async function transfer(
         Quantity: JSON.stringify(quantity),
       },
       "Transfer",
-      tokenAddress,
     );
     const res = message?.Messages[0];
     return res;

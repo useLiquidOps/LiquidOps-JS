@@ -26,7 +26,6 @@ export async function lend(
         "X-Action": "Lend",
       },
       "Lend",
-      tokenID,
     );
   } catch (error) {
     console.log(error);

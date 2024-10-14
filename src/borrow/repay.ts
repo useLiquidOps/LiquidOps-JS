@@ -30,7 +30,6 @@ export async function repay(
         "borrowed-address": tokenID,
       },
       "Repay",
-      tokenID,
     );
   } catch (error) {
     console.log(error);
