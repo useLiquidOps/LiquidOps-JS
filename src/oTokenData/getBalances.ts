@@ -17,14 +17,10 @@ export async function getBalances(
   try {
     const oTokenID = oTokens[token];
 
-    const message = await sendMessage(
-      aoUtils,
-      oTokenID,
-      {
-        Target: oTokenID,
-        Action: "Balances",
-      },
-    );
+    const message = await sendMessage(aoUtils, {
+      Target: oTokenID,
+      Action: "Balances",
+    });
     const res = message?.Messages[0].Tags.find(
       (token: any) => token.name === "Balances",
     );

@@ -16,20 +16,16 @@ export async function repay(
     const tokenID = tokens[token];
     const oTokenID = oTokens[token];
 
-    return await sendMessage(
-      aoUtils,
-      tokenID,
-      {
-        Target: tokenID,
-        Action: "Transfer",
-        Quantity: JSON.stringify(quantity),
-        Recipient: oTokenID,
-        "X-Action": "Repay",
-        "Borrow-Id": borrowID,
-        "borrowed-quantity": JSON.stringify(quantity),
-        "borrowed-address": tokenID,
-      },
-    );
+    return await sendMessage(aoUtils, {
+      Target: tokenID,
+      Action: "Transfer",
+      Quantity: JSON.stringify(quantity),
+      Recipient: oTokenID,
+      "X-Action": "Repay",
+      "Borrow-Id": borrowID,
+      "borrowed-quantity": JSON.stringify(quantity),
+      "borrowed-address": tokenID,
+    });
   } catch (error) {
     console.log(error);
     throw new Error("Error in repay message");

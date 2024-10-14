@@ -16,18 +16,14 @@ export async function payInterest(
     const tokenID = tokens[token];
     const oTokenID = oTokens[token];
 
-    return await sendMessage(
-      aoUtils,
-      tokenID,
-      {
-        Target: tokenID,
-        Action: "Transfer",
-        Quantity: JSON.stringify(quantity),
-        Recipient: oTokenID,
-        "X-Action": "Pay-Interest",
-        "Borrow-Id": borrowID,
-      },
-    );
+    return await sendMessage(aoUtils, {
+      Target: tokenID,
+      Action: "Transfer",
+      Quantity: JSON.stringify(quantity),
+      Recipient: oTokenID,
+      "X-Action": "Pay-Interest",
+      "Borrow-Id": borrowID,
+    });
   } catch (error) {
     console.log(error);
     throw new Error("Error in payInterest message");

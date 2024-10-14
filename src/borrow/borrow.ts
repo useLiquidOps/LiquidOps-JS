@@ -15,19 +15,15 @@ export async function borrow(
     const tokenID = tokens[token];
     const oTokenID = oTokens[token];
 
-    return await sendMessage(
-      aoUtils,
-      tokenID,
-      {
-        Target: tokenID,
-        Action: "Transfer",
-        Quantity: JSON.stringify(quantity),
-        Recipient: oTokenID,
-        "X-Action": "Borrow",
-        "borrowed-quantity": JSON.stringify(quantity),
-        "borrowed-address": tokenID,
-      },
-    );
+    return await sendMessage(aoUtils, {
+      Target: tokenID,
+      Action: "Transfer",
+      Quantity: JSON.stringify(quantity),
+      Recipient: oTokenID,
+      "X-Action": "Borrow",
+      "borrowed-quantity": JSON.stringify(quantity),
+      "borrowed-address": tokenID,
+    });
   } catch (error) {
     console.log(error);
     throw new Error("Error in borrow message");

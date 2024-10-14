@@ -16,16 +16,12 @@ export async function transfer(
   { tokenAddress, recipient, quantity }: Transfer,
 ): Promise<TransferRes> {
   try {
-    const message = await sendMessage(
-      aoUtils,
-      tokenAddress,
-      {
-        Target: tokenAddress,
-        Action: "Transfer",
-        Recipient: recipient,
-        Quantity: JSON.stringify(quantity),
-      },
-    );
+    const message = await sendMessage(aoUtils, {
+      Target: tokenAddress,
+      Action: "Transfer",
+      Recipient: recipient,
+      Quantity: JSON.stringify(quantity),
+    });
     const res = message?.Messages[0];
     return res;
   } catch (error) {

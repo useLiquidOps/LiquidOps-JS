@@ -20,14 +20,10 @@ export async function getReserves(
   try {
     const oTokenID = oTokens[token];
 
-    const message = await sendMessage(
-      aoUtils,
-      oTokenID,
-      {
-        Target: oTokenID,
-        Action: "Get-Reserve",
-      },
-    );
+    const message = await sendMessage(aoUtils, {
+      Target: oTokenID,
+      Action: "Get-Reserve",
+    });
     const res = message?.Messages[0].Tags.find(
       (token: any) => token.name === "Reserves",
     );

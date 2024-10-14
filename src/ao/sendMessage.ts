@@ -8,21 +8,23 @@ export interface SendMessageRes extends MessageResult {
 
 export async function sendMessage(
   aoUtils: aoUtils,
-  processID: string,
   messageTags: {
-    // TODO message tags
+    Target: string;
+    Action: string;
     [key: string]: string | number | boolean | object;
   },
 ): Promise<SendMessageRes> {
   const convertedMessageTags = messageTagsToArray(messageTags);
   convertedMessageTags.push({ name: "Protocol-Name", value: "LiquidOps" });
 
+  const processID = messageTags["Target"];
+
   let id;
   try {
     id = await aoUtils.message({
       process: processID,
       tags: convertedMessageTags,
-      signer: aoUtils.signer
+      signer: aoUtils.signer,
     });
   } catch (error) {
     console.log(error);
@@ -35,8 +37,8 @@ export async function sendMessage(
       process: processID,
     });
 
-    const action = messageTags["Action"]
-    const xAction = messageTags["X-Action"]
+    const action = messageTags["Action"];
+    const xAction = messageTags["X-Action"];
 
     // @ts-ignore, action is always string
     await logResult(aoUtils, Error, id, processID, action, xAction, processID);

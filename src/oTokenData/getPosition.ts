@@ -17,14 +17,10 @@ export async function getPosition(
   try {
     const oTokenID = oTokens[token];
 
-    const message = await sendMessage(
-      aoUtils,
-      oTokenID,
-      {
-        Target: oTokenID,
-        Action: "Get-Position",
-      },
-    );
+    const message = await sendMessage(aoUtils, {
+      Target: oTokenID,
+      Action: "Get-Position",
+    });
     const res = message?.Messages[0].Tags.find(
       (token: any) => token.name === "Get-Position",
     );

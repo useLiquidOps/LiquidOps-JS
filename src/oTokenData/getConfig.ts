@@ -22,14 +22,10 @@ export async function getConfig(
   try {
     const oTokenID = oTokens[token];
 
-    const message = await sendMessage(
-      aoUtils,
-      oTokenID,
-      {
-        Target: oTokenID,
-        Action: "Get-Config",
-      },
-    );
+    const message = await sendMessage(aoUtils, {
+      Target: oTokenID,
+      Action: "Get-Config",
+    });
     const res = message?.Messages[0].Tags.find(
       (token: any) => token.name === "Get-Config",
     );

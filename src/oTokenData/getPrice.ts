@@ -14,15 +14,11 @@ export async function getPrice(
   try {
     const oTokenID = oTokens[token];
 
-    const message = await sendMessage(
-      aoUtils,
-      oTokenID,
-      {
-        Target: oTokenID,
-        Action: "Get-Price",
-        Quantity: JSON.stringify(quantity),
-      },
-    );
+    const message = await sendMessage(aoUtils, {
+      Target: oTokenID,
+      Action: "Get-Price",
+      Quantity: JSON.stringify(quantity),
+    });
     const price = message?.Messages[0].Tags.find(
       (token: any) => token.name === "price",
     );

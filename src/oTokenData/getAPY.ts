@@ -13,14 +13,10 @@ export async function getAPY(
   try {
     const oTokenID = oTokens[token];
 
-    const message = await sendMessage(
-      aoUtils,
-      oTokenID,
-      {
-        Target: oTokenID,
-        Action: "Get-APY",
-      },
-    );
+    const message = await sendMessage(aoUtils, {
+      Target: oTokenID,
+      Action: "Get-APY",
+    });
     const APY = message?.Messages[0].Tags.find(
       (token: any) => token.name === "APY",
     );

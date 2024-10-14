@@ -15,17 +15,13 @@ export async function lend(
     const tokenID = tokens[token];
     const oTokenID = oTokens[token];
 
-    return await sendMessage(
-      aoUtils,
-      tokenID,
-      {
-        Target: tokenID,
-        Action: "Transfer",
-        Quantity: JSON.stringify(quantity),
-        Recipient: oTokenID,
-        "X-Action": "Lend",
-      },
-    );
+    return await sendMessage(aoUtils, {
+      Target: tokenID,
+      Action: "Transfer",
+      Quantity: JSON.stringify(quantity),
+      Recipient: oTokenID,
+      "X-Action": "Lend",
+    });
   } catch (error) {
     console.log(error);
     throw new Error("Error in lend message");

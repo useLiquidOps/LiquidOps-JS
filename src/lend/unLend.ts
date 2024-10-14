@@ -15,15 +15,11 @@ export async function unLend(
     const tokenID = tokens[token];
     const oTokenID = oTokens[token];
 
-    return await sendMessage(
-      aoUtils,
-      oTokenID,
-      {
-        Target: oTokenID,
-        Action: "Burn",
-        Quantity: JSON.stringify(quantity),
-      },
-    );
+    return await sendMessage(aoUtils, {
+      Target: oTokenID,
+      Action: "Burn",
+      Quantity: JSON.stringify(quantity),
+    });
   } catch (error) {
     console.log(error);
     throw new Error("Error in unLend message");

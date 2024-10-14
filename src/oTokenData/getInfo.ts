@@ -20,14 +20,10 @@ export async function getInfo(
   const oTokenID = oTokens[token];
 
   try {
-    const message = await sendMessage(
-      aoUtils,
-      oTokenID,
-      {
-        Target: oTokenID,
-        Action: "Info",
-      },
-    );
+    const message = await sendMessage(aoUtils, {
+      Target: oTokenID,
+      Action: "Info",
+    });
     const info = message?.Messages[0].Tags.find(
       (token: any) => token.name === "Info",
     );

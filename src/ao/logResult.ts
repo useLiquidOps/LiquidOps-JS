@@ -26,7 +26,7 @@ export async function logResult(
     await aoUtils.message({
       process: processID,
       tags: tags,
-      signer: aoUtils.signer
+      signer: aoUtils.signer,
     });
   } catch (error) {
     console.log(error);
