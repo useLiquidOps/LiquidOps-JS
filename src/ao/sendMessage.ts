@@ -6,13 +6,20 @@ export interface SendMessageRes extends MessageResult {
   id: string;
 }
 
+interface MessageTags {
+  Target: string;
+  Action: string;
+  Quantity?: string;
+  Recipient?: string;
+  "X-Action"?: string;
+  "borrowed-quantity"?: string;
+  "borrowed-address"?: string;
+  "Borrow-Id"?: string,
+}
+
 export async function sendMessage(
   aoUtils: aoUtils,
-  messageTags: {
-    Target: string;
-    Action: string;
-    [key: string]: string | number | boolean | object;
-  },
+  messageTags: MessageTags,
 ): Promise<SendMessageRes> {
   const convertedMessageTags = messageTagsToArray(messageTags);
   convertedMessageTags.push({ name: "Protocol-Name", value: "LiquidOps" });
@@ -38,9 +45,8 @@ export async function sendMessage(
     });
 
     const action = messageTags["Action"];
-    const xAction = messageTags["X-Action"];
+    const xAction = messageTags["X-Action"] || "";
 
-    // @ts-ignore, action is always string
     await logResult(aoUtils, Error, id, processID, action, xAction, processID);
 
     return { id, Messages, Spawns, Output, Error };
