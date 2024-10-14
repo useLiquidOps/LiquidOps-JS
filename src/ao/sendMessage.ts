@@ -16,14 +16,14 @@ export async function sendMessage(
   action: string,
   tokenID: string,
 ): Promise<SendMessageRes> {
-  const convertedTags = messageTagsToArray(messageTags);
-  convertedTags.push({ name: "Protocol-Name", value: "LiquidOps" });
+  const convertedMessageTags = messageTagsToArray(messageTags);
+  convertedMessageTags.push({ name: "Protocol-Name", value: "LiquidOps" });
 
   let id;
   try {
     id = await aoUtils.message({
       process: processID,
-      tags: convertedTags,
+      tags: convertedMessageTags,
       signer: aoUtils.signer,
       data: data,
     });
