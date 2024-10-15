@@ -20,7 +20,6 @@ export async function unLend(
       Quantity: JSON.stringify(quantity),
     });
   } catch (error) {
-    console.error("Error in unLend function:", error);
-    throw new Error("Error in unLend message");
+    throw new Error("Error in unLend function:" + error);
   }
 }

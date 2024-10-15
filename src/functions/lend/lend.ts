@@ -22,7 +22,6 @@ export async function lend(
       "X-Action": "Lend",
     });
   } catch (error) {
-    console.error("Error in lend function:", error);
-    throw new Error("Error in lend message");
+    throw new Error("Error in lend function:" + error);
   }
 }

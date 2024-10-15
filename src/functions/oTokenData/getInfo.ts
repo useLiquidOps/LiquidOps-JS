@@ -29,8 +29,6 @@ export async function getInfo(
     );
     return info.value;
   } catch (error) {
-    console.log(error);
-
-    throw new Error("Error getting info");
+    throw new Error("Error in getInfo function:" + error);
   }
 }

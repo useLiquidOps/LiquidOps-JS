@@ -26,8 +26,6 @@ export async function getAllPositions(
     );
     return res.value;
   } catch (error) {
-    console.log(error);
-
-    throw new Error("Error getting all positions");
+    throw new Error("Error in getAllPositions function:" + error);
   }
 }

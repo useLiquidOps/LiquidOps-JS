@@ -26,7 +26,6 @@ export async function repay(
       "borrowed-address": tokenAddress,
     });
   } catch (error) {
-    console.error("Error in repay function:", error);
-    throw new Error("Error in repay message");
+    throw new Error("Error in repay function:" + error);
   }
 }

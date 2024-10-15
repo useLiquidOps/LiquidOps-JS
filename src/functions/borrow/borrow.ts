@@ -24,7 +24,6 @@ export async function borrow(
       "borrowed-address": tokenAddress,
     });
   } catch (error) {
-    console.error("Error in borrow function:", error);
-    throw new Error("Error in borrow message");
+    throw new Error("Error in borrow function:" + error);
   }
 }

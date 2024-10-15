@@ -15,7 +15,6 @@ export async function getTransactions(
 
     return await getTags(aoUtils, tags, walletAddress);
   } catch (error) {
-    console.log(error);
-    throw new Error("Error in get transactions");
+    throw new Error("Error in getTransactions function:" + error);
   }
 }

@@ -31,8 +31,6 @@ export async function getConfig(
     );
     return res.value;
   } catch (error) {
-    console.log(error);
-
-    throw new Error("Error getting config");
+    throw new Error("Error in getConfig function:" + error);
   }
 }

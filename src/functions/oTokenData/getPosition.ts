@@ -26,8 +26,6 @@ export async function getPosition(
     );
     return res.value;
   } catch (error) {
-    console.log(error);
-
-    throw new Error("Error getting position");
+    throw new Error("Error in getPosition function:" + error);
   }
 }

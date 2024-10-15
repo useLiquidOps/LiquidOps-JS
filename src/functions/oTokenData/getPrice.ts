@@ -24,8 +24,6 @@ export async function getPrice(
     );
     return price.value / 100;
   } catch (error) {
-    console.log(error);
-
-    throw new Error("Error getting price");
+    throw new Error("Error in getPrice function:" + error);
   }
 }

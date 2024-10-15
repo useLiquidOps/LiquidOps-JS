@@ -29,8 +29,6 @@ export async function getReserves(
     );
     return res.value;
   } catch (error) {
-    console.log(error);
-
-    throw new Error("Error getting reserves");
+    throw new Error("Error in getReserves function:" + error);
   }
 }

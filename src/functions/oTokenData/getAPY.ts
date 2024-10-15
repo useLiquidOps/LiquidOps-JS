@@ -28,7 +28,6 @@ export async function getAPY(
 
     return parseFloat(APY.value) / 100;
   } catch (error) {
-    console.error("Error in getAPY function:", error);
-    throw new Error("Error getting pool APY");
+    throw new Error("Error in getAPY function:" + error);
   }
 }

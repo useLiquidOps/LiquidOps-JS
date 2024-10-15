@@ -26,8 +26,6 @@ export async function getBalances(
     );
     return res.value;
   } catch (error) {
-    console.log(error);
-
-    throw new Error("Error getting balances");
+    throw new Error("Error in getBalances function:" + error);
   }
 }

@@ -24,7 +24,6 @@ export async function payInterest(
       "Borrow-Id": borrowID,
     });
   } catch (error) {
-    console.error("Error in payInterest function:", error);
-    throw new Error("Error in payInterest message");
+    throw new Error("Error in payInterest function:" + error);
   }
 }

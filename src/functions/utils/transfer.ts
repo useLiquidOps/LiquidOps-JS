@@ -38,7 +38,6 @@ export async function transfer(
     const res = message.Messages[0];
     return res;
   } catch (error) {
-    console.error("Error in transfer function:", error);
-    throw new Error("Error transferring");
+    throw new Error("Error in transfer function:" + error);
   }
 }
