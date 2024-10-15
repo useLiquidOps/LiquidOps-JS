@@ -1,9 +1,9 @@
 import { sendMessage } from "../../ao/sendMessage";
 import { aoUtils } from "../..";
-import { oTokens, SupportedTokens } from "../../ao/processData";
+import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface GetInfo {
-  token: SupportedTokens;
+  token: TokenInput;
 }
 
 export interface GetInfoRes {
@@ -17,11 +17,11 @@ export async function getInfo(
   aoUtils: aoUtils,
   { token }: GetInfo,
 ): Promise<GetInfoRes> {
-  const oTokenID = oTokens[token];
-
   try {
+    const { oTokenAddress } = tokenInput(token);
+
     const message = await sendMessage(aoUtils, {
-      Target: oTokenID,
+      Target: oTokenAddress,
       Action: "Info",
     });
     const info = message?.Messages[0].Tags.find(

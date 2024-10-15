@@ -1,20 +1,33 @@
 import { Token } from "ao-tokens";
+import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface GetBalance {
-  tokenAddress: string;
+  token: TokenInput | string;
   walletAddress: string;
 }
 
 export async function getBalance({
-  tokenAddress,
+  token,
   walletAddress,
 }: GetBalance): Promise<number> {
   try {
-    const token = await Token(tokenAddress);
-    const balance = await token.getBalance(walletAddress);
+    let tokenAddress: string;
+
+    try {
+      const { tokenAddress: supportedTokenAddress } = tokenInput(
+        token as TokenInput,
+      );
+      tokenAddress = supportedTokenAddress;
+    } catch (error) {
+      // If tokenInput fails, assume it's a custom address
+      tokenAddress = token as string;
+    }
+
+    const tokenInstance = await Token(tokenAddress);
+    const balance = await tokenInstance.getBalance(walletAddress);
     return Number(balance.raw.toString());
   } catch (error) {
-    console.log(error);
+    console.error("Error in getBalance function:", error);
     throw new Error("Error getting balance");
   }
 }

@@ -16,7 +16,7 @@ test("getBalance function", async () => {
 
   try {
     const res = await client.getBalance({
-      tokenAddress: LiquidOps.tokens.wAR, // make it typed names?
+      token: "wAR",
       walletAddress,
     });
 

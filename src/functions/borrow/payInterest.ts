@@ -1,11 +1,11 @@
 import { sendMessage, SendMessageRes } from "../../ao/sendMessage";
 import { aoUtils } from "../..";
-import { oTokens, tokens, SupportedTokens } from "../../ao/processData";
+import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface PayInterest {
-  token: SupportedTokens;
+  token: TokenInput;
   quantity: BigInt;
-  borrowID: string; // TODO: talk to Marton
+  borrowID: string;
 }
 
 export async function payInterest(
@@ -13,19 +13,18 @@ export async function payInterest(
   { token, quantity, borrowID }: PayInterest,
 ): Promise<SendMessageRes> {
   try {
-    const tokenID = tokens[token];
-    const oTokenID = oTokens[token];
+    const { tokenAddress, oTokenAddress } = tokenInput(token);
 
     return await sendMessage(aoUtils, {
-      Target: tokenID,
+      Target: tokenAddress,
       Action: "Transfer",
       Quantity: JSON.stringify(quantity),
-      Recipient: oTokenID,
+      Recipient: oTokenAddress,
       "X-Action": "Pay-Interest",
       "Borrow-Id": borrowID,
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error in payInterest function:", error);
     throw new Error("Error in payInterest message");
   }
 }

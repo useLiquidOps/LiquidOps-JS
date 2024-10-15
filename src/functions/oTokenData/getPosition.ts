@@ -1,9 +1,9 @@
 import { sendMessage } from "../../ao/sendMessage";
 import { aoUtils } from "../..";
-import { oTokens, SupportedTokens } from "../../ao/processData";
+import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface GetPosition {
-  token: SupportedTokens;
+  token: TokenInput;
 }
 
 export interface GetPositionRes {
@@ -15,10 +15,10 @@ export async function getPosition(
   { token }: GetPosition,
 ): Promise<GetPositionRes> {
   try {
-    const oTokenID = oTokens[token];
+    const { oTokenAddress } = tokenInput(token);
 
     const message = await sendMessage(aoUtils, {
-      Target: oTokenID,
+      Target: oTokenAddress,
       Action: "Get-Position",
     });
     const res = message?.Messages[0].Tags.find(

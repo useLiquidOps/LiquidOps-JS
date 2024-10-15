@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import LiquidOps, { createDataItemSignerNode } from "../../src";
+import LiquidOps, { createDataItemSignerNode } from "../../../src";
 import { JWKInterface } from "arbundles/node";
 
 test("transfer function", async () => {
@@ -13,7 +13,7 @@ test("transfer function", async () => {
   const client = new LiquidOps(signer);
 
   const res = await client.transfer({
-    tokenAddress: LiquidOps.tokens.wAR, // Make it typed names?
+    token: "wAR",
     recipient: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
     quantity: BigInt(10),
   });

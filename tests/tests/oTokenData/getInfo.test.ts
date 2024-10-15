@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import LiquidOps, { createDataItemSignerNode } from "../../src";
+import LiquidOps, { createDataItemSignerNode } from "../../../src";
 import { JWKInterface } from "arbundles/node";
 
 test("getInfo function", async () => {

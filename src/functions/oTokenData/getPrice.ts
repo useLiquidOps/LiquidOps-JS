@@ -1,9 +1,9 @@
 import { sendMessage } from "../../ao/sendMessage";
 import { aoUtils } from "../..";
-import { oTokens, SupportedTokens } from "../../ao/processData";
+import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface GetPrice {
-  token: SupportedTokens;
+  token: TokenInput;
   quantity: BigInt;
 }
 
@@ -12,10 +12,10 @@ export async function getPrice(
   { token, quantity }: GetPrice,
 ): Promise<number> {
   try {
-    const oTokenID = oTokens[token];
+    const { oTokenAddress } = tokenInput(token);
 
     const message = await sendMessage(aoUtils, {
-      Target: oTokenID,
+      Target: oTokenAddress,
       Action: "Get-Price",
       Quantity: JSON.stringify(quantity),
     });

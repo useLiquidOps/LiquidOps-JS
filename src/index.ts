@@ -40,7 +40,7 @@ import {
   GetAllPositionsRes,
 } from "./functions/protocolData/getAllPositions";
 // LO helpful data
-import { oTokens, tokens } from "./ao/processData";
+import { oTokens, tokens } from "./ao/tokenAddressData";
 // AO misc types/functions
 import { connectToAO } from "./ao/connect";
 import { Services } from "@permaweb/aoconnect/dist/index.common";

@@ -1,9 +1,9 @@
 import { sendMessage, SendMessageRes } from "../../ao/sendMessage";
 import { aoUtils } from "../..";
-import { oTokens, tokens, SupportedTokens } from "../../ao/processData";
+import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface Lend {
-  token: SupportedTokens;
+  token: TokenInput;
   quantity: BigInt;
 }
 
@@ -12,18 +12,17 @@ export async function lend(
   { token, quantity }: Lend,
 ): Promise<SendMessageRes> {
   try {
-    const tokenID = tokens[token];
-    const oTokenID = oTokens[token];
+    const { tokenAddress, oTokenAddress } = tokenInput(token);
 
     return await sendMessage(aoUtils, {
-      Target: tokenID,
+      Target: tokenAddress,
       Action: "Transfer",
       Quantity: JSON.stringify(quantity),
-      Recipient: oTokenID,
+      Recipient: oTokenAddress,
       "X-Action": "Lend",
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error in lend function:", error);
     throw new Error("Error in lend message");
   }
 }

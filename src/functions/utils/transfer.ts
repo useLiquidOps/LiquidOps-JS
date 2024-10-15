@@ -1,8 +1,9 @@
 import { sendMessage } from "../../ao/sendMessage";
 import { aoUtils } from "../..";
+import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface Transfer {
-  tokenAddress: string;
+  token: TokenInput | string;
   recipient: string;
   quantity: BigInt;
 }
@@ -13,20 +14,31 @@ export interface TransferRes {
 
 export async function transfer(
   aoUtils: aoUtils,
-  { tokenAddress, recipient, quantity }: Transfer,
+  { token, recipient, quantity }: Transfer,
 ): Promise<TransferRes> {
   try {
+    let tokenAddress: string;
+
+    try {
+      const { tokenAddress: supportedTokenAddress } = tokenInput(
+        token as TokenInput,
+      );
+      tokenAddress = supportedTokenAddress;
+    } catch (error) {
+      // If tokenInput fails, assume it's a custom address
+      tokenAddress = token as string;
+    }
+
     const message = await sendMessage(aoUtils, {
       Target: tokenAddress,
       Action: "Transfer",
       Recipient: recipient,
       Quantity: JSON.stringify(quantity),
     });
-    const res = message?.Messages[0];
+    const res = message.Messages[0];
     return res;
   } catch (error) {
-    console.log(error);
-
+    console.error("Error in transfer function:", error);
     throw new Error("Error transferring");
   }
 }

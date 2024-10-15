@@ -1,9 +1,9 @@
 import { sendMessage } from "../../ao/sendMessage";
 import { aoUtils } from "../..";
-import { oTokens, SupportedTokens } from "../../ao/processData";
+import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface GetAPY {
-  token: SupportedTokens;
+  token: TokenInput;
 }
 
 export async function getAPY(
@@ -11,19 +11,24 @@ export async function getAPY(
   { token }: GetAPY,
 ): Promise<number> {
   try {
-    const oTokenID = oTokens[token];
+    const { oTokenAddress } = tokenInput(token);
 
     const message = await sendMessage(aoUtils, {
-      Target: oTokenID,
+      Target: oTokenAddress,
       Action: "Get-APY",
     });
-    const APY = message?.Messages[0].Tags.find(
-      (token: any) => token.name === "APY",
-    );
-    return APY.value / 100;
-  } catch (error) {
-    console.log(error);
 
+    const APY = message.Messages[0].Tags.find(
+      (tag: { name: string; value: string }) => tag.name === "APY",
+    );
+
+    if (!APY) {
+      throw new Error("APY not found in the response");
+    }
+
+    return parseFloat(APY.value) / 100;
+  } catch (error) {
+    console.error("Error in getAPY function:", error);
     throw new Error("Error getting pool APY");
   }
 }

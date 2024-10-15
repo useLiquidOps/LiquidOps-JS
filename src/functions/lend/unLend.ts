@@ -1,9 +1,9 @@
 import { sendMessage, SendMessageRes } from "../../ao/sendMessage";
 import { aoUtils } from "../..";
-import { oTokens, tokens, SupportedTokens } from "../../ao/processData";
+import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface UnLend {
-  token: SupportedTokens;
+  token: TokenInput;
   quantity: BigInt;
 }
 
@@ -12,16 +12,15 @@ export async function unLend(
   { token, quantity }: UnLend,
 ): Promise<SendMessageRes> {
   try {
-    const tokenID = tokens[token];
-    const oTokenID = oTokens[token];
+    const { oTokenAddress } = tokenInput(token);
 
     return await sendMessage(aoUtils, {
-      Target: oTokenID,
+      Target: oTokenAddress,
       Action: "Burn",
       Quantity: JSON.stringify(quantity),
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error in unLend function:", error);
     throw new Error("Error in unLend message");
   }
 }

@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
-import LiquidOps, { createDataItemSignerNode } from "../../src";
+import LiquidOps, { createDataItemSignerNode } from "../../../src";
 import { JWKInterface } from "arbundles/node";
-import { SendMessageRes, MessageResult } from "../../src/ao/sendMessage";
+import { SendMessageRes, MessageResult } from "../../../src/ao/sendMessage";
 
 test("unLend function", async () => {
   if (!process.env.JWK) {
