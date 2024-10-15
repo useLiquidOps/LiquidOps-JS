@@ -13,11 +13,11 @@ test("repay function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.repay({
+    const res = (await client.repay({
       token: "wAR",
       quantity: BigInt(10),
       borrowID: "",
-    }) as SendMessageRes & MessageResult;
+    })) as SendMessageRes & MessageResult;
 
     if (res.Error) {
       throw new Error(`Repay function error: ${JSON.stringify(res.Error)}`);
@@ -32,7 +32,6 @@ test("repay function", async () => {
     expect(Array.isArray(res.Messages)).toBe(true);
     expect(res).toHaveProperty("Spawns");
     expect(Array.isArray(res.Spawns)).toBe(true);
-
   } catch (error) {
     console.error("Error testing repay():", error);
     throw error;

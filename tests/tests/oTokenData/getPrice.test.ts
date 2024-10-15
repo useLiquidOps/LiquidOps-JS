@@ -20,7 +20,6 @@ test("getPrice function", async () => {
     expect(res).toBeTypeOf("number");
     expect(res).toBeGreaterThan(0);
     expect(Number.isFinite(res)).toBe(true);
-
   } catch (error) {
     console.error("Error testing getPrice():", error);
     throw error;

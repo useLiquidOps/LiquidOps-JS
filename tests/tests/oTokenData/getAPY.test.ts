@@ -19,7 +19,6 @@ test("getAPY function", async () => {
     expect(res).toBeTypeOf("number");
     expect(res).toBeGreaterThanOrEqual(0);
     expect(res).toBeLessThanOrEqual(100);
-
   } catch (error) {
     console.error("Error testing getAPY():", error);
     throw error;

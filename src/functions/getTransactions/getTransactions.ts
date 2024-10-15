@@ -8,7 +8,8 @@ export interface GetTransactions {
 export async function getTransactions(
   aoUtils: aoUtils,
   { walletAddress }: GetTransactions,
-): Promise<{ node: Transaction }[]> { // TODO: change to txn array instead of node?
+): Promise<{ node: Transaction }[]> {
+  // TODO: change to txn array instead of node?
   try {
     const tags = [{ name: "", values: [""] }]; // TODO
 

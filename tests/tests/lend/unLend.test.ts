@@ -13,10 +13,10 @@ test("unLend function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.unLend({
+    const res = (await client.unLend({
       token: "wAR",
       quantity: BigInt(10),
-    }) as SendMessageRes & MessageResult;
+    })) as SendMessageRes & MessageResult;
 
     if (res.Error) {
       throw new Error(`UnLend function error: ${JSON.stringify(res.Error)}`);
@@ -31,7 +31,6 @@ test("unLend function", async () => {
     expect(Array.isArray(res.Messages)).toBe(true);
     expect(res).toHaveProperty("Spawns");
     expect(Array.isArray(res.Spawns)).toBe(true);
-
   } catch (error) {
     console.error("Error testing unLend():", error);
     throw error;

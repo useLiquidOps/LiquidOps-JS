@@ -13,10 +13,10 @@ test("borrow function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.borrow({
+    const res = (await client.borrow({
       token: "wAR",
       quantity: BigInt(10),
-    }) as SendMessageRes & MessageResult;
+    })) as SendMessageRes & MessageResult;
 
     if (res.Error) {
       throw new Error(`Borrow function error: ${JSON.stringify(res.Error)}`);
@@ -31,7 +31,6 @@ test("borrow function", async () => {
     expect(Array.isArray(res.Messages)).toBe(true);
     expect(res).toHaveProperty("Spawns");
     expect(Array.isArray(res.Spawns)).toBe(true);
-
   } catch (error) {
     console.error("Error testing borrow():", error);
     throw error;

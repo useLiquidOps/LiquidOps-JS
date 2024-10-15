@@ -23,7 +23,6 @@ test("getBalance function", async () => {
     expect(res).toBeTypeOf("number");
     expect(res).toBeGreaterThanOrEqual(0);
     expect(Number.isFinite(res)).toBe(true);
-
   } catch (error) {
     console.error("Error testing getBalance():", error);
     throw error;

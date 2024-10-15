@@ -13,14 +13,16 @@ test("payInterest function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.payInterest({
+    const res = (await client.payInterest({
       token: "wAR",
       quantity: BigInt(10),
       borrowID: "", // TODO
-    }) as SendMessageRes & MessageResult;
+    })) as SendMessageRes & MessageResult;
 
     if (res.Error) {
-      throw new Error(`PayInterest function error: ${JSON.stringify(res.Error)}`);
+      throw new Error(
+        `PayInterest function error: ${JSON.stringify(res.Error)}`,
+      );
     }
 
     expect(res).toHaveProperty("id");
@@ -32,7 +34,6 @@ test("payInterest function", async () => {
     expect(Array.isArray(res.Messages)).toBe(true);
     expect(res).toHaveProperty("Spawns");
     expect(Array.isArray(res.Spawns)).toBe(true);
-
   } catch (error) {
     console.error("Error testing payInterest():", error);
     throw error;
