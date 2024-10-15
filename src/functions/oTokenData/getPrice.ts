@@ -19,7 +19,7 @@ export async function getPrice(
       Action: "Get-Price",
       Quantity: JSON.stringify(quantity),
     });
-    const price = message?.Messages[0].Tags.find(
+    const price = message.Messages[0].Tags.find(
       (token: any) => token.name === "price",
     );
     return price.value / 100;

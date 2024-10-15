@@ -16,7 +16,11 @@ test("getTransactions function", async () => {
   const walletAddress = await ownerToAddress(JWK.n);
 
   try {
-    const res = await client.getTransactions({ walletAddress });
+    const res = await client.getTransactions({
+      token: "wAR",
+      action: "lend",
+      walletAddress,
+    });
 
     expect(Array.isArray(res)).toBe(true);
     expect(res.length).toBeGreaterThan(0);

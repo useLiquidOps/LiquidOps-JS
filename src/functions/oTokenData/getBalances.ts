@@ -21,7 +21,7 @@ export async function getBalances(
       Target: oTokenAddress,
       Action: "Balances",
     });
-    const res = message?.Messages[0].Tags.find(
+    const res = message.Messages[0].Tags.find(
       (token: any) => token.name === "Balances",
     );
     return res.value;

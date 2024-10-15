@@ -24,7 +24,7 @@ export async function getInfo(
       Target: oTokenAddress,
       Action: "Info",
     });
-    const info = message?.Messages[0].Tags.find(
+    const info = message.Messages[0].Tags.find(
       (token: any) => token.name === "Info",
     );
     return info.value;
