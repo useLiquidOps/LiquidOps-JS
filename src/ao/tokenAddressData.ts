@@ -1,25 +1,21 @@
 export type SupportedTokensTickers = "wAR" | "stETH";
 
-export type SupportedTokensAddresses =
-  | "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick"
-  | "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick";
+export type SupportedTokensAddresses = "123" | "456";
 
 export const tokens: Record<SupportedTokensTickers, SupportedTokensAddresses> =
   {
-    wAR: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
-    stETH: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
+    wAR: "123",
+    stETH: "456",
   };
 
 export type SupportedOTokensTickers = "owAR" | "ostETH";
 
-export type SupportedOTokensAddresses =
-  | "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick"
-  | "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick";
+export type SupportedOTokensAddresses = "123" | "456";
 
 export const oTokens: Record<
   SupportedOTokensTickers,
   SupportedOTokensAddresses
 > = {
-  owAR: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
-  ostETH: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
+  owAR: "123",
+  ostETH: "456",
 };
