@@ -1,9 +1,9 @@
 import { expect, test } from "bun:test";
-import LiquidOps, { createDataItemSignerNode } from "../../src";
+import LiquidOps, { createDataItemSignerNode } from "../../../src";
 import { JWKInterface } from "arbundles/node";
-import { SendMessageRes, MessageResult } from "../../src/ao/sendMessage";
+import { SendMessageRes, MessageResult } from "../../../src/ao/sendMessage";
 
-test("borrow function", async () => {
+test("lend function", async () => {
   if (!process.env.JWK) {
     throw new Error("Please specify a JWK in the .env file");
   }
@@ -13,13 +13,13 @@ test("borrow function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.borrow({
+    const res = await client.lend({
       token: "wAR",
       quantity: BigInt(10),
     }) as SendMessageRes & MessageResult;
 
     if (res.Error) {
-      throw new Error(`Borrow function error: ${JSON.stringify(res.Error)}`);
+      throw new Error(`Lend function error: ${JSON.stringify(res.Error)}`);
     }
 
     expect(res).toHaveProperty("id");
@@ -33,7 +33,7 @@ test("borrow function", async () => {
     expect(Array.isArray(res.Spawns)).toBe(true);
 
   } catch (error) {
-    console.error("Error testing borrow():", error);
+    console.error("Error testing lend():", error);
     throw error;
   }
 });

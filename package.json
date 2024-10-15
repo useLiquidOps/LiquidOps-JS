@@ -1,12 +1,12 @@
 {
   "name": "liquidops",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "author": "Lorimer Jenkins (lorimer@liquidops.io), Marton Lederer (marton@liquidops.io)",
   "license": "MIT",
   "description": "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
   "homepage": "https://liquidops.io",
   "bugs": {
-    "url": "https://github.com/Othent/KMS-JS-new/issues"
+    "url": "https://github.com/useLiquidOps/LiquidOps-JS/issues"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -14,7 +14,6 @@
   "keywords": [
     "Arweave",
     "LiquidOps",
-    "Community Labs",
     "AO",
     "Defi",
     "AR",

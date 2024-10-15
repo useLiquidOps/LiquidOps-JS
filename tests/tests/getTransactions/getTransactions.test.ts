@@ -1,8 +1,8 @@
 import { expect, test } from "bun:test";
-import LiquidOps, { createDataItemSignerNode } from "../../src";
+import LiquidOps, { createDataItemSignerNode } from "../../../src";
 import { JWKInterface } from "arbundles/node";
-import { ownerToAddress } from "../testsHelpers/arweaveUtils";
-import { Transaction } from "../../src/arweave/getTags";
+import { ownerToAddress } from "../../testsHelpers/arweaveUtils";
+import { Transaction } from "../../../src/arweave/getTags";
 
 test("getTransactions function", async () => {
   if (!process.env.JWK) {
