@@ -34,6 +34,7 @@ export async function transfer(
       Action: "Transfer",
       Recipient: recipient,
       Quantity: JSON.stringify(quantity),
+      "LO-Action": "Transfer",
     });
     const res = message.Messages[0];
     return res;

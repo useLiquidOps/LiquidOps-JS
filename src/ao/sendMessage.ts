@@ -17,6 +17,7 @@ interface MessageTags {
   "borrowed-quantity"?: string;
   "borrowed-address"?: string;
   "Borrow-Id"?: string;
+  "LO-Action"?: string;
 }
 
 export async function sendMessage(
