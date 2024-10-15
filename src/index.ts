@@ -50,7 +50,6 @@ import { createDataItemSigner as createDataItemSignerNode } from "@permaweb/aoco
 import { createDataItemSigner as createDataItemSignerWeb } from "@permaweb/aoconnect/browser";
 import { Types as aoconnectTypes } from "@permaweb/aoconnect/dist/dal";
 
-
 class LiquidOps {
   private aoUtils: aoUtils;
 
