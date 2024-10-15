@@ -9,7 +9,9 @@ export interface Transfer {
 }
 
 export interface TransferRes {
-  // TODO
+  Action: "Credit-Notice";
+  Sender: string;
+  Quantity: number;
 }
 
 export async function transfer(

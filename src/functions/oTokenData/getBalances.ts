@@ -7,7 +7,7 @@ export interface GetBalances {
 }
 
 export interface GetBalancesRes {
-  // TODO
+  [address: string]: number;
 }
 
 export async function getBalances(
@@ -24,7 +24,7 @@ export async function getBalances(
     const res = message.Messages[0].Tags.find(
       (tag: { name: string; value: string }) => tag.name === "Balances",
     );
-    return res.value;
+    return res.value.Data;
   } catch (error) {
     throw new Error("Error in getBalances function:" + error);
   }

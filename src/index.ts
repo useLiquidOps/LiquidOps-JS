@@ -132,7 +132,7 @@ class LiquidOps {
 
   // protocol data
 
-  async getAllPositions(params: GetAllPositions): Promise<GetAllPositionsRes> {
+  async getAllPositions(params: GetAllPositions): Promise<GetAllPositionsRes> { // TODO: talk to Marton
     return getAllPositions(this.aoUtils, params);
   }
 

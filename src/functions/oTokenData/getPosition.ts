@@ -7,7 +7,9 @@ export interface GetPosition {
 }
 
 export interface GetPositionRes {
-  // TODO
+  Capacity: number;
+  "Used-Capacity": number;
+  "Collateral-Ticker": number;
 }
 
 export async function getPosition(
