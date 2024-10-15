@@ -22,7 +22,7 @@ export async function getAllPositions(
       Action: "Get-Position",
     });
     const res = message.Messages[0].Tags.find(
-      (token: any) => token.name === "Get-Position",
+      (tag: { name: string; value: string }) => tag.name === "Get-Position",
     );
     return res.value;
   } catch (error) {

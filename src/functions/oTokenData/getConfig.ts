@@ -27,7 +27,7 @@ export async function getConfig(
       Action: "Get-Config",
     });
     const res = message.Messages[0].Tags.find(
-      (token: any) => token.name === "Get-Config",
+      (tag: { name: string; value: string }) => tag.name === "Get-Config",
     );
     return res.value;
   } catch (error) {

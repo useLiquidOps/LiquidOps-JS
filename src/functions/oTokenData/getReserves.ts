@@ -25,7 +25,7 @@ export async function getReserves(
       Action: "Get-Reserve",
     });
     const res = message.Messages[0].Tags.find(
-      (token: any) => token.name === "Reserves",
+      (tag: { name: string; value: string }) => tag.name === "Reserves",
     );
     return res.value;
   } catch (error) {

@@ -20,7 +20,7 @@ export async function getPrice(
       Quantity: JSON.stringify(quantity),
     });
     const price = message.Messages[0].Tags.find(
-      (token: any) => token.name === "price",
+      (tag: { name: string; value: string }) => tag.name === "price",
     );
     return price.value / 100;
   } catch (error) {

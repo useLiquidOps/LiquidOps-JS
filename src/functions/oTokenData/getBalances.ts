@@ -22,7 +22,7 @@ export async function getBalances(
       Action: "Balances",
     });
     const res = message.Messages[0].Tags.find(
-      (token: any) => token.name === "Balances",
+      (tag: { name: string; value: string }) => tag.name === "Balances",
     );
     return res.value;
   } catch (error) {

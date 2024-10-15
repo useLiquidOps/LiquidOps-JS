@@ -25,7 +25,7 @@ export async function getInfo(
       Action: "Info",
     });
     const info = message.Messages[0].Tags.find(
-      (token: any) => token.name === "Info",
+      (tag: { name: string; value: string }) => tag.name === "Info",
     );
     return info.value;
   } catch (error) {
