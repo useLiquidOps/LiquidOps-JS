@@ -1,6 +1,8 @@
 import { logResult } from "./logResult";
 import { aoUtils } from "..";
-import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+import { MessageResult as AoMessageResult } from "@permaweb/aoconnect/dist/lib/result";
+
+export type MessageResult = AoMessageResult; // needed for jest tests
 
 export interface SendMessageRes extends MessageResult {
   id: string;
