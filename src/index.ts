@@ -42,24 +42,14 @@ import {
 // LO helpful data
 import { oTokens, tokens } from "./ao/tokenAddressData";
 // AO misc types/functions
-import { connectToAO } from "./ao/connect";
+import { connectToAO, aoUtils } from "./ao/connect";
 import { Services } from "@permaweb/aoconnect/dist/index.common";
-import { SpawnProcess } from "@permaweb/aoconnect/dist/lib/spawn";
-import { SendMessage } from "@permaweb/aoconnect/dist/lib/message";
-import { ReadResult } from "@permaweb/aoconnect/dist/lib/result";
 import { SendMessageRes } from "./ao/sendMessage";
 // AO helpful functions
 import { createDataItemSigner as createDataItemSignerNode } from "@permaweb/aoconnect/dist/client/node/wallet";
 import { createDataItemSigner as createDataItemSignerWeb } from "@permaweb/aoconnect/browser";
 import { Types as aoconnectTypes } from "@permaweb/aoconnect/dist/dal";
 
-export interface aoUtils {
-  spawn: SpawnProcess;
-  message: SendMessage;
-  result: ReadResult;
-  signer: aoconnectTypes["signer"];
-  configs: Services;
-}
 
 class LiquidOps {
   private aoUtils: aoUtils;

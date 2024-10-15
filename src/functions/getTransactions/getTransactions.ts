@@ -1,4 +1,4 @@
-import { aoUtils } from "../..";
+import { aoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 import { getTags, Transaction } from "../../arweave/getTags";
 

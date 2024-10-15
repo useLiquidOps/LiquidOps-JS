@@ -1,5 +1,5 @@
 import { sendMessage, SendMessageRes } from "../../ao/sendMessage";
-import { aoUtils } from "../..";
+import { aoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface Lend {
