@@ -1,5 +1,6 @@
 import { expect, test } from "bun:test";
-import LiquidOps, { createDataItemSignerNode } from "../../../src";
+import LiquidOps from "../../../src";
+import { createDataItemSigner } from "@permaweb/aoconnect";
 import { JWKInterface } from "arbundles/node";
 
 test("getAllPositions function", async () => {
@@ -8,7 +9,7 @@ test("getAllPositions function", async () => {
   }
 
   const JWK: JWKInterface = JSON.parse(process.env.JWK);
-  const signer = await createDataItemSignerNode(JWK);
+  const signer = createDataItemSigner(JWK);
 
   const client = new LiquidOps(signer);
 

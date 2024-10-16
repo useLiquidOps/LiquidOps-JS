@@ -1,5 +1,6 @@
 import { expect, test } from "bun:test";
-import LiquidOps, { createDataItemSignerNode } from "../../../src";
+import LiquidOps from "../../../src";
+import { createDataItemSigner } from "@permaweb/aoconnect";
 import { JWKInterface } from "arbundles/node";
 import { ownerToAddress } from "../../testsHelpers/arweaveUtils";
 import { Transaction } from "../../../src/arweave/getTags";
@@ -10,7 +11,7 @@ test("getTransactions function", async () => {
   }
 
   const JWK: JWKInterface = JSON.parse(process.env.JWK);
-  const signer = await createDataItemSignerNode(JWK);
+  const signer = createDataItemSigner(JWK);
   const client = new LiquidOps(signer);
 
   const walletAddress = await ownerToAddress(JWK.n);
