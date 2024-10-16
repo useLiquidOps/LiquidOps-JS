@@ -16,7 +16,7 @@ test("lend function", async () => {
   try {
     const res = (await client.lend({
       token: "wAR",
-      quantity: BigInt(10),
+      quantity: 10n,
     })) as SendMessageRes & MessageResult;
 
     if (res.Error) {

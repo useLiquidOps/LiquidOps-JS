@@ -15,7 +15,7 @@ test("getPrice function", async () => {
   try {
     const res = await client.getPrice({
       token: "wAR",
-      quantity: BigInt(10),
+      quantity: 10n,
     });
 
     expect(res).toBeTypeOf("number");

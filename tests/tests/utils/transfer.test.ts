@@ -16,7 +16,7 @@ test("transfer function", async () => {
   const res = await client.transfer({
     token: "wAR",
     recipient: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
-    quantity: BigInt(10),
+    quantity: 10n,
   });
 
   expect(res).toBe(1); // TODO

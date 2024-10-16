@@ -16,7 +16,7 @@ test("repay function", async () => {
   try {
     const res = (await client.repay({
       token: "wAR",
-      quantity: BigInt(10),
+      quantity: 10n,
     })) as SendMessageRes & MessageResult;
 
     if (res.Error) {

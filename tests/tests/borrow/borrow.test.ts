@@ -16,7 +16,7 @@ test("borrow function", async () => {
   try {
     const res = (await client.borrow({
       token: "wAR",
-      quantity: 10n, // can do n or BigInt()
+      quantity: 10n,
     })) as SendMessageRes & MessageResult;
 
     if (res.Error) {
