@@ -147,15 +147,13 @@ export default LiquidOps;
 // TODO
 // check with marton on getAllPositions function, leave on ice
 
-// getTxns return type 
+// getTxns return type
 // write/finalize tests for new function res types + handling for a incomplete res + figure out res response
 // double check all new types and return types (compare to paper)
 // README docs
 
-
 // do we need anymore functions?
 // Need liquidation functions
-
 
 // borrow - Borrow
 // repay - Repay
