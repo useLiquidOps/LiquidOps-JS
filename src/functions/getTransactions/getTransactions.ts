@@ -1,6 +1,8 @@
 import { AoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
-import { getTags, Transaction } from "../../arweave/getTags";
+import { getTags } from "../../arweave/getTags";
+import { GQLTransactionsResultInterface as GetTransactionsRes } from "ar-gql/dist/faces";
+export { GQLTransactionsResultInterface as GetTransactionsRes } from "ar-gql/dist/faces";
 
 export interface GetTransactions {
   token: "all" | TokenInput;
@@ -13,13 +15,13 @@ export interface GetTransactions {
     | "unLend"
     | "transfer";
   walletAddress: string;
+  cursor?: string
 }
 
 export async function getTransactions(
   aoUtils: AoUtils,
-  { action, token, walletAddress }: GetTransactions
-): Promise<{ node: Transaction }[]> {
-  // TODO res type
+  { action, token, walletAddress, cursor = "1" }: GetTransactions
+): Promise<GetTransactionsRes> {
   try {
     const tags = [{ name: "Protocol-Name", values: ["LiquidOps"] }];
 
@@ -44,7 +46,10 @@ export async function getTransactions(
       throw new Error("Please specify an action.");
     }
 
-    return await getTags(aoUtils, tags, walletAddress);
+    const res = await getTags({aoUtils, tags, walletAddress, cursor});
+
+    return res;
+
   } catch (error) {
     throw new Error("Error in getTransactions function:" + error);
   }

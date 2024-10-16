@@ -1,32 +1,35 @@
 import { arGql } from "ar-gql";
 import { AoUtils } from "../ao/connect";
+import { GQLTransactionsResultInterface } from "ar-gql/dist/faces";
 
-export interface Transaction {
-  id: string;
-  tags: {
-    name: string;
-    value: string;
-  }[];
+interface GetTags {
+  aoUtils: AoUtils;
+  tags: { name: string; values: string | string[] }[];
+  walletAddress: string;
+  cursor: string;
 }
 
-export async function getTags(
-  aoUtils: AoUtils,
-  tags: { name: string; values: string | string[] }[],
-  walletAddress: string
-): Promise<{ node: Transaction }[]> {
+export async function getTags({
+  aoUtils,
+  tags,
+  walletAddress,
+  cursor,
+}: GetTags): Promise<GQLTransactionsResultInterface> {
   try {
     const gqlEndpoint =
       aoUtils.configs.GRAPHQL_URL || "https://arweave.net/graphql";
     const gql = arGql({ endpointUrl: gqlEndpoint });
     const query = `
-    query GetTransactions($tags: [TagFilter!], $walletAddress: String!) {
+    query GetTransactions($cursor: String, $tags: [TagFilter!], $walletAddress: String!) {
       transactions(
         tags: $tags
         sort: HEIGHT_DESC
+        after: $cursor
         first: 100
         owners:[$walletAddress]
       ) {
         edges {
+          cursor
           node {
             id
             tags {
@@ -42,8 +45,8 @@ export async function getTags(
     }
   `;
 
-    const response = await gql.run(query, { tags, walletAddress });
-    return response.data.transactions.edges;
+    const response = await gql.run(query, { cursor, tags, walletAddress });
+    return response.data.transactions;
   } catch (error) {
     console.log(error);
     throw new Error("Error retrieving arweave GraphQL data");

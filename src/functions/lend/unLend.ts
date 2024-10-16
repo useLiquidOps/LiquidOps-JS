@@ -21,7 +21,7 @@ export interface UnLendRes {
 
 export async function unLend(
   aoUtils: AoUtils,
-  { token, quantity }: UnLend
+  { token, quantity }: UnLend,
 ): Promise<UnLendRes> {
   try {
     const { oTokenAddress } = tokenInput(token);

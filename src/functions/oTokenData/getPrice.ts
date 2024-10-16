@@ -9,7 +9,7 @@ export interface GetPrice {
 
 export async function getPrice(
   aoUtils: AoUtils,
-  { token, quantity }: GetPrice
+  { token, quantity }: GetPrice,
 ): Promise<BigInt> {
   try {
     const { oTokenAddress } = tokenInput(token);
@@ -21,7 +21,7 @@ export async function getPrice(
     });
 
     const priceTag = message.Messages[0].Tags.find(
-      (tag: { name: string; value: string }) => tag.name === "Price"
+      (tag: { name: string; value: string }) => tag.name === "Price",
     );
 
     if (!priceTag) {

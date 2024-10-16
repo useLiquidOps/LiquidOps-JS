@@ -15,7 +15,7 @@ export interface GetAllPositionsRes {
 
 export async function getAllPositions(
   aoUtils: AoUtils,
-  { token, recipient }: GetAllPositions
+  { token, recipient }: GetAllPositions,
 ): Promise<GetAllPositionsRes> {
   try {
     const { oTokenAddress } = tokenInput(token);

@@ -18,7 +18,7 @@ export interface BorrowRes {
 
 export async function borrow(
   aoUtils: AoUtils,
-  { token, quantity }: Borrow
+  { token, quantity }: Borrow,
 ): Promise<BorrowRes> {
   try {
     const { oTokenAddress } = tokenInput(token);

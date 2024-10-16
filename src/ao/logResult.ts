@@ -7,7 +7,7 @@ export async function logResult(
   processID: string,
   action: string,
   xAction: string,
-  tokenID: string
+  tokenID: string,
 ) {
   const tags = [
     { name: "resultID", value: ID },

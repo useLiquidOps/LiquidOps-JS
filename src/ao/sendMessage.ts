@@ -22,7 +22,7 @@ interface MessageTags {
 
 export async function sendMessage(
   aoUtils: AoUtils,
-  messageTags: MessageTags
+  messageTags: MessageTags,
 ): Promise<SendMessageRes> {
   const convertedMessageTags = messageTagsToArray(messageTags);
   convertedMessageTags.push({ name: "Protocol-Name", value: "LiquidOps" });

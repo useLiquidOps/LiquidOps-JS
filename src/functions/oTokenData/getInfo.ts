@@ -15,7 +15,7 @@ export interface GetInfoRes {
 
 export async function getInfo(
   aoUtils: AoUtils,
-  { token }: GetInfo
+  { token }: GetInfo,
 ): Promise<GetInfoRes> {
   try {
     const { oTokenAddress } = tokenInput(token);

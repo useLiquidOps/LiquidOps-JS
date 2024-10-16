@@ -26,14 +26,14 @@ interface Tag {
 
 export async function transfer(
   aoUtils: AoUtils,
-  { token, recipient, quantity }: Transfer
+  { token, recipient, quantity }: Transfer,
 ): Promise<TransferRes> {
   try {
     let tokenAddress: string;
 
     try {
       const { tokenAddress: supportedTokenAddress } = tokenInput(
-        token as TokenInput
+        token as TokenInput,
       );
       tokenAddress = supportedTokenAddress;
     } catch (error) {

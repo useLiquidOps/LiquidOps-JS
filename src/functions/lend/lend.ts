@@ -21,7 +21,7 @@ export interface LendRes {
 
 export async function lend(
   aoUtils: AoUtils,
-  { token, quantity }: Lend
+  { token, quantity }: Lend,
 ): Promise<LendRes> {
   try {
     const { tokenAddress, oTokenAddress } = tokenInput(token);

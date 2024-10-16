@@ -14,7 +14,7 @@ export interface GetReservesRes {
 
 export async function getReserves(
   aoUtils: AoUtils,
-  { token }: GetReserves
+  { token }: GetReserves,
 ): Promise<GetReservesRes> {
   try {
     const { oTokenAddress } = tokenInput(token);

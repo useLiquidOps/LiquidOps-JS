@@ -5,8 +5,8 @@ import { borrow, Borrow, BorrowRes } from "./functions/borrow/borrow";
 import {
   getTransactions,
   GetTransactions,
+  GetTransactionsRes,
 } from "./functions/getTransactions/getTransactions";
-import { Transaction } from "./arweave/getTags";
 import { repay, Repay, RepayRes } from "./functions/borrow/repay";
 import { getAPR, GetAPR } from "./functions/oTokenData/getAPR";
 import { getBalance, GetBalance } from "./functions/utils/getBalance";
@@ -74,9 +74,7 @@ class LiquidOps {
 
   // getTransactions
 
-  async getTransactions(
-    params: GetTransactions
-  ): Promise<{ node: Transaction }[]> {
+  async getTransactions(params: GetTransactions): Promise<GetTransactionsRes> {
     return getTransactions(this.aoUtils, params);
   }
 
@@ -173,7 +171,12 @@ export default LiquidOps;
 // getBalance - new function (ao-tokens)
 // transfer - Transfer
 
-// getTxns return type
-// write/finalize tests for new function res types + handling for a incomplete res + figure out res response
+
+// LORIMER TODO
+
+// write/finalize tests for new function res types
+// handling for a incomplete res
+// figure out res response'
 // double check all new types and return types (compare to paper)
 // README docs
+

@@ -20,7 +20,7 @@ export interface RepayRes {
 
 export async function repay(
   aoUtils: AoUtils,
-  { token, quantity }: Repay
+  { token, quantity }: Repay,
 ): Promise<RepayRes> {
   try {
     const { tokenAddress, oTokenAddress } = tokenInput(token);

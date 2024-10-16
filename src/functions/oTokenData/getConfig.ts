@@ -17,7 +17,7 @@ export interface GetConfigRes {
 
 export async function getConfig(
   aoUtils: AoUtils,
-  { token }: GetConfig
+  { token }: GetConfig,
 ): Promise<GetConfigRes> {
   try {
     const { oTokenAddress } = tokenInput(token);

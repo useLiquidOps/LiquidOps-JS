@@ -13,7 +13,7 @@ export interface APRResponse {
 
 export async function getAPR(
   aoUtils: AoUtils,
-  { token }: GetAPR
+  { token }: GetAPR,
 ): Promise<number> {
   try {
     const { oTokenAddress } = tokenInput(token);
