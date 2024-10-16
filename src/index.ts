@@ -1,15 +1,14 @@
 // LO functions
-import { lend, Lend } from "./functions/lend/lend";
-import { unLend, UnLend } from "./functions/lend/unLend";
-import { borrow, Borrow } from "./functions/borrow/borrow";
+import { lend, Lend, LendRes } from "./functions/lend/lend";
+import { unLend, UnLend, UnLendRes } from "./functions/lend/unLend";
+import { borrow, Borrow, BorrowRes } from "./functions/borrow/borrow";
 import {
   getTransactions,
   GetTransactions,
 } from "./functions/getTransactions/getTransactions";
 import { Transaction } from "./arweave/getTags";
-import { repay, Repay } from "./functions/borrow/repay";
-import { payInterest, PayInterest } from "./functions/borrow/payInterest";
-import { getAPY, GetAPY } from "./functions/oTokenData/getAPY";
+import { repay, Repay, RepayRes } from "./functions/borrow/repay";
+import { getAPR, GetAPR } from "./functions/oTokenData/getAPR";
 import { getBalance, GetBalance } from "./functions/utils/getBalance";
 import {
   getReserves,
@@ -44,7 +43,6 @@ import { oTokens, tokens } from "./ao/tokenAddressData";
 // AO misc types/functions
 import { connectToAO, aoUtils } from "./ao/connect";
 import { Services } from "@permaweb/aoconnect/dist/index.common";
-import { SendMessageRes } from "./ao/sendMessage";
 // AO helpful functions
 import { createDataItemSigner as createDataItemSignerNode } from "@permaweb/aoconnect/dist/client/node/wallet";
 import { createDataItemSigner as createDataItemSignerWeb } from "@permaweb/aoconnect/browser";
@@ -70,15 +68,11 @@ class LiquidOps {
 
   // borrow
 
-  async borrow(params: Borrow): Promise<SendMessageRes> {
+  async borrow(params: Borrow): Promise<BorrowRes> {
     return borrow(this.aoUtils, params);
   }
 
-  async payInterest(params: PayInterest): Promise<SendMessageRes> {
-    return payInterest(this.aoUtils, params);
-  }
-
-  async repay(params: Repay): Promise<SendMessageRes> {
+  async repay(params: Repay): Promise<RepayRes> {
     return repay(this.aoUtils, params);
   }
 
@@ -92,18 +86,18 @@ class LiquidOps {
 
   // lend
 
-  async lend(params: Lend): Promise<SendMessageRes> {
+  async lend(params: Lend): Promise<LendRes> {
     return lend(this.aoUtils, params);
   }
 
-  async unLend(params: UnLend): Promise<SendMessageRes> {
+  async unLend(params: UnLend): Promise<UnLendRes> {
     return unLend(this.aoUtils, params);
   }
 
   // oTokenData
 
-  async getAPY(params: GetAPY): Promise<number> {
-    return getAPY(this.aoUtils, params);
+  async getAPR(params: GetAPR): Promise<number> {
+    return getAPR(this.aoUtils, params);
   }
 
   async getBalances(params: GetBalances): Promise<GetBalancesRes> {
@@ -122,7 +116,7 @@ class LiquidOps {
     return getPosition(this.aoUtils, params);
   }
 
-  async getPrice(params: GetPrice): Promise<number> {
+  async getPrice(params: GetPrice): Promise<BigInt> {
     return getPrice(this.aoUtils, params);
   }
 
@@ -132,13 +126,13 @@ class LiquidOps {
 
   // protocol data
 
-  async getAllPositions(params: GetAllPositions): Promise<GetAllPositionsRes> { // TODO: talk to Marton
+  async getAllPositions(params: GetAllPositions): Promise<GetAllPositionsRes> {
     return getAllPositions(this.aoUtils, params);
   }
 
   // utils
 
-  async getBalance(params: GetBalance): Promise<number> {
+  async getBalance(params: GetBalance): Promise<BigInt> {
     return getBalance(params);
   }
 
@@ -154,3 +148,14 @@ class LiquidOps {
 
 export { createDataItemSignerNode, createDataItemSignerWeb };
 export default LiquidOps;
+
+
+// TODO
+// getTxns return type
+// check with marton on getAllPositions function
+// double check on exporting signers
+// write/finalize tests for new function res types + handling for a incomplete res + figure out res response
+// double check all new types and return types (compare to paper)
+// README docs
+// double check all functions are complete
+

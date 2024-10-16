@@ -1,5 +1,5 @@
 import { arGql } from "ar-gql";
-import { aoUtils } from "..";
+import { aoUtils } from "../ao/connect";
 
 export interface Transaction {
   id: string;

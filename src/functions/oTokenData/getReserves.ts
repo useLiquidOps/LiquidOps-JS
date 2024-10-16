@@ -7,10 +7,9 @@ export interface GetReserves {
 }
 
 export interface GetReservesRes {
-  Target: string;
   Action: string;
-  Available: number;
-  Lent: number;
+  Available: BigInt;
+  Lent: BigInt;
 }
 
 export async function getReserves(
@@ -22,13 +21,27 @@ export async function getReserves(
 
     const message = await sendMessage(aoUtils, {
       Target: oTokenAddress,
-      Action: "Get-Reserve",
+      Action: "Get-Reserves",
     });
-    const res = message.Messages[0].Tags.find(
-      (tag: { name: string; value: string }) => tag.name === "Reserves",
-    );
-    return res.value;
+
+    const tags = message.Messages[0].Tags;
+    const reserves: Partial<GetReservesRes> = { Action: "Reserves" };
+
+    tags.forEach((tag: { name: string; value: string }) => {
+      switch (tag.name) {
+        case "Available":
+        case "Lent":
+          reserves[tag.name] = BigInt(tag.value);
+          break;
+      }
+    });
+
+    if (Object.keys(reserves).length !== 3) {
+      throw new Error("Incomplete reserves information in the response");
+    }
+
+    return reserves as GetReservesRes;
   } catch (error) {
-    throw new Error("Error in getReserves function:" + error);
+    throw new Error("Error in getReserves function: " + error);
   }
 }

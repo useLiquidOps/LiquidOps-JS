@@ -1,4 +1,4 @@
-import { aoUtils } from "..";
+import { aoUtils } from "./connect";
 
 export async function logResult(
   aoUtils: aoUtils,

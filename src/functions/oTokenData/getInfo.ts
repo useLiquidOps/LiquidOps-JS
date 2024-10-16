@@ -24,11 +24,27 @@ export async function getInfo(
       Target: oTokenAddress,
       Action: "Info",
     });
-    const info = message.Messages[0].Tags.find(
-      (tag: { name: string; value: string }) => tag.name === "Info",
-    );
-    return info.value;
+
+    const tags = message.Messages[0].Tags;
+    const info: Partial<GetInfoRes> = {};
+
+    tags.forEach((tag: { name: string; value: string }) => {
+      switch (tag.name) {
+        case "Name":
+        case "Ticker":
+        case "Logo":
+        case "Denomination":
+          info[tag.name] = tag.value;
+          break;
+      }
+    });
+
+    if (Object.keys(info).length !== 4) {
+      throw new Error("Incomplete token information in the response");
+    }
+
+    return info as GetInfoRes;
   } catch (error) {
-    throw new Error("Error in getInfo function:" + error);
+    throw new Error("Error in getInfo function: " + error);
   }
 }

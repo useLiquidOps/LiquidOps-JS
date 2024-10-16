@@ -9,9 +9,19 @@ export interface Transfer {
 }
 
 export interface TransferRes {
-  Action: "Credit-Notice";
-  Sender: string;
-  Quantity: number;
+  Target: string;
+  Tags: {
+    Action: "Debit-Notice" | "Transfer-Error";
+    Recipient?: string;
+    Quantity?: string;
+    "Message-Id"?: string;
+    Error?: string;
+  };
+}
+
+interface Tag {
+  name: string;
+  value: string;
 }
 
 export async function transfer(
@@ -27,7 +37,6 @@ export async function transfer(
       );
       tokenAddress = supportedTokenAddress;
     } catch (error) {
-      // If tokenInput fails, assume it's a custom address
       tokenAddress = token as string;
     }
 
@@ -35,12 +44,44 @@ export async function transfer(
       Target: tokenAddress,
       Action: "Transfer",
       Recipient: recipient,
-      Quantity: JSON.stringify(quantity),
+      Quantity: quantity.toString(),
       "LO-Action": "Transfer",
     });
-    const res = message.Messages[0];
-    return res;
+
+    const responseMessage = message.Messages[0];
+    const tags: Tag[] = responseMessage.Tags;
+
+    const transferRes: TransferRes = {
+      Target: responseMessage.Target,
+      Tags: {
+        Action: "Debit-Notice",
+      },
+    };
+
+    tags.forEach((tag: Tag) => {
+      switch (tag.name) {
+        case "Action":
+          if (tag.value === "Transfer-Error") {
+            transferRes.Tags.Action = "Transfer-Error";
+          }
+          break;
+        case "Recipient":
+          transferRes.Tags.Recipient = tag.value;
+          break;
+        case "Quantity":
+          transferRes.Tags.Quantity = tag.value;
+          break;
+        case "Message-Id":
+          transferRes.Tags["Message-Id"] = tag.value;
+          break;
+        case "Error":
+          transferRes.Tags.Error = tag.value;
+          break;
+      }
+    });
+
+    return transferRes;
   } catch (error) {
-    throw new Error("Error in transfer function:" + error);
+    throw new Error("Error in transfer function: " + error);
   }
 }

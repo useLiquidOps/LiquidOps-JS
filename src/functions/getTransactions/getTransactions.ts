@@ -19,6 +19,7 @@ export async function getTransactions(
   aoUtils: aoUtils,
   { action, token, walletAddress }: GetTransactions,
 ): Promise<{ node: Transaction }[]> {
+  // TODO res type
   try {
     const tags = [{ name: "Protocol-Name", values: ["LiquidOps"] }];
 

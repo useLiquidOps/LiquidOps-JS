@@ -7,18 +7,32 @@ export interface UnLend {
   quantity: BigInt;
 }
 
+export interface UnLendRes {
+  Target: string;
+  Tags: {
+    Action: "Redeem-Confirmation" | "Redeem-Error";
+    "Earned-Quantity"?: string;
+    "Burned-Quantity"?: string;
+    "Refund-Quantity"?: string;
+    Error?: string;
+  };
+  Data?: string;
+}
+
 export async function unLend(
   aoUtils: aoUtils,
   { token, quantity }: UnLend,
-): Promise<SendMessageRes> {
+): Promise<UnLendRes> {
   try {
     const { oTokenAddress } = tokenInput(token);
 
-    return await sendMessage(aoUtils, {
+    const res: SendMessageRes = await sendMessage(aoUtils, {
       Target: oTokenAddress,
-      Action: "Burn",
+      Action: "Redeem",
       Quantity: JSON.stringify(quantity),
     });
+
+    return res.Output;
   } catch (error) {
     throw new Error("Error in unLend function:" + error);
   }

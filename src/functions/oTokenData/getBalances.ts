@@ -7,7 +7,7 @@ export interface GetBalances {
 }
 
 export interface GetBalancesRes {
-  [address: string]: number;
+  [address: string]: BigInt;
 }
 
 export async function getBalances(
@@ -21,11 +21,23 @@ export async function getBalances(
       Target: oTokenAddress,
       Action: "Balances",
     });
-    const res = message.Messages[0].Tags.find(
-      (tag: { name: string; value: string }) => tag.name === "Balances",
+
+    if (!message.Messages[0].Data) {
+      throw new Error("Balances data not found in the response");
+    }
+
+    const balancesData = JSON.parse(message.Messages[0].Data);
+
+    const balances: GetBalancesRes = Object.entries(balancesData).reduce(
+      (acc, [address, balance]) => {
+        acc[address] = BigInt(balance as string);
+        return acc;
+      },
+      {} as GetBalancesRes,
     );
-    return res.value.Data;
+
+    return balances;
   } catch (error) {
-    throw new Error("Error in getBalances function:" + error);
+    throw new Error("Error in getBalances function: " + error);
   }
 }

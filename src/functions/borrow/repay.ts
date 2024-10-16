@@ -5,26 +5,35 @@ import { TokenInput, tokenInput } from "../../ao/tokenInput";
 export interface Repay {
   token: TokenInput;
   quantity: BigInt;
-  borrowID: string;
+}
+
+export interface RepayRes {
+  Target: string;
+  Tags: {
+    Action: "Repay-Confirmation" | "Repay-Error";
+    "Repaid-Quantity"?: string;
+    "Refund-Quantity"?: string;
+    Error?: string;
+  };
+  Data?: string;
 }
 
 export async function repay(
   aoUtils: aoUtils,
-  { token, quantity, borrowID }: Repay,
-): Promise<SendMessageRes> {
+  { token, quantity }: Repay,
+): Promise<RepayRes> {
   try {
     const { tokenAddress, oTokenAddress } = tokenInput(token);
 
-    return await sendMessage(aoUtils, {
+    const res: SendMessageRes = await sendMessage(aoUtils, {
       Target: tokenAddress,
       Action: "Transfer",
       Quantity: JSON.stringify(quantity),
       Recipient: oTokenAddress,
       "X-Action": "Repay",
-      "Borrow-Id": borrowID,
-      "borrowed-quantity": JSON.stringify(quantity),
-      "borrowed-address": tokenAddress,
     });
+
+    return res.Output;
   } catch (error) {
     throw new Error("Error in repay function:" + error);
   }

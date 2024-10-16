@@ -9,7 +9,7 @@ export interface GetBalance {
 export async function getBalance({
   token,
   walletAddress,
-}: GetBalance): Promise<number> {
+}: GetBalance): Promise<BigInt> {
   try {
     let tokenAddress: string;
 
@@ -19,13 +19,12 @@ export async function getBalance({
       );
       tokenAddress = supportedTokenAddress;
     } catch (error) {
-      // If tokenInput fails, assume it's a custom address
       tokenAddress = token as string;
     }
 
     const tokenInstance = await Token(tokenAddress);
     const balance = await tokenInstance.getBalance(walletAddress);
-    return Number(balance.raw.toString());
+    return BigInt(balance.raw.toString());
   } catch (error) {
     throw new Error("Error in getBalance function:" + error);
   }

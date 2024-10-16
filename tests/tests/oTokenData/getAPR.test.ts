@@ -2,7 +2,7 @@ import { expect, test } from "bun:test";
 import LiquidOps, { createDataItemSignerNode } from "../../../src";
 import { JWKInterface } from "arbundles/node";
 
-test("getAPY function", async () => {
+test("getAPR function", async () => {
   if (!process.env.JWK) {
     throw new Error("Please specify a JWK in the .env file");
   }
@@ -12,7 +12,7 @@ test("getAPY function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.getAPY({
+    const res = await client.getAPR({
       token: "wAR",
     });
 

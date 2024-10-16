@@ -4,26 +4,32 @@ import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface GetPrice {
   token: TokenInput;
-  quantity: BigInt;
+  quantity?: BigInt;
 }
 
 export async function getPrice(
   aoUtils: aoUtils,
   { token, quantity }: GetPrice,
-): Promise<number> {
+): Promise<BigInt> {
   try {
     const { oTokenAddress } = tokenInput(token);
 
     const message = await sendMessage(aoUtils, {
       Target: oTokenAddress,
       Action: "Get-Price",
-      Quantity: JSON.stringify(quantity),
+      ...(quantity && { Quantity: quantity.toString() }),
     });
-    const price = message.Messages[0].Tags.find(
-      (tag: { name: string; value: string }) => tag.name === "price",
+
+    const priceTag = message.Messages[0].Tags.find(
+      (tag: { name: string; value: string }) => tag.name === "Price",
     );
-    return price.value / 100;
+
+    if (!priceTag) {
+      throw new Error("Price information not found in the response");
+    }
+
+    return BigInt(priceTag.value);
   } catch (error) {
-    throw new Error("Error in getPrice function:" + error);
+    throw new Error("Error in getPrice function: " + error);
   }
 }

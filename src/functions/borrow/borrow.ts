@@ -1,4 +1,4 @@
-import { sendMessage, SendMessageRes } from "../../ao/sendMessage";
+import { sendMessage } from "../../ao/sendMessage";
 import { aoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
@@ -7,22 +7,29 @@ export interface Borrow {
   quantity: BigInt;
 }
 
+export interface BorrowRes {
+  Target: string;
+  Tags: {
+    Action: "Borrow-Confirmation" | "Borrow-Error";
+    "Borrowed-Quantity"?: string;
+  };
+  Data?: string;
+}
+
 export async function borrow(
   aoUtils: aoUtils,
   { token, quantity }: Borrow,
-): Promise<SendMessageRes> {
+): Promise<BorrowRes> {
   try {
-    const { tokenAddress, oTokenAddress } = tokenInput(token);
+    const { oTokenAddress } = tokenInput(token);
 
-    return await sendMessage(aoUtils, {
-      Target: tokenAddress,
-      Action: "Transfer",
+    const res = await sendMessage(aoUtils, {
+      Target: oTokenAddress,
+      Action: "Borrow",
       Quantity: JSON.stringify(quantity),
-      Recipient: oTokenAddress,
-      "X-Action": "Borrow",
-      "borrowed-quantity": JSON.stringify(quantity),
-      "borrowed-address": tokenAddress,
     });
+
+    return res.Output;
   } catch (error) {
     throw new Error("Error in borrow function:" + error);
   }

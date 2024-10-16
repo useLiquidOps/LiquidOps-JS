@@ -1,5 +1,5 @@
 import { logResult } from "./logResult";
-import { aoUtils } from "..";
+import { aoUtils } from "./connect";
 import { MessageResult as AoMessageResult } from "@permaweb/aoconnect/dist/lib/result";
 
 export type MessageResult = AoMessageResult; // needed for jest tests

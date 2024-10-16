@@ -9,10 +9,10 @@ export interface GetConfig {
 export interface GetConfigRes {
   Action: string;
   Token: string;
-  "Collateral-Ratio": number;
-  "Liquidation-Threshold": number;
+  "Collateral-Ratio": string;
+  "Liquidation-Threshold": string;
   Oracle: string;
-  "Wrapped-Denomination": string;
+  "Collateral-Denomination": string;
 }
 
 export async function getConfig(
@@ -26,11 +26,29 @@ export async function getConfig(
       Target: oTokenAddress,
       Action: "Get-Config",
     });
-    const res = message.Messages[0].Tags.find(
-      (tag: { name: string; value: string }) => tag.name === "Get-Config",
-    );
-    return res.value;
+
+    const tags = message.Messages[0].Tags;
+    const config: Partial<GetConfigRes> = {};
+
+    tags.forEach((tag: { name: string; value: string }) => {
+      switch (tag.name) {
+        case "Action":
+        case "Token":
+        case "Collateral-Ratio":
+        case "Liquidation-Threshold":
+        case "Oracle":
+        case "Collateral-Denomination":
+          config[tag.name] = tag.value;
+          break;
+      }
+    });
+
+    if (Object.keys(config).length !== 6) {
+      throw new Error("Incomplete configuration data in the response");
+    }
+
+    return config as GetConfigRes;
   } catch (error) {
-    throw new Error("Error in getConfig function:" + error);
+    throw new Error("Error in getConfig function: " + error);
   }
 }
