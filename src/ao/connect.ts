@@ -3,7 +3,7 @@ import { Services } from "@permaweb/aoconnect/dist/index.common";
 import { SpawnProcess } from "@permaweb/aoconnect/dist/lib/spawn";
 import { SendMessage } from "@permaweb/aoconnect/dist/lib/message";
 import { ReadResult } from "@permaweb/aoconnect/dist/lib/result";
-import { Types as aoconnectTypes } from "@permaweb/aoconnect/dist/dal";
+import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 
 export function connectToAO(services?: Services) {
   const {
@@ -31,6 +31,6 @@ export interface AoUtils {
   spawn: SpawnProcess;
   message: SendMessage;
   result: ReadResult;
-  signer: aoconnectTypes["signer"];
+  signer: AoConnectTypes["signer"];
   configs: Services;
 }

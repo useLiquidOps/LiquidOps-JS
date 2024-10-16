@@ -43,11 +43,11 @@ import { oTokens, tokens } from "./ao/tokenAddressData";
 // AO misc types/functions
 import { connectToAO, AoUtils } from "./ao/connect";
 import { Services } from "@permaweb/aoconnect/dist/index.common";
-import { Types as aoconnectTypes } from "@permaweb/aoconnect/dist/dal";
+import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 class LiquidOps {
   private aoUtils: AoUtils;
 
-  constructor(signer: aoconnectTypes["signer"], configs: Services = {}) {
+  constructor(signer: AoConnectTypes["signer"], configs: Services = {}) {
     if (!signer) {
       throw new Error("Please specify a ao createDataItemSigner signer");
     }
