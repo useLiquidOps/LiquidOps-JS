@@ -172,11 +172,14 @@ export default LiquidOps;
 // transfer - Transfer
 
 
-// LORIMER TODO
+// LORIMER TODO later on after process deployed
 
-// add ao res check
-// write/finalize tests for new function res types
-// figure out res response' for fail and success
-// double check all new types and return types (compare to paper)
+// add ao send message res check
+// add ao send message correct res response (!res.output) 
 // README docs
+
+// double check all new types and return types (compare to paper)
+// figure out res response' for fail and success
+// write/finalize tests for new function res types - with new fail types too
+
 
