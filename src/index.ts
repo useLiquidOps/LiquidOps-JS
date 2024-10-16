@@ -150,13 +150,17 @@ export { createDataItemSignerNode, createDataItemSignerWeb };
 export default LiquidOps;
 
 // TODO
-// getTxns return type
-// check with marton on getAllPositions function
-// double check on exporting signers
+// check with marton on getAllPositions function, leave on ice
+
+// double check on exporting signers - TODO, make it a peer dependency and the user to import it from the ao package
+// getTxns return type 
 // write/finalize tests for new function res types + handling for a incomplete res + figure out res response
 // double check all new types and return types (compare to paper)
 // README docs
-// double check all functions are complete
+
+
+// do we need anymore functions?
+// Need liquidation functions
 
 
 // borrow - Borrow
@@ -168,7 +172,7 @@ export default LiquidOps;
 // unLend - Redeem
 
 // getAPR - Get-APR
-// getBalance - Balances // check this
+// getBalance - Balances // lorimer change to Borrow-Balance
 // getConfig - Get-Config
 // getInfo - Info
 // getPosition - Position

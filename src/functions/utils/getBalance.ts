@@ -24,7 +24,7 @@ export async function getBalance({
 
     const tokenInstance = await Token(tokenAddress);
     const balance = await tokenInstance.getBalance(walletAddress);
-    return BigInt(balance.raw.toString());
+    return balance.raw
   } catch (error) {
     throw new Error("Error in getBalance function:" + error);
   }
