@@ -43,10 +43,10 @@ import { oTokens, tokens } from "./ao/tokenAddressData";
 // AO misc types/functions
 import { connectToAO, aoUtils } from "./ao/connect";
 import { Services } from "@permaweb/aoconnect/dist/index.common";
+import { Types as aoconnectTypes } from "@permaweb/aoconnect/dist/dal";
 // AO helpful functions
 import { createDataItemSigner as createDataItemSignerNode } from "@permaweb/aoconnect/dist/client/node/wallet";
 import { createDataItemSigner as createDataItemSignerWeb } from "@permaweb/aoconnect/browser";
-import { Types as aoconnectTypes } from "@permaweb/aoconnect/dist/dal";
 
 class LiquidOps {
   private aoUtils: aoUtils;
@@ -149,7 +149,6 @@ class LiquidOps {
 export { createDataItemSignerNode, createDataItemSignerWeb };
 export default LiquidOps;
 
-
 // TODO
 // getTxns return type
 // check with marton on getAllPositions function
@@ -158,4 +157,3 @@ export default LiquidOps;
 // double check all new types and return types (compare to paper)
 // README docs
 // double check all functions are complete
-
