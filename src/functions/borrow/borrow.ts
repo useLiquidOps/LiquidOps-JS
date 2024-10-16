@@ -26,7 +26,7 @@ export async function borrow(
     const res = await sendMessage(aoUtils, {
       Target: oTokenAddress,
       Action: "Borrow",
-      Quantity: quantity.toString(), // TODO, change this everywhere for .toString()
+      Quantity: quantity.toString(),
     });
 
     return res.Output;

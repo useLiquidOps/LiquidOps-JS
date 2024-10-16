@@ -29,7 +29,7 @@ export async function unLend(
     const res: SendMessageRes = await sendMessage(aoUtils, {
       Target: oTokenAddress,
       Action: "Redeem",
-      Quantity: JSON.stringify(quantity),
+      Quantity: quantity.toString(),
     });
 
     return res.Output;

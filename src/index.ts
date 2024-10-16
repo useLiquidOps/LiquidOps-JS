@@ -174,9 +174,9 @@ export default LiquidOps;
 
 // LORIMER TODO
 
+// handling for a incomplete res + handling for not all inputs
 // write/finalize tests for new function res types
-// handling for a incomplete res
-// figure out res response'
+// figure out res response' for fail and success
 // double check all new types and return types (compare to paper)
 // README docs
 

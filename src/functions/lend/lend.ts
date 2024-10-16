@@ -29,7 +29,7 @@ export async function lend(
     const res: SendMessageRes = await sendMessage(aoUtils, {
       Target: tokenAddress,
       Action: "Transfer",
-      Quantity: JSON.stringify(quantity),
+      Quantity: quantity.toString(),
       Recipient: oTokenAddress,
       "X-Action": "Mint",
     });
