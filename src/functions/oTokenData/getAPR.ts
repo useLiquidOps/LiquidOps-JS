@@ -46,7 +46,7 @@ export async function getAPR(
     const apr = parseFloat(aprResponse["Annual-Percentage-Rate"]);
     const rateMultiplier = parseFloat(aprResponse["Rate-Multiplier"]);
 
-    return apr / rateMultiplier;
+    return apr / rateMultiplier; // TODO: check later + modular response handling
   } catch (error) {
     throw new Error("Error in getAPR function: " + error);
   }

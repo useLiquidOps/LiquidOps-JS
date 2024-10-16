@@ -7,10 +7,10 @@ export interface GetConfig {
 }
 
 export interface GetConfigRes {
-  Action: string;
+  Action: "Config";
   Token: string;
-  "Collateral-Ratio": string;
-  "Liquidation-Threshold": string;
+  "Collateral-Ratio": number;
+  "Liquidation-Threshold": number;
   Oracle: string;
   "Collateral-Denomination": string;
 }
@@ -27,28 +27,12 @@ export async function getConfig(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const message = await sendMessage(aoUtils, {
+    const res = await sendMessage(aoUtils, {
       Target: oTokenAddress,
       Action: "Get-Config",
     });
 
-    const tags = message.Messages[0].Tags;
-    const config: Partial<GetConfigRes> = {};
-
-    tags.forEach((tag: { name: string; value: string }) => {
-      switch (tag.name) {
-        case "Action":
-        case "Token":
-        case "Collateral-Ratio":
-        case "Liquidation-Threshold":
-        case "Oracle":
-        case "Collateral-Denomination":
-          config[tag.name] = tag.value;
-          break;
-      }
-    });
-
-    return config as GetConfigRes;
+    return res.Output; // TODO, make modular sendMessage response handling 
   } catch (error) {
     throw new Error("Error in getConfig function: " + error);
   }

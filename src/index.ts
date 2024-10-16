@@ -147,6 +147,7 @@ export default LiquidOps;
 // getAllPositions function, leave on ice Lorimer
 // Do we need anymore functions?
 // We need liquidation functions?
+// Check all repo and check tests
 
 // FUNCTION MAPPING GUIDE
 
@@ -174,12 +175,10 @@ export default LiquidOps;
 
 // LORIMER TODO later on after process deployed
 
-// add ao send message res check
-// add ao send message correct res response (!res.output) 
+// add ao sendMessage modular response handling
 // README docs
 
-// double check all new types and return types (compare to paper)
-// figure out res response' for fail and success
+
 // write/finalize tests for new function res types - with new fail types too
 
 

@@ -19,11 +19,6 @@ export interface TransferRes {
   };
 }
 
-interface Tag {
-  name: string;
-  value: string;
-}
-
 export async function transfer(
   aoUtils: AoUtils,
   { token, recipient, quantity }: Transfer,
@@ -46,47 +41,15 @@ export async function transfer(
       tokenAddress = token as string;
     }
 
-    const message = await sendMessage(aoUtils, {
+    const res = await sendMessage(aoUtils, {
       Target: tokenAddress,
       Action: "Transfer",
       Recipient: recipient,
       Quantity: quantity.toString(),
-      "LO-Action": "Transfer",
+      "LO-Action": "Transfer", // for LO analytics
     });
 
-    const responseMessage = message.Messages[0];
-    const tags: Tag[] = responseMessage.Tags;
-
-    const transferRes: TransferRes = {
-      Target: responseMessage.Target,
-      Tags: {
-        Action: "Debit-Notice",
-      },
-    };
-
-    tags.forEach((tag: Tag) => {
-      switch (tag.name) {
-        case "Action":
-          if (tag.value === "Transfer-Error") {
-            transferRes.Tags.Action = "Transfer-Error";
-          }
-          break;
-        case "Recipient":
-          transferRes.Tags.Recipient = tag.value;
-          break;
-        case "Quantity":
-          transferRes.Tags.Quantity = tag.value;
-          break;
-        case "Message-Id":
-          transferRes.Tags["Message-Id"] = tag.value;
-          break;
-        case "Error":
-          transferRes.Tags.Error = tag.value;
-          break;
-      }
-    });
-
-    return transferRes;
+    return res.Output; // TODO, make modular sendMessage response handling 
   } catch (error) {
     throw new Error("Error in transfer function: " + error);
   }

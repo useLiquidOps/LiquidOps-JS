@@ -4,49 +4,32 @@ import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface GetAllPositions {
   token: TokenInput;
-  recipient?: string;
 }
 
 export interface GetAllPositionsRes {
-  Capacity: BigInt;
-  "Used-Capacity": BigInt;
-  "Collateral-Ticker": BigInt;
+  Capacity: string;
+  "Used-Capacity": string;
+  "Collateral-Ticker": string;
 }
 
-export async function getAllPositions(
+export async function getAllPositions( // TODO: waiting on Marton
   aoUtils: AoUtils,
-  { token, recipient }: GetAllPositions,
+  { token }: GetAllPositions,
 ): Promise<GetAllPositionsRes> {
   try {
 
-    if (!token || !recipient) {
-      throw new Error("Please specify a token and recipient.");
+    if (!token) {
+      throw new Error("Please specify a token.");
     }
 
     const { oTokenAddress } = tokenInput(token);
 
-    const message = await sendMessage(aoUtils, {
+    const res = await sendMessage(aoUtils, {
       Target: oTokenAddress,
-      Action: "Position",
-      ...(recipient && { Recipient: recipient }),
+      Action: "Get-All-Positions",
     });
 
-    const tags = message.Messages[0].Tags;
-    const position: Partial<GetAllPositionsRes> = {};
-
-    tags.forEach((tag: { name: string; value: string }) => {
-      switch (tag.name) {
-        case "Capacity":
-        case "Used-Capacity":
-          position[tag.name] = BigInt(tag.value);
-          break;
-        case "Collateral-Ticker":
-          position[tag.name] = tag.value;
-          break;
-      }
-    });
-
-    return position as GetAllPositionsRes;
+    return res.Output; // TODO, make modular sendMessage response handling 
   } catch (error) {
     throw new Error("Error in getAllPositions function: " + error);
   }

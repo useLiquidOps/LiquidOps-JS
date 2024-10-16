@@ -25,26 +25,12 @@ export async function getInfo(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const message = await sendMessage(aoUtils, {
+    const res = await sendMessage(aoUtils, {
       Target: oTokenAddress,
       Action: "Info",
     });
 
-    const tags = message.Messages[0].Tags;
-    const info: Partial<GetInfoRes> = {};
-
-    tags.forEach((tag: { name: string; value: string }) => {
-      switch (tag.name) {
-        case "Name":
-        case "Ticker":
-        case "Logo":
-        case "Denomination":
-          info[tag.name] = tag.value;
-          break;
-      }
-    });
-
-    return info as GetInfoRes;
+    return res.Output; // TODO, make modular sendMessage response handling 
   } catch (error) {
     throw new Error("Error in getInfo function: " + error);
   }

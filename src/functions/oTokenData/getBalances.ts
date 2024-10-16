@@ -22,22 +22,12 @@ export async function getBalances(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const message = await sendMessage(aoUtils, {
+    const res = await sendMessage(aoUtils, {
       Target: oTokenAddress,
       Action: "Balances",
     });
 
-    const balancesData = JSON.parse(message.Messages[0].Data);
-
-    const balances: GetBalancesRes = Object.entries(balancesData).reduce(
-      (acc, [address, balance]) => {
-        acc[address] = BigInt(balance as string);
-        return acc;
-      },
-      {} as GetBalancesRes,
-    );
-
-    return balances;
+    return res.Output; // TODO, make modular sendMessage response handling 
   } catch (error) {
     throw new Error("Error in getBalances function: " + error);
   }

@@ -5,6 +5,7 @@ import { TokenInput, tokenInput } from "../../ao/tokenInput";
 export interface Repay {
   token: TokenInput;
   quantity: BigInt;
+  onBehalfOf?: string;
 }
 
 export interface RepayRes {
@@ -20,25 +21,25 @@ export interface RepayRes {
 
 export async function repay(
   aoUtils: AoUtils,
-  { token, quantity }: Repay,
+  { token, quantity, onBehalfOf }: Repay,
 ): Promise<RepayRes> {
   try {
-
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");
     }
 
     const { tokenAddress, oTokenAddress } = tokenInput(token);
 
-    const res: SendMessageRes = await sendMessage(aoUtils, {
+    const res = await sendMessage(aoUtils, {
       Target: tokenAddress,
       Action: "Transfer",
       Quantity: quantity.toString(),
       Recipient: oTokenAddress,
       "X-Action": "Repay",
+      ...(onBehalfOf && { "X-On-Behalf": onBehalfOf }),
     });
 
-    return res.Output; // TODO
+    return res.Output; // TODO, make modular sendMessage response handling 
   } catch (error) {
     throw new Error("Error in repay function:" + error);
   }

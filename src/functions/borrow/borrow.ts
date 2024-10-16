@@ -34,7 +34,7 @@ export async function borrow(
       Quantity: quantity.toString(),
     });
 
-    return res.Output; // TODO
+    return res.Output; // TODO, make modular sendMessage response handling 
   } catch (error) {
     throw new Error("Error in borrow function:" + error);
   }

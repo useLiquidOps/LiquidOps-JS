@@ -8,8 +8,8 @@ export interface GetPosition {
 }
 
 export interface GetPositionRes {
-  Capacity: BigInt;
-  "Used-Capacity": BigInt;
+  Capacity: string;
+  "Used-Capacity": string;
   "Collateral-Ticker": string;
 }
 
@@ -25,28 +25,13 @@ export async function getPosition(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const message = await sendMessage(aoUtils, {
+    const res = await sendMessage(aoUtils, {
       Target: oTokenAddress,
       Action: "Position",
       ...(recipient && { Recipient: recipient }),
     });
 
-    const tags = message.Messages[0].Tags;
-    const position: Partial<GetPositionRes> = {};
-
-    tags.forEach((tag: { name: string; value: string }) => {
-      switch (tag.name) {
-        case "Capacity":
-        case "Used-Capacity":
-          position[tag.name] = BigInt(tag.value);
-          break;
-        case "Collateral-Ticker":
-          position[tag.name] = tag.value;
-          break;
-      }
-    });
-
-    return position as GetPositionRes;
+    return res.Output; // TODO, make modular sendMessage response handling 
   } catch (error) {
     throw new Error("Error in getPosition function: " + error);
   }

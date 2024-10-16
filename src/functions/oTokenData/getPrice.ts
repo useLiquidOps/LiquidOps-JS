@@ -29,7 +29,7 @@ export async function getPrice(
       (tag: { name: string; value: string }) => tag.name === "Price",
     );
 
-    return BigInt(priceTag.value);
+    return BigInt(priceTag.value); // TODO: check later + add modular response handling
   } catch (error) {
     throw new Error("Error in getPrice function: " + error);
   }

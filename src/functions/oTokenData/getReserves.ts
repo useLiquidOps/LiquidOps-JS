@@ -7,9 +7,9 @@ export interface GetReserves {
 }
 
 export interface GetReservesRes {
-  Action: string;
-  Available: BigInt;
-  Lent: BigInt;
+  Action: "Reserves";
+  Available: string;
+  Lent: string;
 }
 
 export async function getReserves(
@@ -24,24 +24,12 @@ export async function getReserves(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const message = await sendMessage(aoUtils, {
+    const res = await sendMessage(aoUtils, {
       Target: oTokenAddress,
       Action: "Get-Reserves",
     });
 
-    const tags = message.Messages[0].Tags;
-    const reserves: Partial<GetReservesRes> = { Action: "Reserves" };
-
-    tags.forEach((tag: { name: string; value: string }) => {
-      switch (tag.name) {
-        case "Available":
-        case "Lent":
-          reserves[tag.name] = BigInt(tag.value);
-          break;
-      }
-    });
-
-    return reserves as GetReservesRes;
+    return res.Output; // TODO, make modular sendMessage response handling 
   } catch (error) {
     throw new Error("Error in getReserves function: " + error);
   }

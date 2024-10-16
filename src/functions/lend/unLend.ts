@@ -37,7 +37,7 @@ export async function unLend(
       Quantity: quantity.toString(),
     });
 
-    return res.Output; // TODO
+    return res.Output; // TODO, make modular sendMessage response handling 
   } catch (error) {
     throw new Error("Error in unLend function:" + error);
   }
