@@ -44,10 +44,6 @@ export async function getInfo(
       }
     });
 
-    if (Object.keys(info).length !== 4) {
-      throw new Error("Incomplete token information in the response");
-    }
-
     return info as GetInfoRes;
   } catch (error) {
     throw new Error("Error in getInfo function: " + error);

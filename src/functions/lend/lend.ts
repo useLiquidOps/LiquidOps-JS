@@ -39,7 +39,7 @@ export async function lend(
       "X-Action": "Mint",
     });
 
-    return res.Output;
+    return res.Output; // TODO
   } catch (error) {
     throw new Error("Error in lend function:" + error);
   }

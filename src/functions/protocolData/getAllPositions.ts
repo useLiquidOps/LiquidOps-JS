@@ -46,10 +46,6 @@ export async function getAllPositions(
       }
     });
 
-    if (Object.keys(position).length !== 3) {
-      throw new Error("Incomplete position information in the response");
-    }
-
     return position as GetAllPositionsRes;
   } catch (error) {
     throw new Error("Error in getAllPositions function: " + error);

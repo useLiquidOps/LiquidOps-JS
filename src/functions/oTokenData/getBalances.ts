@@ -27,10 +27,6 @@ export async function getBalances(
       Action: "Balances",
     });
 
-    if (!message.Messages[0].Data) {
-      throw new Error("Balances data not found in the response");
-    }
-
     const balancesData = JSON.parse(message.Messages[0].Data);
 
     const balances: GetBalancesRes = Object.entries(balancesData).reduce(

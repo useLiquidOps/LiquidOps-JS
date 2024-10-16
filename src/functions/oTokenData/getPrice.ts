@@ -29,10 +29,6 @@ export async function getPrice(
       (tag: { name: string; value: string }) => tag.name === "Price",
     );
 
-    if (!priceTag) {
-      throw new Error("Price information not found in the response");
-    }
-
     return BigInt(priceTag.value);
   } catch (error) {
     throw new Error("Error in getPrice function: " + error);

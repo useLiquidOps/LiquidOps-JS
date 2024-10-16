@@ -48,10 +48,6 @@ export async function getConfig(
       }
     });
 
-    if (Object.keys(config).length !== 6) {
-      throw new Error("Incomplete configuration data in the response");
-    }
-
     return config as GetConfigRes;
   } catch (error) {
     throw new Error("Error in getConfig function: " + error);

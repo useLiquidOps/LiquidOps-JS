@@ -41,10 +41,6 @@ export async function getReserves(
       }
     });
 
-    if (Object.keys(reserves).length !== 3) {
-      throw new Error("Incomplete reserves information in the response");
-    }
-
     return reserves as GetReservesRes;
   } catch (error) {
     throw new Error("Error in getReserves function: " + error);

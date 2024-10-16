@@ -43,13 +43,6 @@ export async function getAPR(
       }
     });
 
-    if (
-      !aprResponse["Annual-Percentage-Rate"] ||
-      !aprResponse["Rate-Multiplier"]
-    ) {
-      throw new Error("APR or Rate Multiplier not found in the response");
-    }
-
     const apr = parseFloat(aprResponse["Annual-Percentage-Rate"]);
     const rateMultiplier = parseFloat(aprResponse["Rate-Multiplier"]);
 
