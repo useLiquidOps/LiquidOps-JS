@@ -1,5 +1,5 @@
 import { sendMessage } from "../../ao/sendMessage";
-import { aoUtils } from "../../ao/connect";
+import { AoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface GetReserves {
@@ -13,8 +13,8 @@ export interface GetReservesRes {
 }
 
 export async function getReserves(
-  aoUtils: aoUtils,
-  { token }: GetReserves,
+  aoUtils: AoUtils,
+  { token }: GetReserves
 ): Promise<GetReservesRes> {
   try {
     const { oTokenAddress } = tokenInput(token);

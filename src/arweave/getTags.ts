@@ -1,5 +1,5 @@
 import { arGql } from "ar-gql";
-import { aoUtils } from "../ao/connect";
+import { AoUtils } from "../ao/connect";
 
 export interface Transaction {
   id: string;
@@ -10,9 +10,9 @@ export interface Transaction {
 }
 
 export async function getTags(
-  aoUtils: aoUtils,
+  aoUtils: AoUtils,
   tags: { name: string; values: string | string[] }[],
-  walletAddress: string,
+  walletAddress: string
 ): Promise<{ node: Transaction }[]> {
   try {
     const gqlEndpoint =

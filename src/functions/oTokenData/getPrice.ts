@@ -1,5 +1,5 @@
 import { sendMessage } from "../../ao/sendMessage";
-import { aoUtils } from "../../ao/connect";
+import { AoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface GetPrice {
@@ -8,8 +8,8 @@ export interface GetPrice {
 }
 
 export async function getPrice(
-  aoUtils: aoUtils,
-  { token, quantity }: GetPrice,
+  aoUtils: AoUtils,
+  { token, quantity }: GetPrice
 ): Promise<BigInt> {
   try {
     const { oTokenAddress } = tokenInput(token);
@@ -21,7 +21,7 @@ export async function getPrice(
     });
 
     const priceTag = message.Messages[0].Tags.find(
-      (tag: { name: string; value: string }) => tag.name === "Price",
+      (tag: { name: string; value: string }) => tag.name === "Price"
     );
 
     if (!priceTag) {

@@ -1,5 +1,5 @@
 import { sendMessage } from "../../ao/sendMessage";
-import { aoUtils } from "../../ao/connect";
+import { AoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface GetAllPositions {
@@ -14,8 +14,8 @@ export interface GetAllPositionsRes {
 }
 
 export async function getAllPositions(
-  aoUtils: aoUtils,
-  { token, recipient }: GetAllPositions,
+  aoUtils: AoUtils,
+  { token, recipient }: GetAllPositions
 ): Promise<GetAllPositionsRes> {
   try {
     const { oTokenAddress } = tokenInput(token);

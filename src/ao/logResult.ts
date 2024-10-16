@@ -1,13 +1,13 @@
-import { aoUtils } from "./connect";
+import { AoUtils } from "./connect";
 
 export async function logResult(
-  aoUtils: aoUtils,
+  aoUtils: AoUtils,
   Error: any,
   ID: string,
   processID: string,
   action: string,
   xAction: string,
-  tokenID: string,
+  tokenID: string
 ) {
   const tags = [
     { name: "resultID", value: ID },

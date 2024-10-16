@@ -27,7 +27,7 @@ export function connectToAO(services?: Services) {
   return { spawn, message, result };
 }
 
-export interface aoUtils {
+export interface AoUtils {
   spawn: SpawnProcess;
   message: SendMessage;
   result: ReadResult;

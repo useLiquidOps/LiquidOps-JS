@@ -1,5 +1,5 @@
 import { sendMessage } from "../../ao/sendMessage";
-import { aoUtils } from "../../ao/connect";
+import { AoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface GetBalances {
@@ -11,8 +11,8 @@ export interface GetBalancesRes {
 }
 
 export async function getBalances(
-  aoUtils: aoUtils,
-  { token }: GetBalances,
+  aoUtils: AoUtils,
+  { token }: GetBalances
 ): Promise<GetBalancesRes> {
   try {
     const { oTokenAddress } = tokenInput(token);
@@ -33,7 +33,7 @@ export async function getBalances(
         acc[address] = BigInt(balance as string);
         return acc;
       },
-      {} as GetBalancesRes,
+      {} as GetBalancesRes
     );
 
     return balances;

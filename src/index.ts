@@ -41,11 +41,11 @@ import {
 // LO helpful data
 import { oTokens, tokens } from "./ao/tokenAddressData";
 // AO misc types/functions
-import { connectToAO, aoUtils } from "./ao/connect";
+import { connectToAO, AoUtils } from "./ao/connect";
 import { Services } from "@permaweb/aoconnect/dist/index.common";
 import { Types as aoconnectTypes } from "@permaweb/aoconnect/dist/dal";
 class LiquidOps {
-  private aoUtils: aoUtils;
+  private aoUtils: AoUtils;
 
   constructor(signer: aoconnectTypes["signer"], configs: Services = {}) {
     if (!signer) {
@@ -75,7 +75,7 @@ class LiquidOps {
   // getTransactions
 
   async getTransactions(
-    params: GetTransactions,
+    params: GetTransactions
   ): Promise<{ node: Transaction }[]> {
     return getTransactions(this.aoUtils, params);
   }
@@ -144,16 +144,13 @@ class LiquidOps {
 
 export default LiquidOps;
 
-// TODO
-// check with marton on getAllPositions function, leave on ice
+// MARCI TODO
 
-// getTxns return type
-// write/finalize tests for new function res types + handling for a incomplete res + figure out res response
-// double check all new types and return types (compare to paper)
-// README docs
+// getAllPositions function, leave on ice
+// Do we need anymore functions?
+// We need liquidation functions?
 
-// do we need anymore functions?
-// Need liquidation functions
+// FUNCTION MAPPING GUIDE
 
 // borrow - Borrow
 // repay - Repay
@@ -175,3 +172,8 @@ export default LiquidOps;
 
 // getBalance - new function (ao-tokens)
 // transfer - Transfer
+
+// getTxns return type
+// write/finalize tests for new function res types + handling for a incomplete res + figure out res response
+// double check all new types and return types (compare to paper)
+// README docs

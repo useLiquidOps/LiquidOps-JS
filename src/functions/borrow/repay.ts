@@ -1,5 +1,5 @@
 import { sendMessage, SendMessageRes } from "../../ao/sendMessage";
-import { aoUtils } from "../../ao/connect";
+import { AoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface Repay {
@@ -19,8 +19,8 @@ export interface RepayRes {
 }
 
 export async function repay(
-  aoUtils: aoUtils,
-  { token, quantity }: Repay,
+  aoUtils: AoUtils,
+  { token, quantity }: Repay
 ): Promise<RepayRes> {
   try {
     const { tokenAddress, oTokenAddress } = tokenInput(token);

@@ -1,4 +1,4 @@
-import { aoUtils } from "../../ao/connect";
+import { AoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 import { getTags, Transaction } from "../../arweave/getTags";
 
@@ -16,8 +16,8 @@ export interface GetTransactions {
 }
 
 export async function getTransactions(
-  aoUtils: aoUtils,
-  { action, token, walletAddress }: GetTransactions,
+  aoUtils: AoUtils,
+  { action, token, walletAddress }: GetTransactions
 ): Promise<{ node: Transaction }[]> {
   // TODO res type
   try {

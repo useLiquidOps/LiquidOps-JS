@@ -1,5 +1,5 @@
 import { logResult } from "./logResult";
-import { aoUtils } from "./connect";
+import { AoUtils } from "./connect";
 import { MessageResult as AoMessageResult } from "@permaweb/aoconnect/dist/lib/result";
 
 export type MessageResult = AoMessageResult; // needed for jest tests
@@ -21,8 +21,8 @@ interface MessageTags {
 }
 
 export async function sendMessage(
-  aoUtils: aoUtils,
-  messageTags: MessageTags,
+  aoUtils: AoUtils,
+  messageTags: MessageTags
 ): Promise<SendMessageRes> {
   const convertedMessageTags = messageTagsToArray(messageTags);
   convertedMessageTags.push({ name: "Protocol-Name", value: "LiquidOps" });

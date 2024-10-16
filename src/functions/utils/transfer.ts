@@ -1,5 +1,5 @@
 import { sendMessage } from "../../ao/sendMessage";
-import { aoUtils } from "../../ao/connect";
+import { AoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface Transfer {
@@ -25,15 +25,15 @@ interface Tag {
 }
 
 export async function transfer(
-  aoUtils: aoUtils,
-  { token, recipient, quantity }: Transfer,
+  aoUtils: AoUtils,
+  { token, recipient, quantity }: Transfer
 ): Promise<TransferRes> {
   try {
     let tokenAddress: string;
 
     try {
       const { tokenAddress: supportedTokenAddress } = tokenInput(
-        token as TokenInput,
+        token as TokenInput
       );
       tokenAddress = supportedTokenAddress;
     } catch (error) {

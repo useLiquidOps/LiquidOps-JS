@@ -1,5 +1,5 @@
 import { sendMessage } from "../../ao/sendMessage";
-import { aoUtils } from "../../ao/connect";
+import { AoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface GetAPR {
@@ -12,8 +12,8 @@ export interface APRResponse {
 }
 
 export async function getAPR(
-  aoUtils: aoUtils,
-  { token }: GetAPR,
+  aoUtils: AoUtils,
+  { token }: GetAPR
 ): Promise<number> {
   try {
     const { oTokenAddress } = tokenInput(token);

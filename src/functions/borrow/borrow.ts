@@ -1,5 +1,5 @@
 import { sendMessage } from "../../ao/sendMessage";
-import { aoUtils } from "../../ao/connect";
+import { AoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface Borrow {
@@ -17,8 +17,8 @@ export interface BorrowRes {
 }
 
 export async function borrow(
-  aoUtils: aoUtils,
-  { token, quantity }: Borrow,
+  aoUtils: AoUtils,
+  { token, quantity }: Borrow
 ): Promise<BorrowRes> {
   try {
     const { oTokenAddress } = tokenInput(token);

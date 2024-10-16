@@ -1,5 +1,5 @@
 import { sendMessage, SendMessageRes } from "../../ao/sendMessage";
-import { aoUtils } from "../../ao/connect";
+import { AoUtils } from "../../ao/connect";
 import { TokenInput, tokenInput } from "../../ao/tokenInput";
 
 export interface UnLend {
@@ -20,8 +20,8 @@ export interface UnLendRes {
 }
 
 export async function unLend(
-  aoUtils: aoUtils,
-  { token, quantity }: UnLend,
+  aoUtils: AoUtils,
+  { token, quantity }: UnLend
 ): Promise<UnLendRes> {
   try {
     const { oTokenAddress } = tokenInput(token);
