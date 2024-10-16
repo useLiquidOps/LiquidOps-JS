@@ -144,7 +144,7 @@ export default LiquidOps;
 
 // MARCI TODO
 
-// getAllPositions function, leave on ice
+// getAllPositions function, leave on ice Lorimer
 // Do we need anymore functions?
 // We need liquidation functions?
 
@@ -153,22 +153,22 @@ export default LiquidOps;
 // borrow - Borrow
 // repay - Repay
 
-// getTransactions - new function (Arweave GQL)
+// getTransactions - (Arweave GQL)
 
 // lend - Mint
 // unLend - Redeem
 
 // getAPR - Get-APR
-// getBalance - Balances // lorimer change to Borrow-Balance
+// getBalances - Balances
 // getConfig - Get-Config
 // getInfo - Info
 // getPosition - Position
 // getPrice - Get-Price
 // getReserves - Get-Reserves
 
-// getAllPositions - Position // TODO find action
+// getAllPositions - Position
 
-// getBalance - new function (ao-tokens)
+// getBalance - (ao-tokens)
 // transfer - Transfer
 
 
