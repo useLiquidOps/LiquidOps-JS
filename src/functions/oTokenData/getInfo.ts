@@ -18,6 +18,11 @@ export async function getInfo(
   { token }: GetInfo,
 ): Promise<GetInfoRes> {
   try {
+
+    if (!token) {
+      throw new Error("Please specify a token.");
+    }
+
     const { oTokenAddress } = tokenInput(token);
 
     const message = await sendMessage(aoUtils, {

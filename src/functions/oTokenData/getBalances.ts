@@ -15,6 +15,11 @@ export async function getBalances(
   { token }: GetBalances,
 ): Promise<GetBalancesRes> {
   try {
+
+    if (!token) {
+      throw new Error("Please specify a token.");
+    }
+
     const { oTokenAddress } = tokenInput(token);
 
     const message = await sendMessage(aoUtils, {

@@ -11,6 +11,11 @@ export async function getBalance({
   walletAddress,
 }: GetBalance): Promise<BigInt> {
   try {
+
+    if (!token || !walletAddress) {
+      throw new Error("Please specify a token and walletAddress.");
+    }
+
     let tokenAddress: string;
 
     try {

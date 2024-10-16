@@ -24,6 +24,11 @@ export async function unLend(
   { token, quantity }: UnLend,
 ): Promise<UnLendRes> {
   try {
+
+    if (!token || !quantity) {
+      throw new Error("Please specify a token and quantity.");
+    }
+
     const { oTokenAddress } = tokenInput(token);
 
     const res: SendMessageRes = await sendMessage(aoUtils, {

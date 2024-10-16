@@ -20,6 +20,11 @@ export async function getConfig(
   { token }: GetConfig,
 ): Promise<GetConfigRes> {
   try {
+
+    if (!token) {
+      throw new Error("Please specify a token.");
+    }
+
     const { oTokenAddress } = tokenInput(token);
 
     const message = await sendMessage(aoUtils, {

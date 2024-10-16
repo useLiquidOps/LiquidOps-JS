@@ -29,6 +29,12 @@ export async function transfer(
   { token, recipient, quantity }: Transfer,
 ): Promise<TransferRes> {
   try {
+
+    if (!token || !recipient || !quantity) {
+      throw new Error("Please specify a token, recipient and quantity.");
+    }
+
+
     let tokenAddress: string;
 
     try {

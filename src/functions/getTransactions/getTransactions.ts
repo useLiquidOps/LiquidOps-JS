@@ -20,9 +20,14 @@ export interface GetTransactions {
 
 export async function getTransactions(
   aoUtils: AoUtils,
-  { action, token, walletAddress, cursor = "1" }: GetTransactions
+  { token, action, walletAddress, cursor = "1" }: GetTransactions
 ): Promise<GetTransactionsRes> {
   try {
+
+    if (!token || !action || !walletAddress) {
+      throw new Error("Please specify a token, action and walletAddress.");
+    }
+
     const tags = [{ name: "Protocol-Name", values: ["LiquidOps"] }];
 
     if (token !== "all") {

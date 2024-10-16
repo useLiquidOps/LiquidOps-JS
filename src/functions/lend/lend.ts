@@ -24,6 +24,11 @@ export async function lend(
   { token, quantity }: Lend,
 ): Promise<LendRes> {
   try {
+
+    if (!token || !quantity) {
+      throw new Error("Please specify a token and quantity.");
+    }
+
     const { tokenAddress, oTokenAddress } = tokenInput(token);
 
     const res: SendMessageRes = await sendMessage(aoUtils, {

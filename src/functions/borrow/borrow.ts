@@ -21,6 +21,11 @@ export async function borrow(
   { token, quantity }: Borrow,
 ): Promise<BorrowRes> {
   try {
+
+    if (!token || !quantity) {
+      throw new Error("Please specify a token and quantity.");
+    }
+
     const { oTokenAddress } = tokenInput(token);
 
     const res = await sendMessage(aoUtils, {

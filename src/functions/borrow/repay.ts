@@ -23,6 +23,11 @@ export async function repay(
   { token, quantity }: Repay,
 ): Promise<RepayRes> {
   try {
+
+    if (!token || !quantity) {
+      throw new Error("Please specify a token and quantity.");
+    }
+
     const { tokenAddress, oTokenAddress } = tokenInput(token);
 
     const res: SendMessageRes = await sendMessage(aoUtils, {

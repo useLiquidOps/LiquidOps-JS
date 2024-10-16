@@ -18,6 +18,11 @@ export async function getAllPositions(
   { token, recipient }: GetAllPositions,
 ): Promise<GetAllPositionsRes> {
   try {
+
+    if (!token || !recipient) {
+      throw new Error("Please specify a token and recipient.");
+    }
+
     const { oTokenAddress } = tokenInput(token);
 
     const message = await sendMessage(aoUtils, {
