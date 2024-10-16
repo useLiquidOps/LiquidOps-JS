@@ -21,7 +21,7 @@ test("getAPR function", async () => {
     expect(res).toBeGreaterThanOrEqual(0);
     expect(res).toBeLessThanOrEqual(100);
   } catch (error) {
-    console.error("Error testing getAPY():", error);
+    console.error("Error testing getAPR():", error);
     throw error;
   }
 });

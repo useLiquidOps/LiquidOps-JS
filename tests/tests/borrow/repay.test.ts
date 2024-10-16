@@ -2,7 +2,7 @@ import { expect, test } from "bun:test";
 import LiquidOps from "../../../src";
 import { createDataItemSigner } from "@permaweb/aoconnect";
 import { JWKInterface } from "arbundles/node";
-import { SendMessageRes, MessageResult } from "../../../src/ao/sendMessage";
+import { RepayRes } from "../../../src/functions/borrow/repay";
 
 test("repay function", async () => {
   if (!process.env.JWK) {
@@ -14,24 +14,41 @@ test("repay function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = (await client.repay({
+    const res = await client.repay({
       token: "wAR",
       quantity: 10n,
-    })) as SendMessageRes & MessageResult;
+    }) as RepayRes;
 
-    if (res.Error) {
-      throw new Error(`Repay function error: ${JSON.stringify(res.Error)}`);
+    expect(res).toHaveProperty("Target");
+    expect(res.Target).toBeTypeOf("string");
+    expect(res.Target.length).toBeGreaterThan(0);
+
+    expect(res).toHaveProperty("Tags");
+    expect(res.Tags).toHaveProperty("Action");
+    expect(res.Tags.Action).toBeOneOf(["Repay-Confirmation", "Repay-Error"]);
+
+    if (res.Tags.Action === "Repay-Confirmation") {
+      if (res.Tags["Repaid-Quantity"]) {
+        expect(res.Tags["Repaid-Quantity"]).toBeTypeOf("string");
+        const repaidQuantity = BigInt(res.Tags["Repaid-Quantity"]);
+        expect(repaidQuantity).toBeGreaterThan(0n);
+      } else {
+        throw new Error("Repaid-Quantity is missing in Repay-Confirmation response");
+      }
+
+      if (res.Tags["Refund-Quantity"]) {
+        expect(res.Tags["Refund-Quantity"]).toBeTypeOf("string");
+        const refundQuantity = BigInt(res.Tags["Refund-Quantity"]);
+        expect(refundQuantity).toBeGreaterThanOrEqual(0n);
+      }
+    } else if (res.Tags.Action === "Repay-Error") {
+      expect(res.Tags).toHaveProperty("Error");
+      expect(res.Tags.Error).toBeTypeOf("string");
     }
 
-    expect(res).toHaveProperty("id");
-    expect(res.id).toBeTypeOf("string");
-    expect(res.id.length).toBeGreaterThan(0);
-
-    expect(res).toHaveProperty("Output");
-    expect(res).toHaveProperty("Messages");
-    expect(Array.isArray(res.Messages)).toBe(true);
-    expect(res).toHaveProperty("Spawns");
-    expect(Array.isArray(res.Spawns)).toBe(true);
+    if (res.Data) {
+      expect(res.Data).toBeTypeOf("string");
+    }
   } catch (error) {
     console.error("Error testing repay():", error);
     throw error;

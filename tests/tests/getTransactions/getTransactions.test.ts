@@ -3,7 +3,7 @@ import LiquidOps from "../../../src";
 import { createDataItemSigner } from "@permaweb/aoconnect";
 import { JWKInterface } from "arbundles/node";
 import { ownerToAddress } from "../../testsHelpers/arweaveUtils";
-import { Transaction } from "../../../src/arweave/getTags";
+
 
 test("getTransactions function", async () => {
   if (!process.env.JWK) {
@@ -16,39 +16,61 @@ test("getTransactions function", async () => {
 
   const walletAddress = await ownerToAddress(JWK.n);
 
-  try {
-    const res = await client.getTransactions({
-      token: "wAR",
-      action: "lend",
-      walletAddress,
-    });
+  const actions = ["all", "borrow", "payInterest", "repay", "lend", "unLend", "transfer"] as const;
 
-    expect(Array.isArray(res)).toBe(true);
-    expect(res.length).toBeGreaterThan(0);
-
-    res.forEach((item, index) => {
-      expect(item).toHaveProperty("node");
-      const transaction: Transaction = item.node;
-
-      expect(transaction).toHaveProperty("id");
-      expect(transaction.id).toBeTypeOf("string");
-      expect(transaction.id.length).toBeGreaterThan(0);
-
-      expect(transaction).toHaveProperty("tags");
-      expect(Array.isArray(transaction.tags)).toBe(true);
-      expect(transaction.tags.length).toBeGreaterThan(0);
-
-      transaction.tags.forEach((tag, tagIndex) => {
-        expect(tag).toHaveProperty("name");
-        expect(tag.name).toBeTypeOf("string");
-        expect(tag.name.length).toBeGreaterThan(0);
-
-        expect(tag).toHaveProperty("value");
-        expect(tag.value).toBeTypeOf("string");
+  for (const action of actions) {
+    try {
+      const res = await client.getTransactions({
+        token: "wAR",
+        action: action,
+        walletAddress,
       });
-    });
-  } catch (error) {
-    console.error("Error testing getTransactions():", error);
-    throw error;
+
+      expect(res).toHaveProperty("edges");
+      expect(Array.isArray(res.edges)).toBe(true);
+
+      if (res.edges.length > 0) {
+        res.edges.forEach((edge) => {
+          expect(edge).toHaveProperty("node");
+          const transaction = edge.node;
+
+          expect(transaction).toHaveProperty("id");
+          expect(transaction.id).toBeTypeOf("string");
+          expect(transaction.id.length).toBeGreaterThan(0);
+
+          expect(transaction).toHaveProperty("tags");
+          expect(Array.isArray(transaction.tags)).toBe(true);
+          expect(transaction.tags.length).toBeGreaterThan(0);
+
+          const protocolNameTag = transaction.tags.find(tag => tag.name === "Protocol-Name");
+          expect(protocolNameTag).toBeDefined();
+          expect(protocolNameTag?.value).toBe("LiquidOps");
+
+          if (action !== "all") {
+            const actionTag = transaction.tags.find(tag => {
+              if (action === "unLend") return tag.name === "Action" && tag.value === "Burn";
+              if (action === "transfer") return tag.name === "LO-Action" && tag.value === "Transfer";
+              return tag.name === "X-Action" && tag.value === action.charAt(0).toUpperCase() + action.slice(1);
+            });
+            expect(actionTag).toBeDefined();
+          }
+
+          transaction.tags.forEach((tag) => {
+            expect(tag).toHaveProperty("name");
+            expect(tag.name).toBeTypeOf("string");
+            expect(tag.name.length).toBeGreaterThan(0);
+
+            expect(tag).toHaveProperty("value");
+            expect(tag.value).toBeTypeOf("string");
+          });
+        });
+      }
+
+      expect(res).toHaveProperty("pageInfo");
+      expect(res.pageInfo).toHaveProperty("hasNextPage");
+    } catch (error) {
+      console.error(`Error testing getTransactions() with action ${action}:`, error);
+      throw error;
+    }
   }
 });

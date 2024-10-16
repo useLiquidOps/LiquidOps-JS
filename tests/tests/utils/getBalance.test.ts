@@ -21,9 +21,8 @@ test("getBalance function", async () => {
       walletAddress,
     });
 
-    expect(res).toBeTypeOf("number");
-    expect(res).toBeGreaterThanOrEqual(0);
-    expect(Number.isFinite(res)).toBe(true);
+    expect(typeof res).toBe("bigint");
+    expect(res).toBeGreaterThanOrEqual(0n);
   } catch (error) {
     console.error("Error testing getBalance():", error);
     throw error;

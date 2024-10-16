@@ -178,7 +178,3 @@ export default LiquidOps;
 // add ao sendMessage modular response handling
 // README docs
 
-
-// write/finalize tests for new function res types - with new fail types too
-
-

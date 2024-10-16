@@ -18,11 +18,11 @@ test("getPrice function", async () => {
       quantity: 10n,
     });
 
-    expect(res).toBeTypeOf("number");
-    expect(res).toBeGreaterThan(0);
-    expect(Number.isFinite(res)).toBe(true);
+    expect(typeof res).toBe("bigint");
+    expect(res).toBeGreaterThan(0n);
   } catch (error) {
     console.error("Error testing getPrice():", error);
     throw error;
   }
 });
+
