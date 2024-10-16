@@ -157,3 +157,25 @@ export default LiquidOps;
 // double check all new types and return types (compare to paper)
 // README docs
 // double check all functions are complete
+
+
+// borrow - Borrow
+// repay - Repay
+
+// getTransactions - new function (Arweave GQL)
+
+// lend - Mint
+// unLend - Redeem
+
+// getAPR - Get-APR
+// getBalance - Balances // check this
+// getConfig - Get-Config
+// getInfo - Info
+// getPosition - Position
+// getPrice - Get-Price
+// getReserves - Get-Reserves
+
+// getAllPositions - Position // TODO find action
+
+// getBalance - new function (ao-tokens)
+// transfer - Transfer
