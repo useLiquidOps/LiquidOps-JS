@@ -14,11 +14,11 @@ test("transfer function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.transfer({
+    const res = (await client.transfer({
       token: "wAR",
       recipient: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
       quantity: 10n,
-    }) as TransferRes;
+    })) as TransferRes;
 
     expect(res).toBeTypeOf("object");
     expect(res.Target).toBeTypeOf("string");
@@ -28,7 +28,9 @@ test("transfer function", async () => {
     expect(res.Tags.Action).toBeOneOf(["Debit-Notice", "Transfer-Error"]);
 
     if (res.Tags.Action === "Debit-Notice") {
-      expect(res.Tags.Recipient).toBe("psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick");
+      expect(res.Tags.Recipient).toBe(
+        "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
+      );
       expect(res.Tags.Quantity).toBe("10");
       expect(res.Tags["Message-Id"]).toBeTypeOf("string");
     } else if (res.Tags.Action === "Transfer-Error") {
@@ -39,4 +41,3 @@ test("transfer function", async () => {
     throw error;
   }
 });
-

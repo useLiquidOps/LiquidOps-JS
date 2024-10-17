@@ -39,7 +39,7 @@ export async function repay(
       ...(onBehalfOf && { "X-On-Behalf": onBehalfOf }),
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling 
+    return res.Output; // TODO, make modular sendMessage response handling
   } catch (error) {
     throw new Error("Error in repay function:" + error);
   }

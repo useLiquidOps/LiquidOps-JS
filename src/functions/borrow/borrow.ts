@@ -21,7 +21,6 @@ export async function borrow(
   { token, quantity }: Borrow,
 ): Promise<BorrowRes> {
   try {
-
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");
     }
@@ -34,7 +33,7 @@ export async function borrow(
       Quantity: quantity.toString(),
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling 
+    return res.Output; // TODO, make modular sendMessage response handling
   } catch (error) {
     throw new Error("Error in borrow function:" + error);
   }

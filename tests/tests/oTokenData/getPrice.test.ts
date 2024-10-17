@@ -25,4 +25,3 @@ test("getPrice function", async () => {
     throw error;
   }
 });
-

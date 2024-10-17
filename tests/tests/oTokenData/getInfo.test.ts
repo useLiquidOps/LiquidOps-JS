@@ -14,9 +14,9 @@ test("getInfo function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.getInfo({
+    const res = (await client.getInfo({
       token: "wAR",
-    }) as GetInfoRes;
+    })) as GetInfoRes;
 
     expect(res).toBeTypeOf("object");
     expect(res.Name).toBeTypeOf("string");

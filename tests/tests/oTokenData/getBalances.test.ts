@@ -14,9 +14,9 @@ test("getBalances function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.getBalances({
+    const res = (await client.getBalances({
       token: "wAR",
-    }) as GetBalancesRes;
+    })) as GetBalancesRes;
 
     expect(res).toBeTypeOf("object");
     expect(Object.keys(res).length).toBeGreaterThan(0);
@@ -24,7 +24,7 @@ test("getBalances function", async () => {
     for (const [address, balance] of Object.entries(res)) {
       expect(address).toBeTypeOf("string");
       expect(address.length).toBeGreaterThan(0);
-      
+
       expect(typeof balance).toBe("bigint");
       expect(balance).toBeGreaterThanOrEqual(0n);
     }

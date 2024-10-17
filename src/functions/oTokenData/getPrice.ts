@@ -12,7 +12,6 @@ export async function getPrice(
   { token, quantity }: GetPrice,
 ): Promise<BigInt> {
   try {
-
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");
     }

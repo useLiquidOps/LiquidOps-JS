@@ -17,7 +17,6 @@ export async function getReserves(
   { token }: GetReserves,
 ): Promise<GetReservesRes> {
   try {
-
     if (!token) {
       throw new Error("Please specify a token.");
     }
@@ -29,7 +28,7 @@ export async function getReserves(
       Action: "Get-Reserves",
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling 
+    return res.Output; // TODO, make modular sendMessage response handling
   } catch (error) {
     throw new Error("Error in getReserves function: " + error);
   }

@@ -4,7 +4,6 @@ import { createDataItemSigner } from "@permaweb/aoconnect";
 import { JWKInterface } from "arbundles/node";
 import { ownerToAddress } from "../../testsHelpers/arweaveUtils";
 
-
 test("getTransactions function", async () => {
   if (!process.env.JWK) {
     throw new Error("Please specify a JWK in the .env file");
@@ -16,7 +15,15 @@ test("getTransactions function", async () => {
 
   const walletAddress = await ownerToAddress(JWK.n);
 
-  const actions = ["all", "borrow", "payInterest", "repay", "lend", "unLend", "transfer"] as const;
+  const actions = [
+    "all",
+    "borrow",
+    "payInterest",
+    "repay",
+    "lend",
+    "unLend",
+    "transfer",
+  ] as const;
 
   for (const action of actions) {
     try {
@@ -42,15 +49,22 @@ test("getTransactions function", async () => {
           expect(Array.isArray(transaction.tags)).toBe(true);
           expect(transaction.tags.length).toBeGreaterThan(0);
 
-          const protocolNameTag = transaction.tags.find(tag => tag.name === "Protocol-Name");
+          const protocolNameTag = transaction.tags.find(
+            (tag) => tag.name === "Protocol-Name",
+          );
           expect(protocolNameTag).toBeDefined();
           expect(protocolNameTag?.value).toBe("LiquidOps");
 
           if (action !== "all") {
-            const actionTag = transaction.tags.find(tag => {
-              if (action === "unLend") return tag.name === "Action" && tag.value === "Burn";
-              if (action === "transfer") return tag.name === "LO-Action" && tag.value === "Transfer";
-              return tag.name === "X-Action" && tag.value === action.charAt(0).toUpperCase() + action.slice(1);
+            const actionTag = transaction.tags.find((tag) => {
+              if (action === "unLend")
+                return tag.name === "Action" && tag.value === "Burn";
+              if (action === "transfer")
+                return tag.name === "LO-Action" && tag.value === "Transfer";
+              return (
+                tag.name === "X-Action" &&
+                tag.value === action.charAt(0).toUpperCase() + action.slice(1)
+              );
             });
             expect(actionTag).toBeDefined();
           }
@@ -69,7 +83,10 @@ test("getTransactions function", async () => {
       expect(res).toHaveProperty("pageInfo");
       expect(res.pageInfo).toHaveProperty("hasNextPage");
     } catch (error) {
-      console.error(`Error testing getTransactions() with action ${action}:`, error);
+      console.error(
+        `Error testing getTransactions() with action ${action}:`,
+        error,
+      );
       throw error;
     }
   }

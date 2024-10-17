@@ -14,10 +14,10 @@ test("borrow function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.borrow({
+    const res = (await client.borrow({
       token: "wAR",
       quantity: 10n,
-    }) as BorrowRes;
+    })) as BorrowRes;
 
     expect(res).toHaveProperty("Target");
     expect(res.Target).toBeTypeOf("string");
@@ -34,7 +34,9 @@ test("borrow function", async () => {
         const borrowedQuantity = BigInt(res.Tags["Borrowed-Quantity"]);
         expect(borrowedQuantity).toBeGreaterThan(0n);
       } else {
-        throw new Error("Borrowed-Quantity is missing in Borrow-Confirmation response");
+        throw new Error(
+          "Borrowed-Quantity is missing in Borrow-Confirmation response",
+        );
       }
     }
 

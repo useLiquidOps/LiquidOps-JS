@@ -14,10 +14,10 @@ test("unLend function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.unLend({
+    const res = (await client.unLend({
       token: "wAR",
       quantity: 10n,
-    }) as UnLendRes;
+    })) as UnLendRes;
 
     expect(res).toHaveProperty("Target");
     expect(res.Target).toBeTypeOf("string");
@@ -39,7 +39,9 @@ test("unLend function", async () => {
         const burnedQuantity = BigInt(res.Tags["Burned-Quantity"]);
         expect(burnedQuantity).toBeGreaterThan(0n);
       } else {
-        throw new Error("Burned-Quantity is missing in Redeem-Confirmation response");
+        throw new Error(
+          "Burned-Quantity is missing in Redeem-Confirmation response",
+        );
       }
 
       if (res.Tags["Refund-Quantity"]) {

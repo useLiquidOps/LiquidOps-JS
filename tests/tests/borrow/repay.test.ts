@@ -14,10 +14,10 @@ test("repay function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.repay({
+    const res = (await client.repay({
       token: "wAR",
       quantity: 10n,
-    }) as RepayRes;
+    })) as RepayRes;
 
     expect(res).toHaveProperty("Target");
     expect(res.Target).toBeTypeOf("string");
@@ -33,7 +33,9 @@ test("repay function", async () => {
         const repaidQuantity = BigInt(res.Tags["Repaid-Quantity"]);
         expect(repaidQuantity).toBeGreaterThan(0n);
       } else {
-        throw new Error("Repaid-Quantity is missing in Repay-Confirmation response");
+        throw new Error(
+          "Repaid-Quantity is missing in Repay-Confirmation response",
+        );
       }
 
       if (res.Tags["Refund-Quantity"]) {

@@ -14,9 +14,9 @@ test("getReserves function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.getReserves({
+    const res = (await client.getReserves({
       token: "wAR",
-    }) as GetReservesRes;
+    })) as GetReservesRes;
 
     expect(res).toBeTypeOf("object");
     expect(res.Action).toBe("Reserves");
@@ -35,4 +35,3 @@ test("getReserves function", async () => {
     throw error;
   }
 });
-

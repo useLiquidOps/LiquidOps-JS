@@ -20,7 +20,6 @@ export async function getConfig(
   { token }: GetConfig,
 ): Promise<GetConfigRes> {
   try {
-
     if (!token) {
       throw new Error("Please specify a token.");
     }
@@ -32,7 +31,7 @@ export async function getConfig(
       Action: "Get-Config",
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling 
+    return res.Output; // TODO, make modular sendMessage response handling
   } catch (error) {
     throw new Error("Error in getConfig function: " + error);
   }

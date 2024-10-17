@@ -14,10 +14,10 @@ test("lend function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.lend({
+    const res = (await client.lend({
       token: "wAR",
       quantity: 10n,
-    }) as LendRes;
+    })) as LendRes;
 
     expect(res).toHaveProperty("Target");
     expect(res.Target).toBeTypeOf("string");
@@ -33,7 +33,9 @@ test("lend function", async () => {
         const mintQuantity = BigInt(res.Tags["Mint-Quantity"]);
         expect(mintQuantity).toBeGreaterThan(0n);
       } else {
-        throw new Error("Mint-Quantity is missing in Mint-Confirmation response");
+        throw new Error(
+          "Mint-Quantity is missing in Mint-Confirmation response",
+        );
       }
 
       if (res.Tags["Supplied-Quantity"]) {
@@ -41,7 +43,9 @@ test("lend function", async () => {
         const suppliedQuantity = BigInt(res.Tags["Supplied-Quantity"]);
         expect(suppliedQuantity).toBeGreaterThan(0n);
       } else {
-        throw new Error("Supplied-Quantity is missing in Mint-Confirmation response");
+        throw new Error(
+          "Supplied-Quantity is missing in Mint-Confirmation response",
+        );
       }
 
       if (res.Tags["Refund-Quantity"]) {

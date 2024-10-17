@@ -15,7 +15,6 @@ export async function getBalances(
   { token }: GetBalances,
 ): Promise<GetBalancesRes> {
   try {
-
     if (!token) {
       throw new Error("Please specify a token.");
     }
@@ -27,7 +26,7 @@ export async function getBalances(
       Action: "Balances",
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling 
+    return res.Output; // TODO, make modular sendMessage response handling
   } catch (error) {
     throw new Error("Error in getBalances function: " + error);
   }

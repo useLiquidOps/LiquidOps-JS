@@ -15,15 +15,14 @@ export interface GetTransactions {
     | "unLend"
     | "transfer";
   walletAddress: string;
-  cursor?: string
+  cursor?: string;
 }
 
 export async function getTransactions(
   aoUtils: AoUtils,
-  { token, action, walletAddress, cursor = "1" }: GetTransactions
+  { token, action, walletAddress, cursor = "1" }: GetTransactions,
 ): Promise<GetTransactionsRes> {
   try {
-
     if (!token || !action || !walletAddress) {
       throw new Error("Please specify a token, action and walletAddress.");
     }
@@ -51,10 +50,9 @@ export async function getTransactions(
       throw new Error("Please specify an action.");
     }
 
-    const res = await getTags({aoUtils, tags, walletAddress, cursor});
+    const res = await getTags({ aoUtils, tags, walletAddress, cursor });
 
     return res;
-
   } catch (error) {
     throw new Error("Error in getTransactions function:" + error);
   }

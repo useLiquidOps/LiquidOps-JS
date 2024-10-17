@@ -17,7 +17,6 @@ export async function getAllPositions( // TODO: waiting on Marton
   { token }: GetAllPositions,
 ): Promise<GetAllPositionsRes> {
   try {
-
     if (!token) {
       throw new Error("Please specify a token.");
     }
@@ -29,7 +28,7 @@ export async function getAllPositions( // TODO: waiting on Marton
       Action: "Get-All-Positions",
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling 
+    return res.Output; // TODO, make modular sendMessage response handling
   } catch (error) {
     throw new Error("Error in getAllPositions function: " + error);
   }

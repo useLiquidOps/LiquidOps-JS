@@ -24,11 +24,9 @@ export async function transfer(
   { token, recipient, quantity }: Transfer,
 ): Promise<TransferRes> {
   try {
-
     if (!token || !recipient || !quantity) {
       throw new Error("Please specify a token, recipient and quantity.");
     }
-
 
     let tokenAddress: string;
 
@@ -49,7 +47,7 @@ export async function transfer(
       "LO-Action": "Transfer", // for LO analytics
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling 
+    return res.Output; // TODO, make modular sendMessage response handling
   } catch (error) {
     throw new Error("Error in transfer function: " + error);
   }

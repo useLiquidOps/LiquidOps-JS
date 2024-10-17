@@ -18,7 +18,6 @@ export async function getPosition(
   { token, recipient }: GetPosition,
 ): Promise<GetPositionRes> {
   try {
-
     if (!token || !recipient) {
       throw new Error("Please specify a token and recipient.");
     }
@@ -31,7 +30,7 @@ export async function getPosition(
       ...(recipient && { Recipient: recipient }),
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling 
+    return res.Output; // TODO, make modular sendMessage response handling
   } catch (error) {
     throw new Error("Error in getPosition function: " + error);
   }

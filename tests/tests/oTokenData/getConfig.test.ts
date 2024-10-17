@@ -14,9 +14,9 @@ test("getConfig function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.getConfig({
+    const res = (await client.getConfig({
       token: "wAR",
-    }) as GetConfigRes;
+    })) as GetConfigRes;
 
     expect(res).toBeTypeOf("object");
     expect(res.Action).toBe("Config");
@@ -28,7 +28,9 @@ test("getConfig function", async () => {
 
     expect(res["Collateral-Ratio"]).toBeGreaterThan(0);
     expect(res["Liquidation-Threshold"]).toBeGreaterThan(0);
-    expect(res["Liquidation-Threshold"]).toBeLessThanOrEqual(res["Collateral-Ratio"]);
+    expect(res["Liquidation-Threshold"]).toBeLessThanOrEqual(
+      res["Collateral-Ratio"],
+    );
     expect(res.Oracle.length).toBeGreaterThan(0);
     expect(res["Collateral-Denomination"].length).toBeGreaterThan(0);
   } catch (error) {

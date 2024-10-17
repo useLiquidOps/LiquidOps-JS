@@ -172,9 +172,7 @@ export default LiquidOps;
 // getBalance - (ao-tokens)
 // transfer - Transfer
 
-
 // LORIMER TODO later on after process deployed
 
 // add ao sendMessage modular response handling
 // README docs
-

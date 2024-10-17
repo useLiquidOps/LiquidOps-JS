@@ -24,7 +24,6 @@ export async function lend(
   { token, quantity }: Lend,
 ): Promise<LendRes> {
   try {
-
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");
     }
@@ -39,7 +38,7 @@ export async function lend(
       "X-Action": "Mint",
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling 
+    return res.Output; // TODO, make modular sendMessage response handling
   } catch (error) {
     throw new Error("Error in lend function:" + error);
   }

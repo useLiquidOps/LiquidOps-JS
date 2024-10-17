@@ -18,7 +18,6 @@ export async function getInfo(
   { token }: GetInfo,
 ): Promise<GetInfoRes> {
   try {
-
     if (!token) {
       throw new Error("Please specify a token.");
     }
@@ -30,7 +29,7 @@ export async function getInfo(
       Action: "Info",
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling 
+    return res.Output; // TODO, make modular sendMessage response handling
   } catch (error) {
     throw new Error("Error in getInfo function: " + error);
   }

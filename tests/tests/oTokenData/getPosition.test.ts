@@ -14,10 +14,10 @@ test("getPosition function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.getPosition({
+    const res = (await client.getPosition({
       token: "wAR",
       recipient: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
-    }) as GetPositionRes;
+    })) as GetPositionRes;
 
     expect(res).toBeTypeOf("object");
     expect(res.Capacity).toBeTypeOf("string");
@@ -26,11 +26,12 @@ test("getPosition function", async () => {
 
     expect(BigInt(res.Capacity)).toBeGreaterThanOrEqual(0n);
     expect(BigInt(res["Used-Capacity"])).toBeGreaterThanOrEqual(0n);
-    expect(BigInt(res["Used-Capacity"])).toBeLessThanOrEqual(BigInt(res.Capacity));
+    expect(BigInt(res["Used-Capacity"])).toBeLessThanOrEqual(
+      BigInt(res.Capacity),
+    );
     expect(res["Collateral-Ticker"].length).toBeGreaterThan(0);
   } catch (error) {
     console.error("Error testing getPosition():", error);
     throw error;
   }
 });
-
