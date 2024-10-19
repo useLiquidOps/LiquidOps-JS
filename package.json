@@ -48,6 +48,7 @@
     "arbundles": "^0.11.2"
   },
   "devDependencies": {
+	"@permaweb/aoconnect": "^0.0.59",
     "@types/bun": "^1.1.10",
     "bun-types": "^1.1.27",
     "prettier": "^3.0.3",
