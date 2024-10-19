@@ -58,6 +58,9 @@
     "typescript": "^5.0.4",
     "@types/node": "^22.5.5"
   },
+  "peerDependencies": {
+    "@permaweb/aoconnect": ">=0.0.59 <1.0.0"
+   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
