@@ -19,11 +19,6 @@ import { getPrice, GetPrice } from "./functions/oTokenData/getPrice";
 import { getInfo, GetInfo, GetInfoRes } from "./functions/oTokenData/getInfo";
 import { transfer, Transfer, TransferRes } from "./functions/utils/transfer";
 import {
-  getConfig,
-  GetConfig,
-  GetConfigRes,
-} from "./functions/oTokenData/getConfig";
-import {
   getPosition,
   GetPosition,
   GetPositionRes,
@@ -96,10 +91,6 @@ class LiquidOps {
 
   async getBalances(params: GetBalances): Promise<GetBalancesRes> {
     return getBalances(this.aoUtils, params);
-  }
-
-  async getConfig(params: GetConfig): Promise<GetConfigRes> {
-    return getConfig(this.aoUtils, params);
   }
 
   async getInfo(params: GetInfo): Promise<GetInfoRes> {
