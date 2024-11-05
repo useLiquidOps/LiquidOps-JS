@@ -1,4 +1,3 @@
-import { logResult } from "./logResult";
 import { AoUtils } from "./connect";
 import { MessageResult as AoMessageResult } from "@permaweb/aoconnect/dist/lib/result";
 
@@ -46,11 +45,6 @@ export async function sendMessage(
       message: id,
       process: processID,
     });
-
-    const action = messageTags["Action"];
-    const xAction = messageTags["X-Action"] || "";
-
-    await logResult(aoUtils, Error, id, processID, action, xAction, processID);
 
     return { id, Messages, Spawns, Output, Error };
   } catch (error) {
