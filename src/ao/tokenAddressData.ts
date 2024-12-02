@@ -8,16 +8,10 @@ export interface TokenData {
 const tokenData: Record<string, TokenData> = {
   wAR: {
     ticker: "wAR",
-    address: "mmnvTHBi6gRWhY_Wtz08oxGq1DEtzkPKKdzNAi9XyPo",
+    address: "g9AjGn30ldiGvUSMUGADFIT1twzF3rEJxwPVPhrl8eE",
     oTicker: "owAR",
-    oAddress: "2bCBzCi3Tr4RXAIumBdesr0IcDCBhfxFU8RXbO98c04",
-  },
-  stETH: {
-    ticker: "stETH",
-    address: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
-    oTicker: "ostETH",
-    oAddress: "EO54_9d715SEqSXxx-nNsXqMyRgqyrYNIqb_OXSxSXA",
-  },
+    oAddress: "0UWVo81RdMjeE08aZBfXoHAs1MQ-AX-A2RfGmOoNFKk",
+  }
 };
 
 export type SupportedTokensTickers = keyof typeof tokenData;

@@ -2,15 +2,48 @@
   "name": "liquidops",
   "version": "0.0.1",
   "author": "Lorimer Jenkins (lorimer@liquidops.io), Marton Lederer (marton@liquidops.io)",
-  "license": "MIT",
-  "description": "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
-  "homepage": "https://liquidops.io",
-  "bugs": {
-    "url": "https://github.com/useLiquidOps/LiquidOps-JS/issues"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/useLiquidOps/package.git"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@permaweb/ao-scheduler-utils": "^0.0.24",
+    "ao-tokens": "^0.0.4",
+    "ar-gql": "^2.0.2",
+    "arbundles": "^0.11.2"
+  },
+  "devDependencies": {
+    "@permaweb/aoconnect": "^0.0.62",
+    "@types/bun": "^1.1.10",
+    "@types/node": "^22.5.5",
+    "bun-types": "^1.1.27",
+    "prettier": "^3.0.3",
+    "ts-jest": "^29.1.1",
+    "tslib": "^2.5.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.0.4"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/useLiquidOps/LiquidOps-JS/issues"
+  },
+  "description": "LiquidOps is an over-collateralised lending and borrowing protocol built on Arweave's L2 AO.",
+  "files": [
+    "dist/",
+    "src/",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
+  "homepage": "https://liquidops.io",
   "keywords": [
     "Arweave",
     "LiquidOps",
@@ -20,6 +53,10 @@
     "Lending",
     "Borrowing"
   ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "bun run build && bun run link",
     "build": "bun run prettier && tsup src/index.ts --format cjs,esm --dts",
@@ -27,46 +64,6 @@
     "prettier": "prettier --write .",
     "link": "bun link"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/useLiquidOps/package.git"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "dist/",
-    "src/",
-    "LICENSE",
-    "package.json",
-    "README.md"
-  ],
-  "dependencies": {
-    "@permaweb/ao-scheduler-utils": "^0.0.24",
-    "ao-tokens": "^0.0.4",
-    "ar-gql": "^2.0.2",
-    "arbundles": "^0.11.2"
-  },
-  "devDependencies": {
-    "@permaweb/aoconnect": "^0.0.59",
-    "@types/bun": "^1.1.10",
-    "bun-types": "^1.1.27",
-    "prettier": "^3.0.3",
-    "ts-jest": "^29.1.1",
-    "tslib": "^2.5.0",
-    "tsup": "^8.0.1",
-    "typescript": "^5.0.4",
-    "@types/node": "^22.5.5"
-  },
-  "peerDependencies": {
-    "@permaweb/aoconnect": ">=0.0.59 <1.0.0"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    }
-  },
-  "type": "module"
+  "type": "module",
+  "types": "dist/index.d.ts"
 }
