@@ -3,7 +3,6 @@ import { TokenInput, tokenInput } from "../../ao/tokenInput";
 import { getTags } from "../../arweave/getTags";
 import { GQLTransactionsResultInterface as GetTransactionsRes } from "ar-gql/dist/faces";
 
-
 export interface GetTransactions {
   token: "all" | TokenInput;
   action:

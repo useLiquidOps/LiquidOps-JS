@@ -11,7 +11,7 @@ const tokenData: Record<string, TokenData> = {
     address: "g9AjGn30ldiGvUSMUGADFIT1twzF3rEJxwPVPhrl8eE",
     oTicker: "owAR",
     oAddress: "0UWVo81RdMjeE08aZBfXoHAs1MQ-AX-A2RfGmOoNFKk",
-  }
+  },
 };
 
 export type SupportedTokensTickers = keyof typeof tokenData;

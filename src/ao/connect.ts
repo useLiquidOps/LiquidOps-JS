@@ -5,7 +5,6 @@ import { SendMessage } from "@permaweb/aoconnect/dist/lib/message";
 import { ReadResult } from "@permaweb/aoconnect/dist/lib/result";
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 
-
 const DEFAULT_SERVICES: Services = {
   MU_URL: "https://mu.ao-testnet.xyz",
   CU_URL: "https://cu.ao-testnet.xyz",

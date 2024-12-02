@@ -15,5 +15,4 @@ const res = await client.lend({
   quantity: 10n,
 });
 
-
 console.log(res);
