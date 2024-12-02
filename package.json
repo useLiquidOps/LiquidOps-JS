@@ -11,8 +11,7 @@
   "dependencies": {
     "@permaweb/ao-scheduler-utils": "^0.0.24",
     "ao-tokens": "^0.0.4",
-    "ar-gql": "^2.0.2",
-    "arbundles": "^0.11.2"
+    "ar-gql": "^2.0.2"
   },
   "devDependencies": {
     "@permaweb/aoconnect": "^0.0.62",
@@ -23,7 +22,10 @@
     "ts-jest": "^29.1.1",
     "tslib": "^2.5.0",
     "tsup": "^8.0.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "base64-js": "^1.5.1",
+    "base64url": "^3.0.1",
+    "warp-arbundles": "npm:warp-arbundles"
   },
   "exports": {
     ".": {

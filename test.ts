@@ -1,5 +1,5 @@
 import LiquidOps from "./src";
-import { createDataItemSigner } from "@permaweb/aoconnect";
+import createDataItemSignerBun from "./tests/testsHelpers/bunSigner/index";
 import { JWKInterface } from "arbundles/node";
 
 if (!process.env.JWK) {
@@ -7,7 +7,7 @@ if (!process.env.JWK) {
 }
 
 const JWK: JWKInterface = JSON.parse(process.env.JWK);
-const signer = createDataItemSigner(JWK);
+const signer = createDataItemSignerBun(JWK);
 const client = new LiquidOps(signer);
 
 const res = await client.lend({
