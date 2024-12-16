@@ -1,23 +1,16 @@
-import { sendMessage, SendMessageRes } from "../../ao/sendMessage";
-import { AoUtils } from "../../ao/connect";
-import { TokenInput, tokenInput } from "../../ao/tokenInput";
+import {
+  sendTransaction,
+  SendTransactionRes,
+} from "../../ao/messaging/sendTransaction";
+import { AoUtils } from "../../ao/utils/connect";
+import { tokenInput, TokenInput } from "../../ao/utils/tokenInput";
 
 export interface Lend {
   token: TokenInput;
   quantity: BigInt;
 }
 
-export interface LendRes {
-  Target: string;
-  Tags: {
-    Action: "Mint-Confirmation" | "Mint-Error";
-    "Mint-Quantity"?: string;
-    "Supplied-Quantity"?: string;
-    "Refund-Quantity"?: string;
-    Error?: string;
-  };
-  Data?: string;
-}
+export interface LendRes extends SendTransactionRes {}
 
 export async function lend(
   aoUtils: AoUtils,
@@ -30,7 +23,7 @@ export async function lend(
 
     const { tokenAddress, oTokenAddress } = tokenInput(token);
 
-    const res: SendMessageRes = await sendMessage(aoUtils, {
+    const res = await sendTransaction(aoUtils, {
       Target: tokenAddress,
       Action: "Transfer",
       Quantity: quantity.toString(),
@@ -38,8 +31,7 @@ export async function lend(
       "X-Action": "Mint",
     });
 
-    // @ts-ignore
-    return res; // TODO, make modular sendMessage response handling
+    return res;
   } catch (error) {
     throw new Error("Error in lend function:" + error);
   }

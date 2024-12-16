@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import LiquidOps from "../../../src";
-import { createDataItemSigner } from "@permaweb/aoconnect";
+import createDataItemSignerBun from "../../testsHelpers/bunSigner";
 import { JWKInterface } from "arbundles/node";
 import { GetReservesRes } from "../../../src/functions/oTokenData/getReserves";
 
@@ -10,26 +10,25 @@ test("getReserves function", async () => {
   }
 
   const JWK: JWKInterface = JSON.parse(process.env.JWK);
-  const signer = createDataItemSigner(JWK);
+  const signer = createDataItemSignerBun(JWK);
   const client = new LiquidOps(signer);
 
   try {
     const res = (await client.getReserves({
-      token: "wAR",
+      token: "QAR",
     })) as GetReservesRes;
 
     expect(res).toBeTypeOf("object");
-    expect(res.Action).toBe("Reserves");
-    expect(res.Available).toBeTypeOf("string");
-    expect(res.Lent).toBeTypeOf("string");
+    expect(res.available).toBeTypeOf("string");
+    expect(res.lent).toBeTypeOf("string");
 
-    expect(BigInt(res.Available)).toBeGreaterThanOrEqual(0n);
-    expect(BigInt(res.Lent)).toBeGreaterThanOrEqual(0n);
+    expect(BigInt(res.available)).toBeGreaterThanOrEqual(0n);
+    expect(BigInt(res.lent)).toBeGreaterThanOrEqual(0n);
 
-    // Check if the sum of Available and Lent equals the total reserves
-    const totalReserves = BigInt(res.Available) + BigInt(res.Lent);
-    expect(totalReserves).toBeGreaterThanOrEqual(BigInt(res.Available));
-    expect(totalReserves).toBeGreaterThanOrEqual(BigInt(res.Lent));
+    // Check if the sum of available and lent equals the total reserves
+    const totalReserves = BigInt(res.available) + BigInt(res.lent);
+    expect(totalReserves).toBeGreaterThanOrEqual(BigInt(res.available));
+    expect(totalReserves).toBeGreaterThanOrEqual(BigInt(res.lent));
   } catch (error) {
     console.error("Error testing getReserves():", error);
     throw error;

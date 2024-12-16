@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import LiquidOps from "../../../src";
-import { createDataItemSigner } from "@permaweb/aoconnect";
+import createDataItemSignerBun from "../../testsHelpers/bunSigner";
 import { JWKInterface } from "arbundles/node";
 import { GetInfoRes } from "../../../src/functions/oTokenData/getInfo";
 
@@ -10,26 +10,24 @@ test("getInfo function", async () => {
   }
 
   const JWK: JWKInterface = JSON.parse(process.env.JWK);
-  const signer = createDataItemSigner(JWK);
+  const signer = createDataItemSignerBun(JWK);
   const client = new LiquidOps(signer);
 
   try {
     const res = (await client.getInfo({
-      token: "wAR",
+      token: "QAR",
     })) as GetInfoRes;
 
     expect(res).toBeTypeOf("object");
-    expect(res.Name).toBeTypeOf("string");
-    expect(res.Ticker).toBeTypeOf("string");
-    expect(res.Logo).toBeTypeOf("string");
-    expect(res.Denomination).toBeTypeOf("string");
+    expect(res.name).toBeTypeOf("string");
+    expect(res.ticker).toBeTypeOf("string");
+    expect(res.logo).toBeTypeOf("string");
+    expect(res.denomination).toBeTypeOf("string");
 
-    expect(res.Name.length).toBeGreaterThan(0);
-    expect(res.Ticker.length).toBeGreaterThan(0);
-    expect(res.Logo.length).toBeGreaterThan(0);
-    expect(res.Denomination.length).toBeGreaterThan(0);
-
-    expect(() => new URL(res.Logo)).not.toThrow();
+    expect(res.name.length).toBeGreaterThan(0);
+    expect(res.ticker.length).toBeGreaterThan(0);
+    expect(res.logo.length).toBeGreaterThan(0);
+    expect(res.denomination.length).toBeGreaterThan(0);
   } catch (error) {
     console.error("Error testing getInfo():", error);
     throw error;

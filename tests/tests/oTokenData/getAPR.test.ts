@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import LiquidOps from "../../../src";
-import { createDataItemSigner } from "@permaweb/aoconnect";
+import createDataItemSignerBun from "../../testsHelpers/bunSigner";
 import { JWKInterface } from "arbundles/node";
 
 test("getAPR function", async () => {
@@ -9,12 +9,12 @@ test("getAPR function", async () => {
   }
 
   const JWK: JWKInterface = JSON.parse(process.env.JWK);
-  const signer = createDataItemSigner(JWK);
+  const signer = createDataItemSignerBun(JWK);
   const client = new LiquidOps(signer);
 
   try {
     const res = await client.getAPR({
-      token: "wAR",
+      token: "QAR",
     });
 
     expect(res).toBeTypeOf("number");

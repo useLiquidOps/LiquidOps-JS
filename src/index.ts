@@ -5,8 +5,8 @@ import { borrow, Borrow, BorrowRes } from "./functions/borrow/borrow";
 import {
   getTransactions,
   GetTransactions,
+  GetTransactionsRes,
 } from "./functions/getTransactions/getTransactions";
-import { GQLTransactionsResultInterface as GetTransactionsRes } from "ar-gql/dist/faces";
 import { repay, Repay, RepayRes } from "./functions/borrow/repay";
 import { getAPR, GetAPR } from "./functions/oTokenData/getAPR";
 import { getBalance, GetBalance } from "./functions/utils/getBalance";
@@ -34,9 +34,9 @@ import {
   GetAllPositionsRes,
 } from "./functions/protocolData/getAllPositions";
 // LO helpful data
-import { oTokens, tokens } from "./ao/tokenAddressData";
+import { oTokens, tokens } from "./ao/utils/tokenAddressData";
 // AO misc types/functions
-import { connectToAO, AoUtils } from "./ao/connect";
+import { connectToAO, AoUtils } from "./ao/utils/connect";
 import { Services } from "@permaweb/aoconnect/dist/index.common";
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 
@@ -54,6 +54,7 @@ class LiquidOps {
       message,
       result,
       signer,
+      configs,
     };
   }
 
@@ -132,38 +133,3 @@ class LiquidOps {
 }
 
 export default LiquidOps;
-
-// MARCI TODO
-
-// getAllPositions function, leave on ice Lorimer
-// Do we need anymore functions?
-// We need liquidation functions?
-// Check all repo and check tests
-
-// FUNCTION MAPPING GUIDE
-
-// borrow - Borrow
-// repay - Repay
-
-// getTransactions - (Arweave GQL)
-
-// lend - Mint
-// unLend - Redeem
-
-// getAPR - Get-APR
-// getBalances - Balances
-// getConfig - Get-Config
-// getInfo - Info
-// getPosition - Position
-// getPrice - Get-Price
-// getReserves - Get-Reserves
-
-// getAllPositions - Position
-
-// getBalance - (ao-tokens)
-// transfer - Transfer
-
-// LORIMER TODO later on after process deployed
-
-// add ao sendMessage modular response handling
-// README docs

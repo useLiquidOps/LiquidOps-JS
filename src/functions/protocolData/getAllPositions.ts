@@ -1,6 +1,6 @@
-import { sendMessage } from "../../ao/sendMessage";
-import { AoUtils } from "../../ao/connect";
-import { TokenInput, tokenInput } from "../../ao/tokenInput";
+import { getData } from "../../ao/messaging/getData";
+import { AoUtils } from "../../ao/utils/connect";
+import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetAllPositions {
   token: TokenInput;
@@ -23,12 +23,13 @@ export async function getAllPositions( // TODO: waiting on Marton
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res = await sendMessage(aoUtils, {
+    const res = await getData(aoUtils, {
       Target: oTokenAddress,
       Action: "Get-All-Positions",
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling
+    // @ts-ignore TODO
+    return res;
   } catch (error) {
     throw new Error("Error in getAllPositions function: " + error);
   }

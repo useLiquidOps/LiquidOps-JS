@@ -1,6 +1,6 @@
-import { sendMessage } from "../../ao/sendMessage";
-import { AoUtils } from "../../ao/connect";
-import { TokenInput, tokenInput } from "../../ao/tokenInput";
+import { sendTransaction } from "../../ao/messaging/sendTransaction";
+import { AoUtils } from "../../ao/utils/connect";
+import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface Borrow {
   token: TokenInput;
@@ -27,13 +27,14 @@ export async function borrow(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res = await sendMessage(aoUtils, {
+    const res = await sendTransaction(aoUtils, {
       Target: oTokenAddress,
       Action: "Borrow",
       Quantity: quantity.toString(),
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling
+    // @ts-ignore TODO
+    return res;
   } catch (error) {
     throw new Error("Error in borrow function:" + error);
   }

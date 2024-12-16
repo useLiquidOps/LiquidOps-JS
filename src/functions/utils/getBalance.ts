@@ -1,5 +1,10 @@
 import { Token } from "ao-tokens";
-import { TokenInput, tokenInput } from "../../ao/tokenInput";
+import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
+
+// Add window, for node environments error
+if (typeof window === "undefined") {
+  global.window = {} as any;
+}
 
 export interface GetBalance {
   token: TokenInput | string;
@@ -15,21 +20,12 @@ export async function getBalance({
       throw new Error("Please specify a token and walletAddress.");
     }
 
-    let tokenAddress: string;
-
-    try {
-      const { tokenAddress: supportedTokenAddress } = tokenInput(
-        token as TokenInput,
-      );
-      tokenAddress = supportedTokenAddress;
-    } catch (error) {
-      tokenAddress = token as string;
-    }
+    const { tokenAddress } = tokenInput(token);
 
     const tokenInstance = await Token(tokenAddress);
     const balance = await tokenInstance.getBalance(walletAddress);
     return balance.raw;
   } catch (error) {
-    throw new Error("Error in getBalance function:" + error);
+    throw new Error("Error in getBalance function: " + error);
   }
 }

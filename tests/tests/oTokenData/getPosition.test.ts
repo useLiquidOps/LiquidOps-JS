@@ -1,8 +1,9 @@
 import { expect, test } from "bun:test";
 import LiquidOps from "../../../src";
-import { createDataItemSigner } from "@permaweb/aoconnect";
+import createDataItemSignerBun from "../../testsHelpers/bunSigner";
 import { JWKInterface } from "arbundles/node";
 import { GetPositionRes } from "../../../src/functions/oTokenData/getPosition";
+import { ownerToAddress } from "../../testsHelpers/arweaveUtils";
 
 test("getPosition function", async () => {
   if (!process.env.JWK) {
@@ -10,26 +11,27 @@ test("getPosition function", async () => {
   }
 
   const JWK: JWKInterface = JSON.parse(process.env.JWK);
-  const signer = createDataItemSigner(JWK);
+  const signer = createDataItemSignerBun(JWK);
   const client = new LiquidOps(signer);
+  const walletAddress = await ownerToAddress(JWK.n);
 
   try {
     const res = (await client.getPosition({
-      token: "wAR",
-      recipient: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
+      token: "QAR",
+      recipient: walletAddress,
     })) as GetPositionRes;
 
     expect(res).toBeTypeOf("object");
-    expect(res.Capacity).toBeTypeOf("string");
-    expect(res["Used-Capacity"]).toBeTypeOf("string");
-    expect(res["Collateral-Ticker"]).toBeTypeOf("string");
+    expect(res.capacity).toBeTypeOf("string");
+    expect(res.usedCapacity).toBeTypeOf("string");
+    expect(res.collateralTicker).toBeTypeOf("string");
+    expect(res.collateralDenomination).toBeTypeOf("string");
 
-    expect(BigInt(res.Capacity)).toBeGreaterThanOrEqual(0n);
-    expect(BigInt(res["Used-Capacity"])).toBeGreaterThanOrEqual(0n);
-    expect(BigInt(res["Used-Capacity"])).toBeLessThanOrEqual(
-      BigInt(res.Capacity),
-    );
-    expect(res["Collateral-Ticker"].length).toBeGreaterThan(0);
+    expect(BigInt(res.capacity)).toBeGreaterThanOrEqual(0n);
+    expect(BigInt(res.usedCapacity)).toBeGreaterThanOrEqual(0n);
+    expect(BigInt(res.usedCapacity)).toBeLessThanOrEqual(BigInt(res.capacity));
+    expect(res.collateralTicker.length).toBeGreaterThan(0);
+    expect(BigInt(res.collateralDenomination)).toBeGreaterThan(0n);
   } catch (error) {
     console.error("Error testing getPosition():", error);
     throw error;

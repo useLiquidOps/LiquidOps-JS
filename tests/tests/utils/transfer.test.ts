@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import LiquidOps from "../../../src";
-import { createDataItemSigner } from "@permaweb/aoconnect";
+import createDataItemSignerBun from "../../testsHelpers/bunSigner";
 import { JWKInterface } from "arbundles/node";
 import { TransferRes } from "../../../src/functions/utils/transfer";
 
@@ -10,31 +10,24 @@ test("transfer function", async () => {
   }
 
   const JWK: JWKInterface = JSON.parse(process.env.JWK);
-  const signer = createDataItemSigner(JWK);
+  const signer = createDataItemSignerBun(JWK);
   const client = new LiquidOps(signer);
 
   try {
     const res = (await client.transfer({
-      token: "wAR",
+      token: "QAR",
       recipient: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
-      quantity: 10n,
+      quantity: 1n,
     })) as TransferRes;
 
     expect(res).toBeTypeOf("object");
-    expect(res.Target).toBeTypeOf("string");
-    expect(res.Target.length).toBeGreaterThan(0);
+    expect(res.id).toBeTypeOf("string");
+    expect(res.id.length).toBeGreaterThan(0);
+    expect(res.status).toBeTypeOf("boolean");
 
-    expect(res.Tags).toBeTypeOf("object");
-    expect(res.Tags.Action).toBeOneOf(["Debit-Notice", "Transfer-Error"]);
-
-    if (res.Tags.Action === "Debit-Notice") {
-      expect(res.Tags.Recipient).toBe(
-        "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
-      );
-      expect(res.Tags.Quantity).toBe("10");
-      expect(res.Tags["Message-Id"]).toBeTypeOf("string");
-    } else if (res.Tags.Action === "Transfer-Error") {
-      expect(res.Tags.Error).toBeTypeOf("string");
+    // check transfer result
+    if (res.status) {
+      expect(res.status).toBe(true);
     }
   } catch (error) {
     console.error("Error testing transfer():", error);

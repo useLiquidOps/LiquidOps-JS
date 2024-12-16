@@ -1,23 +1,16 @@
-import { sendMessage, SendMessageRes } from "../../ao/sendMessage";
-import { AoUtils } from "../../ao/connect";
-import { TokenInput, tokenInput } from "../../ao/tokenInput";
+import {
+  sendTransaction,
+  SendTransactionRes,
+} from "../../ao/messaging/sendTransaction";
+import { AoUtils } from "../../ao/utils/connect";
+import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface UnLend {
   token: TokenInput;
   quantity: BigInt;
 }
 
-export interface UnLendRes {
-  Target: string;
-  Tags: {
-    Action: "Redeem-Confirmation" | "Redeem-Error";
-    "Earned-Quantity"?: string;
-    "Burned-Quantity"?: string;
-    "Refund-Quantity"?: string;
-    Error?: string;
-  };
-  Data?: string;
-}
+export interface UnLendRes extends SendTransactionRes {}
 
 export async function unLend(
   aoUtils: AoUtils,
@@ -30,13 +23,13 @@ export async function unLend(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res: SendMessageRes = await sendMessage(aoUtils, {
+    const res = await sendTransaction(aoUtils, {
       Target: oTokenAddress,
       Action: "Redeem",
       Quantity: quantity.toString(),
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling
+    return res;
   } catch (error) {
     throw new Error("Error in unLend function:" + error);
   }

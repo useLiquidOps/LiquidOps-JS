@@ -1,16 +1,21 @@
-import { sendMessage } from "../../ao/sendMessage";
-import { AoUtils } from "../../ao/connect";
-import { TokenInput, tokenInput } from "../../ao/tokenInput";
+import { getData } from "../../ao/messaging/getData";
+import { AoUtils } from "../../ao/utils/connect";
+import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetInfo {
   token: TokenInput;
 }
 
 export interface GetInfoRes {
-  Name: string;
-  Ticker: string;
-  Logo: string;
-  Denomination: string;
+  name: string;
+  ticker: string;
+  logo: string;
+  denomination: string;
+}
+
+interface Tag {
+  name: string;
+  value: string;
 }
 
 export async function getInfo(
@@ -24,12 +29,21 @@ export async function getInfo(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res = await sendMessage(aoUtils, {
+    const res = await getData(aoUtils, {
       Target: oTokenAddress,
       Action: "Info",
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling
+    const tagsObject = Object.fromEntries(
+      res.Messages[0].Tags.map((tag: Tag) => [tag.name, tag.value]),
+    );
+
+    return {
+      name: tagsObject["Name"],
+      ticker: tagsObject["Ticker"],
+      logo: tagsObject["Logo"],
+      denomination: tagsObject["Denomination"],
+    };
   } catch (error) {
     throw new Error("Error in getInfo function: " + error);
   }

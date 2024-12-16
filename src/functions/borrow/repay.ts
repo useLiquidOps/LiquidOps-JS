@@ -1,6 +1,6 @@
-import { sendMessage, SendMessageRes } from "../../ao/sendMessage";
-import { AoUtils } from "../../ao/connect";
-import { TokenInput, tokenInput } from "../../ao/tokenInput";
+import { sendTransaction } from "../../ao/messaging/sendTransaction";
+import { AoUtils } from "../../ao/utils/connect";
+import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface Repay {
   token: TokenInput;
@@ -30,7 +30,7 @@ export async function repay(
 
     const { tokenAddress, oTokenAddress } = tokenInput(token);
 
-    const res = await sendMessage(aoUtils, {
+    const res = await sendTransaction(aoUtils, {
       Target: tokenAddress,
       Action: "Transfer",
       Quantity: quantity.toString(),
@@ -39,7 +39,8 @@ export async function repay(
       ...(onBehalfOf && { "X-On-Behalf": onBehalfOf }),
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling
+    // @ts-ignore TODO
+    return res;
   } catch (error) {
     throw new Error("Error in repay function:" + error);
   }

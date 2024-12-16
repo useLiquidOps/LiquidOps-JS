@@ -6,11 +6,11 @@ export interface TokenData {
 }
 
 const tokenData: Record<string, TokenData> = {
-  wAR: {
-    ticker: "wAR",
-    address: "g9AjGn30ldiGvUSMUGADFIT1twzF3rEJxwPVPhrl8eE",
-    oTicker: "owAR",
-    oAddress: "0UWVo81RdMjeE08aZBfXoHAs1MQ-AX-A2RfGmOoNFKk",
+  QAR: {
+    ticker: "QAR",
+    address: "3addpL9j4OdWBKbvGucFtg5BoZycBNwlA8vy3h9VZhE",
+    oTicker: "oQAR",
+    oAddress: "KNpCAntte9l1_AZm7Yn5AGmN-j8C_UURCxcxCb0oiOA",
   },
 };
 

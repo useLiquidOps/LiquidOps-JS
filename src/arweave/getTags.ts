@@ -1,54 +1,77 @@
 import { arGql } from "ar-gql";
-import { AoUtils } from "../ao/connect";
+import { AoUtils } from "../ao/utils/connect";
 import { GQLTransactionsResultInterface } from "ar-gql/dist/faces";
+
+export interface Tag {
+  name: string;
+  values: string | string[];
+}
 
 interface GetTags {
   aoUtils: AoUtils;
-  tags: { name: string; values: string | string[] }[];
-  walletAddress: string;
+  tags: Tag[];
   cursor: string;
+  owner?: string;
 }
 
 export async function getTags({
   aoUtils,
   tags,
-  walletAddress,
+  owner,
   cursor,
 }: GetTags): Promise<GQLTransactionsResultInterface> {
   try {
     const gqlEndpoint =
-      aoUtils.configs.GRAPHQL_URL || "https://arweave.net/graphql";
+      aoUtils.configs.GRAPHQL_URL ||
+      "https://arweave-search.goldsky.com/graphql";
     const gql = arGql({ endpointUrl: gqlEndpoint });
+
+    const formattedTags = tags.map((tag) => ({
+      name: tag.name,
+      values: Array.isArray(tag.values) ? tag.values : [tag.values],
+    }));
+
     const query = `
-    query GetTransactions($cursor: String, $tags: [TagFilter!], $walletAddress: String!) {
-      transactions(
-        tags: $tags
-        sort: HEIGHT_DESC
-        after: $cursor
-        first: 100
-        owners:[$walletAddress]
-      ) {
-        edges {
-          cursor
-          node {
-            id
-            tags {
-              name
-              value
+      query GetTransactions($tags: [TagFilter!], $cursor: String${owner ? ", $owner: String!" : ""}) {
+        transactions(
+          tags: $tags
+          ${owner ? "owners: [$owner]" : ""}
+          first: 100
+          after: $cursor
+          sort: HEIGHT_DESC
+        ) {
+          edges {
+            cursor
+            node {
+              id
+              tags {
+                name
+                value
+              }
             }
           }
-        }
-        pageInfo {
-          hasNextPage
+          pageInfo {
+            hasNextPage
+          }
         }
       }
-    }
-  `;
+    `;
 
-    const response = await gql.run(query, { cursor, tags, walletAddress });
+    const variables = {
+      tags: formattedTags,
+      cursor: cursor || "",
+      ...(owner && { owner }),
+    };
+
+    const response = await gql.run(query, variables);
+
+    // @ts-ignore, ar-gql package error type incorrect
+    if (response.errors?.[0]?.message === "internal server error") {
+      throw new Error("GraphQL endpoint internal server error.");
+    }
+
     return response.data.transactions;
   } catch (error) {
-    console.log(error);
-    throw new Error("Error retrieving arweave GraphQL data");
+    throw new Error(`Failed to retrieve Arweave GraphQL data: ${error}`);
   }
 }

@@ -1,25 +1,25 @@
-import { AoUtils } from "../../ao/connect";
-import { TokenInput, tokenInput } from "../../ao/tokenInput";
+import { AoUtils } from "../../ao/utils/connect";
+import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 import { getTags } from "../../arweave/getTags";
-import { GQLTransactionsResultInterface as GetTransactionsRes } from "ar-gql/dist/faces";
 
 export interface GetTransactions {
-  token: "all" | TokenInput;
-  action:
-    | "all"
-    | "borrow"
-    | "payInterest"
-    | "repay"
-    | "lend"
-    | "unLend"
-    | "transfer";
+  token: TokenInput;
+  action: "lend" | "unLend" | "borrow" | "repay";
   walletAddress: string;
   cursor?: string;
 }
 
+export interface GetTransactionsRes {
+  transactions: Transaction[];
+  pageInfo: {
+    hasNextPage: boolean;
+    cursor?: string;
+  };
+}
+
 export async function getTransactions(
   aoUtils: AoUtils,
-  { token, action, walletAddress, cursor = "1" }: GetTransactions,
+  { token, action, walletAddress, cursor = "" }: GetTransactions,
 ): Promise<GetTransactionsRes> {
   try {
     if (!token || !action || !walletAddress) {
@@ -28,31 +28,73 @@ export async function getTransactions(
 
     const tags = [{ name: "Protocol-Name", values: ["LiquidOps"] }];
 
-    if (token !== "all") {
-      const { tokenAddress } = tokenInput(token);
-      tags.push({ name: "Target", values: [tokenAddress] });
-    }
+    const { oTokenAddress, tokenAddress } = tokenInput(token);
 
     if (action === "borrow") {
-      tags.push({ name: "X-Action", values: ["Borrow"] });
-    } else if (action === "payInterest") {
-      tags.push({ name: "X-Action", values: ["Pay-Interest"] });
+      tags.push({ name: "Target", values: [oTokenAddress] });
+      tags.push({ name: "Action", values: ["Borrow"] });
     } else if (action === "repay") {
+      tags.push({ name: "Target", values: [tokenAddress] });
+      tags.push({ name: "Action", values: ["Transfer"] });
+      tags.push({ name: "Recipient", values: [oTokenAddress] });
       tags.push({ name: "X-Action", values: ["Repay"] });
     } else if (action === "lend") {
-      tags.push({ name: "X-Action", values: ["Lend"] });
+      tags.push({ name: "Target", values: [tokenAddress] });
+      tags.push({ name: "Action", values: ["Transfer"] });
+      tags.push({ name: "Recipient", values: [oTokenAddress] });
+      tags.push({ name: "X-Action", values: ["Mint"] });
     } else if (action === "unLend") {
-      tags.push({ name: "Action", values: ["Burn"] });
-    } else if (action === "transfer") {
-      tags.push({ name: "LO-Action", values: ["Transfer"] });
-    } else if (action !== "all") {
+      tags.push({ name: "Target", values: [oTokenAddress] });
+      tags.push({ name: "Action", values: ["Redeem"] });
+    } else {
       throw new Error("Please specify an action.");
     }
 
-    const res = await getTags({ aoUtils, tags, walletAddress, cursor });
+    const queryArweave = await getTags({
+      aoUtils,
+      tags,
+      owner: walletAddress,
+      cursor,
+    });
 
-    return res;
+    return {
+      transactions: processTransactions(queryArweave.edges),
+      pageInfo: {
+        hasNextPage: queryArweave.pageInfo.hasNextPage,
+        cursor: queryArweave.edges[queryArweave.edges.length - 1]?.cursor,
+      },
+    };
   } catch (error) {
     throw new Error("Error in getTransactions function:" + error);
   }
+}
+
+interface TransactionNode {
+  id: string;
+  tags: {
+    name: string;
+    value: string;
+  }[];
+}
+
+export interface Transaction {
+  id: string;
+  tags: Record<string, string>;
+}
+
+function processTransactions(
+  transactions: { node: TransactionNode }[],
+): Transaction[] {
+  return transactions.map(({ node }) => {
+    const processedTransaction: Transaction = {
+      id: node.id,
+      tags: {},
+    };
+
+    node.tags.forEach((tag) => {
+      processedTransaction.tags[tag.name] = tag.value;
+    });
+
+    return processedTransaction;
+  });
 }

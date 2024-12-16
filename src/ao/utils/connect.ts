@@ -38,4 +38,5 @@ export interface AoUtils {
   message: SendMessage;
   result: ReadResult;
   signer: AoConnectTypes["signer"];
+  configs: Services;
 }

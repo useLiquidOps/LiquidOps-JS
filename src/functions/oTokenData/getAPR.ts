@@ -1,6 +1,6 @@
-import { sendMessage } from "../../ao/sendMessage";
-import { AoUtils } from "../../ao/connect";
-import { TokenInput, tokenInput } from "../../ao/tokenInput";
+import { getData } from "../../ao/messaging/getData";
+import { AoUtils } from "../../ao/utils/connect";
+import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetAPR {
   token: TokenInput;
@@ -22,12 +22,12 @@ export async function getAPR(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const message = await sendMessage(aoUtils, {
+    const checkDataRes = await getData(aoUtils, {
       Target: oTokenAddress,
       Action: "Get-APR",
     });
 
-    const tags = message.Messages[0].Tags;
+    const tags = checkDataRes.Messages[0].Tags;
     const aprResponse: APRResponse = {
       "Annual-Percentage-Rate": "",
       "Rate-Multiplier": "",
@@ -45,7 +45,7 @@ export async function getAPR(
     const apr = parseFloat(aprResponse["Annual-Percentage-Rate"]);
     const rateMultiplier = parseFloat(aprResponse["Rate-Multiplier"]);
 
-    return apr / rateMultiplier; // TODO: check later + modular response handling
+    return apr / rateMultiplier;
   } catch (error) {
     throw new Error("Error in getAPR function: " + error);
   }

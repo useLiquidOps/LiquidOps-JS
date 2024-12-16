@@ -1,6 +1,6 @@
-import { sendMessage } from "../../ao/sendMessage";
-import { AoUtils } from "../../ao/connect";
-import { TokenInput, tokenInput } from "../../ao/tokenInput";
+import { getData } from "../../ao/messaging/getData";
+import { AoUtils } from "../../ao/utils/connect";
+import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface Transfer {
   token: TokenInput | string;
@@ -9,14 +9,8 @@ export interface Transfer {
 }
 
 export interface TransferRes {
-  Target: string;
-  Tags: {
-    Action: "Debit-Notice" | "Transfer-Error";
-    Recipient?: string;
-    Quantity?: string;
-    "Message-Id"?: string;
-    Error?: string;
-  };
+  id: string;
+  status: boolean;
 }
 
 export async function transfer(
@@ -28,26 +22,24 @@ export async function transfer(
       throw new Error("Please specify a token, recipient and quantity.");
     }
 
-    let tokenAddress: string;
+    const { tokenAddress } = tokenInput(token);
 
-    try {
-      const { tokenAddress: supportedTokenAddress } = tokenInput(
-        token as TokenInput,
-      );
-      tokenAddress = supportedTokenAddress;
-    } catch (error) {
-      tokenAddress = token as string;
-    }
-
-    const res = await sendMessage(aoUtils, {
+    const res = await getData(aoUtils, {
       Target: tokenAddress,
       Action: "Transfer",
       Recipient: recipient,
       Quantity: quantity.toString(),
-      "LO-Action": "Transfer", // for LO analytics
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling
+    const hasDebitNotice = res.Messages[0]?.Tags.some(
+      (tag: { name: string; value: string }) =>
+        tag.name === "Action" && tag.value === "Debit-Notice",
+    );
+
+    return {
+      id: res.initialMessageID,
+      status: hasDebitNotice,
+    };
   } catch (error) {
     throw new Error("Error in transfer function: " + error);
   }

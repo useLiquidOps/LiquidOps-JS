@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import LiquidOps from "../../../src";
-import { createDataItemSigner } from "@permaweb/aoconnect";
+import createDataItemSignerBun from "../../testsHelpers/bunSigner";
 import { JWKInterface } from "arbundles/node";
 import { ownerToAddress } from "../../testsHelpers/arweaveUtils";
 
@@ -10,78 +10,89 @@ test("getTransactions function", async () => {
   }
 
   const JWK: JWKInterface = JSON.parse(process.env.JWK);
-  const signer = createDataItemSigner(JWK);
-  const client = new LiquidOps(signer);
+  const signer = createDataItemSignerBun(JWK);
+  const client = new LiquidOps(signer, {
+    CU_URL: "https://cu.ar-io.dev"
+  });
 
   const walletAddress = await ownerToAddress(JWK.n);
 
-  const actions = [
-    "all",
-    "borrow",
-    "payInterest",
-    "repay",
-    "lend",
-    "unLend",
-    "transfer",
-  ] as const;
+  const actions = ["lend", "unLend", "borrow", "repay"] as const;
 
   for (const action of actions) {
     try {
-      const res = await client.getTransactions({
-        token: "wAR",
+      const response = await client.getTransactions({
+        token: "QAR",
         action: action,
         walletAddress,
       });
 
-      expect(res).toHaveProperty("edges");
-      expect(Array.isArray(res.edges)).toBe(true);
+      // Check response structure
+      expect(response).toHaveProperty("transactions");
+      expect(response).toHaveProperty("pageInfo");
+      expect(response.pageInfo).toHaveProperty("hasNextPage");
+      expect(typeof response.pageInfo.hasNextPage).toBe("boolean");
 
-      if (res.edges.length > 0) {
-        res.edges.forEach((edge) => {
-          expect(edge).toHaveProperty("node");
-          const transaction = edge.node;
-
-          expect(transaction).toHaveProperty("id");
-          expect(transaction.id).toBeTypeOf("string");
-          expect(transaction.id.length).toBeGreaterThan(0);
-
-          expect(transaction).toHaveProperty("tags");
-          expect(Array.isArray(transaction.tags)).toBe(true);
-          expect(transaction.tags.length).toBeGreaterThan(0);
-
-          const protocolNameTag = transaction.tags.find(
-            (tag) => tag.name === "Protocol-Name",
-          );
-          expect(protocolNameTag).toBeDefined();
-          expect(protocolNameTag?.value).toBe("LiquidOps");
-
-          if (action !== "all") {
-            const actionTag = transaction.tags.find((tag) => {
-              if (action === "unLend")
-                return tag.name === "Action" && tag.value === "Burn";
-              if (action === "transfer")
-                return tag.name === "LO-Action" && tag.value === "Transfer";
-              return (
-                tag.name === "X-Action" &&
-                tag.value === action.charAt(0).toUpperCase() + action.slice(1)
-              );
-            });
-            expect(actionTag).toBeDefined();
-          }
-
-          transaction.tags.forEach((tag) => {
-            expect(tag).toHaveProperty("name");
-            expect(tag.name).toBeTypeOf("string");
-            expect(tag.name.length).toBeGreaterThan(0);
-
-            expect(tag).toHaveProperty("value");
-            expect(tag.value).toBeTypeOf("string");
-          });
-        });
+      if (response.pageInfo.hasNextPage) {
+        expect(response.pageInfo).toHaveProperty("cursor");
+        expect(typeof response.pageInfo.cursor).toBe("string");
       }
 
-      expect(res).toHaveProperty("pageInfo");
-      expect(res.pageInfo).toHaveProperty("hasNextPage");
+      expect(Array.isArray(response.transactions)).toBe(true);
+
+      if (response.transactions.length > 0) {
+        response.transactions.forEach((transaction) => {
+          // Check basic transaction structure
+          expect(transaction).toHaveProperty("id");
+          expect(typeof transaction.id).toBe("string");
+          expect(transaction.id.length).toBeGreaterThan(0);
+
+          // Check tags object exists
+          expect(transaction).toHaveProperty("tags");
+          expect(typeof transaction.tags).toBe("object");
+
+          // Check Protocol-Name tag
+          expect(transaction.tags["Protocol-Name"]).toBe("LiquidOps");
+
+          // Check common tag properties that should exist in all transactions
+          const commonTags = [
+            "Content-Type",
+            "SDK",
+            "Data-Protocol",
+            "Variant",
+            "Type",
+            "Target"
+          ];
+
+          commonTags.forEach(tag => {
+            expect(transaction.tags).toHaveProperty(tag);
+            expect(typeof transaction.tags[tag]).toBe("string");
+          });
+
+          // Check action-specific tags and values
+          switch (action) {
+            case "borrow":
+              expect(transaction.tags["Action"]).toBe("Borrow");
+              break;
+            
+            case "repay":
+              expect(transaction.tags["Action"]).toBe("Transfer");
+              expect(transaction.tags["X-Action"]).toBe("Repay");
+              expect(transaction.tags["Recipient"]).toBeDefined();
+              break;
+            
+            case "lend":
+              expect(transaction.tags["Action"]).toBe("Transfer");
+              expect(transaction.tags["X-Action"]).toBe("Mint");
+              expect(transaction.tags["Recipient"]).toBeDefined();
+              break;
+            
+            case "unLend":
+              expect(transaction.tags["Action"]).toBe("Redeem");
+              break;
+          }
+        });
+      }
     } catch (error) {
       console.error(
         `Error testing getTransactions() with action ${action}:`,

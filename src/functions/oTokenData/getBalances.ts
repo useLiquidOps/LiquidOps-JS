@@ -1,6 +1,6 @@
-import { sendMessage } from "../../ao/sendMessage";
-import { AoUtils } from "../../ao/connect";
-import { TokenInput, tokenInput } from "../../ao/tokenInput";
+import { getData } from "../../ao/messaging/getData";
+import { AoUtils } from "../../ao/utils/connect";
+import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetBalances {
   token: TokenInput;
@@ -21,12 +21,15 @@ export async function getBalances(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res = await sendMessage(aoUtils, {
+    const res = await getData(aoUtils, {
       Target: oTokenAddress,
       Action: "Balances",
     });
 
-    return res.Output; // TODO, make modular sendMessage response handling
+    console.log(res.Messages[0]);
+
+    // @ts-ignore TODO
+    return res;
   } catch (error) {
     throw new Error("Error in getBalances function: " + error);
   }
