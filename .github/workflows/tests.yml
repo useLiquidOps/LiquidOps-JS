@@ -8,6 +8,8 @@ on:
 jobs:
   test:
     runs-on: macos-latest
+    env:
+      JWK: ${{ secrets.JWK }}
 
     steps:
       - name: Checkout
@@ -23,6 +25,8 @@ jobs:
 
       - name: Run tests
         run: bun test
+        env:
+          JWK: ${{ secrets.JWK }}
 
       - name: Run build
         run: bun run build
