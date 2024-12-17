@@ -12,7 +12,7 @@ test("getTransactions function", async () => {
   const JWK: JWKInterface = JSON.parse(process.env.JWK);
   const signer = createDataItemSignerBun(JWK);
   const client = new LiquidOps(signer, {
-    CU_URL: "https://cu.ar-io.dev"
+    CU_URL: "https://cu.ar-io.dev",
   });
 
   const walletAddress = await ownerToAddress(JWK.n);
@@ -61,10 +61,10 @@ test("getTransactions function", async () => {
             "Data-Protocol",
             "Variant",
             "Type",
-            "Target"
+            "Target",
           ];
 
-          commonTags.forEach(tag => {
+          commonTags.forEach((tag) => {
             expect(transaction.tags).toHaveProperty(tag);
             expect(typeof transaction.tags[tag]).toBe("string");
           });
@@ -74,19 +74,19 @@ test("getTransactions function", async () => {
             case "borrow":
               expect(transaction.tags["Action"]).toBe("Borrow");
               break;
-            
+
             case "repay":
               expect(transaction.tags["Action"]).toBe("Transfer");
               expect(transaction.tags["X-Action"]).toBe("Repay");
               expect(transaction.tags["Recipient"]).toBeDefined();
               break;
-            
+
             case "lend":
               expect(transaction.tags["Action"]).toBe("Transfer");
               expect(transaction.tags["X-Action"]).toBe("Mint");
               expect(transaction.tags["Recipient"]).toBeDefined();
               break;
-            
+
             case "unLend":
               expect(transaction.tags["Action"]).toBe("Redeem");
               break;

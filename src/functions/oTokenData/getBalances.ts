@@ -26,11 +26,21 @@ export async function getBalances(
       Action: "Balances",
     });
 
-    console.log(res.Messages[0]);
+    if (!res.Messages || !res.Messages[0] || !res.Messages[0].Data) {
+      throw new Error("Invalid response format from getData");
+    }
 
-    // @ts-ignore TODO
-    return res;
+    const balance: { [key: string]: string } = JSON.parse(res.Messages[0].Data);
+
+    const key = Object.keys(balance)[0];
+    const value = Object.values(balance)[0];
+
+    if (!key || !value) {
+      throw new Error("Invalid balance data format");
+    }
+
+    return { [key]: BigInt(value) };
   } catch (error) {
-    throw new Error("Error in getBalances function: " + error);
+    throw new Error(`Error in getBalances function: ${error}`);
   }
 }

@@ -7,12 +7,11 @@ export interface GetAllPositions {
 }
 
 export interface GetAllPositionsRes {
-  Capacity: string;
-  "Used-Capacity": string;
-  "Collateral-Ticker": string;
+  capacity: BigInt;
+  usedCapacity: BigInt;
 }
 
-export async function getAllPositions( // TODO: waiting on Marton
+export async function getAllPositions(
   aoUtils: AoUtils,
   { token }: GetAllPositions,
 ): Promise<GetAllPositionsRes> {
@@ -25,12 +24,20 @@ export async function getAllPositions( // TODO: waiting on Marton
 
     const res = await getData(aoUtils, {
       Target: oTokenAddress,
-      Action: "Get-All-Positions",
+      Action: "Positions",
     });
 
-    // @ts-ignore TODO
-    return res;
+    const positions = JSON.parse(res.Messages[0].Data);
+    const data = Object.values(positions)[0] as {
+      Capacity: string;
+      "Used-Capacity": string;
+    };
+
+    return {
+      capacity: BigInt(data.Capacity),
+      usedCapacity: BigInt(data["Used-Capacity"]),
+    };
   } catch (error) {
-    throw new Error("Error in getAllPositions function: " + error);
+    throw new Error(`Error in getAllPositions function: ${error}`);
   }
 }
