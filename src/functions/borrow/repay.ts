@@ -1,6 +1,18 @@
-import { sendTransaction } from "../../ao/messaging/sendTransaction";
 import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
+import {
+  TransactionResult,
+  validateTransaction,
+  findTransactionIds
+} from "../../ao/messaging/validationUtils";
+
+const REPAY_CONFIG = {
+  action: "Repay",
+  expectedTxCount: 2,
+  confirmationTag: "Repay-Confirmation",
+  requiredNotices: ["Debit-Notice", "Credit-Notice"],
+  requiresCreditDebit: true,
+};
 
 export interface Repay {
   token: TokenInput;
@@ -8,16 +20,7 @@ export interface Repay {
   onBehalfOf?: string;
 }
 
-export interface RepayRes {
-  Target: string;
-  Tags: {
-    Action: "Repay-Confirmation" | "Repay-Error";
-    "Repaid-Quantity"?: string;
-    "Refund-Quantity"?: string;
-    Error?: string;
-  };
-  Data?: string;
-}
+export interface RepayRes extends TransactionResult {}
 
 export async function repay(
   aoUtils: AoUtils,
@@ -30,18 +33,50 @@ export async function repay(
 
     const { tokenAddress, oTokenAddress } = tokenInput(token);
 
-    const res = await sendTransaction(aoUtils, {
-      Target: tokenAddress,
-      Action: "Transfer",
-      Quantity: quantity.toString(),
-      Recipient: oTokenAddress,
-      "X-Action": "Repay",
-      ...(onBehalfOf && { "X-On-Behalf": onBehalfOf }),
+    const transferID = await aoUtils.message({
+      process: tokenAddress,
+      tags: [
+        { name: "Action", value: "Transfer" },
+        { name: "Quantity", value: quantity.toString() },
+        { name: "Recipient", value: oTokenAddress },
+        { name: "X-Action", value: "Repay" },
+        { name: "Protocol-Name", value: "LiquidOps" },
+        ...(onBehalfOf ? [{ name: "X-On-Behalf", value: onBehalfOf }] : []),
+      ],
+      signer: aoUtils.signer,
     });
 
-    // @ts-ignore TODO
-    return res;
+    const transferResult = await validateTransaction(
+      aoUtils,
+      transferID,
+      tokenAddress,
+      REPAY_CONFIG,
+    );
+
+    if (transferResult === "pending") {
+      return {
+        status: "pending",
+        transferID,
+        response: "Transaction pending.",
+      };
+    }
+
+    if (!transferResult) {
+          throw new Error("Transaction validation failed");
+        }
+    
+        const transactionIds = await findTransactionIds(
+          aoUtils,
+          transferID,
+          tokenAddress,
+        );
+    
+        return {
+          status: true,
+          ...transactionIds,
+          transferID,
+        };
   } catch (error) {
-    throw new Error("Error in repay function:" + error);
+    throw new Error("Error in repay function: " + error);
   }
 }

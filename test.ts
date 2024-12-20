@@ -9,9 +9,7 @@ if (!process.env.JWK) {
 
 const JWK: JWKInterface = JSON.parse(process.env.JWK);
 const signer = createDataItemSignerBun(JWK);
-const client = new LiquidOps(signer, {
-  CU_URL: "https://cu.ar-io.dev", // TODO: play about with this
-});
+const client = new LiquidOps(signer);
 const walletAddress = await ownerToAddress(JWK.n);
 
 //// get transactions
@@ -116,3 +114,19 @@ const walletAddress = await ownerToAddress(JWK.n);
 // });
 
 // console.log(transfer)
+
+// borrow
+
+// const borrow = await client.borrow({
+//   token: "QAR",
+//   quantity: 1n,
+// });
+
+// console.log(borrow);
+
+// const repay = await client.repay({
+//   token: "QAR",
+//   quantity: 1n,
+// });
+
+// console.log(repay);
