@@ -3,7 +3,7 @@ import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 import {
   TransactionResult,
   validateTransaction,
-  findTransactionIds
+  findTransactionIds,
 } from "../../ao/messaging/validationUtils";
 
 const REPAY_CONFIG = {
@@ -62,20 +62,20 @@ export async function repay(
     }
 
     if (!transferResult) {
-          throw new Error("Transaction validation failed");
-        }
-    
-        const transactionIds = await findTransactionIds(
-          aoUtils,
-          transferID,
-          tokenAddress,
-        );
-    
-        return {
-          status: true,
-          ...transactionIds,
-          transferID,
-        };
+      throw new Error("Transaction validation failed");
+    }
+
+    const transactionIds = await findTransactionIds(
+      aoUtils,
+      transferID,
+      tokenAddress,
+    );
+
+    return {
+      status: true,
+      ...transactionIds,
+      transferID,
+    };
   } catch (error) {
     throw new Error("Error in repay function: " + error);
   }
