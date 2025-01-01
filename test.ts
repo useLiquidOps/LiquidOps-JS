@@ -12,7 +12,7 @@
 // const client = new LiquidOps(signer);
 // const walletAddress = await ownerToAddress(JWK.n);
 
-//// get transactions
+// // get transactions
 
 // const getTransactions = await client.getTransactions({
 //   token: "QAR",
@@ -22,7 +22,7 @@
 
 // console.log(getTransactions);
 
-//// lend
+// // lend
 
 // const lend = await client.lend({
 //   token: "QAR",
@@ -38,7 +38,7 @@
 
 // console.log(unLend);
 
-//// oTokenData
+// // oTokenData
 
 // const getAPR = await client.getAPR({
 //   token: "QAR",
@@ -51,12 +51,6 @@
 // });
 
 // console.log(getBalances);
-
-// const getInfo = await client.getInfo({
-//   token: "QAR",
-// });
-
-// console.log(getInfo)
 
 // const getInfo = await client.getInfo({
 //   token: "QAR",
@@ -84,13 +78,7 @@
 
 // console.log(getReserves)
 
-// const getReserves = await client.getReserves({
-//   token: "QAR",
-// });
-
-// console.log(getReserves)
-
-//// protocolData
+// // protocolData
 
 // const getAllPositions = await client.getAllPositions({
 //   token: "QAR",
@@ -98,7 +86,7 @@
 
 // console.log(getAllPositions)
 
-//// utils
+// // utils
 
 // const getBalance = await client.getBalance({
 //   token: "QAR",
@@ -115,7 +103,7 @@
 
 // console.log(transfer)
 
-// borrow
+// // borrow
 
 // const borrow = await client.borrow({
 //   token: "QAR",
