@@ -1,16 +1,16 @@
-// import LiquidOps from "./src";
-// import createDataItemSignerBun from "./tests/testsHelpers/bunSigner/index";
-// import { JWKInterface } from "arbundles/node";
-// import { ownerToAddress } from "./tests/testsHelpers/arweaveUtils";
+import LiquidOps from "./src";
+import createDataItemSignerBun from "./tests/testsHelpers/bunSigner/index";
+import { JWKInterface } from "arbundles/node";
+import { ownerToAddress } from "./tests/testsHelpers/arweaveUtils";
 
-// if (!process.env.JWK) {
-//   throw new Error("Please specify a JWK in the .env file");
-// }
+if (!process.env.JWK) {
+  throw new Error("Please specify a JWK in the .env file");
+}
 
-// const JWK: JWKInterface = JSON.parse(process.env.JWK);
-// const signer = createDataItemSignerBun(JWK);
-// const client = new LiquidOps(signer);
-// const walletAddress = await ownerToAddress(JWK.n);
+const JWK: JWKInterface = JSON.parse(process.env.JWK);
+const signer = createDataItemSignerBun(JWK);
+const client = new LiquidOps(signer);
+const walletAddress = await ownerToAddress(JWK.n);
 
 // // get transactions
 

@@ -12,6 +12,18 @@ const tokenData: Record<string, TokenData> = {
     oTicker: "oQAR",
     oAddress: "KNpCAntte9l1_AZm7Yn5AGmN-j8C_UURCxcxCb0oiOA",
   },
+  STETH: {
+    ticker: "STETH",
+    address: "3addpL9j4OdWBKbvGucFtg5BoZycBNwlA8vy3h9VZhE",
+    oTicker: "oSTETH",
+    oAddress: "KNpCAntte9l1_AZm7Yn5AGmN-j8C_UURCxcxCb0oiOA",
+  },
+  DAI: {
+    ticker: "DAI",
+    address: "3addpL9j4OdWBKbvGucFtg5BoZycBNwlA8vy3h9VZhE",
+    oTicker: "oDAI",
+    oAddress: "KNpCAntte9l1_AZm7Yn5AGmN-j8C_UURCxcxCb0oiOA",
+  },
 };
 
 export type SupportedTokensTickers = keyof typeof tokenData;
