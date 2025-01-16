@@ -136,7 +136,6 @@ class LiquidOps {
 
 export default LiquidOps;
 
-
 // Type exports
 export type {
   // borrow
@@ -179,7 +178,7 @@ export type {
   // Utility types for constructor/setup
   AoUtils,
   Signer,
-  Configs
+  Configs,
 };
 
 // Re-export static properties
