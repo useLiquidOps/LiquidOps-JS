@@ -38,12 +38,14 @@ import { oTokens, tokens } from "./ao/utils/tokenAddressData";
 // AO misc types/functions
 import { connectToAO, AoUtils } from "./ao/utils/connect";
 import { Services } from "@permaweb/aoconnect/dist/index.common";
+type Configs = Services;
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
+type Signer = AoConnectTypes["signer"];
 
 class LiquidOps {
   private aoUtils: AoUtils;
 
-  constructor(signer: AoConnectTypes["signer"], configs: Services = {}) {
+  constructor(signer: Signer, configs: Configs = {}) {
     if (!signer) {
       throw new Error("Please specify a ao createDataItemSigner signer");
     }
@@ -133,3 +135,52 @@ class LiquidOps {
 }
 
 export default LiquidOps;
+
+
+// Type exports
+export type {
+  // borrow
+  Borrow,
+  BorrowRes,
+  Repay,
+  RepayRes,
+
+  // getTransactions
+  GetTransactions,
+  GetTransactionsRes,
+
+  // lend
+  Lend,
+  LendRes,
+  UnLend,
+  UnLendRes,
+
+  // oTokenData
+  GetAPR,
+  GetBalances,
+  GetBalancesRes,
+  GetInfo,
+  GetInfoRes,
+  GetPosition,
+  GetPositionRes,
+  GetPrice,
+  GetReserves,
+  GetReservesRes,
+
+  // protocol data
+  GetAllPositions,
+  GetAllPositionsRes,
+
+  // utils
+  GetBalance,
+  Transfer,
+  TransferRes,
+
+  // Utility types for constructor/setup
+  AoUtils,
+  Signer,
+  Configs
+};
+
+// Re-export static properties
+export { oTokens, tokens };
