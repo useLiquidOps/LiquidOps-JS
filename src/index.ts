@@ -33,6 +33,7 @@ import {
   GetAllPositions,
   GetAllPositionsRes,
 } from "./functions/protocolData/getAllPositions";
+import { getLiquidations, GetLiquidations, GetLiquidationsRes } from "./functions/protocolData/getLiquidations";
 import {
   liquidate,
   Liquidate,
@@ -123,6 +124,10 @@ class LiquidOps {
     return getAllPositions(this.aoUtils, params);
   }
 
+  async getLiquidations(params: GetLiquidations): Promise<GetLiquidationsRes> {
+    return getLiquidations(this.aoUtils, params);
+  }
+
   // utils
 
   async getBalance(params: GetBalance): Promise<BigInt> {
@@ -180,6 +185,8 @@ export type {
   // protocol data
   GetAllPositions,
   GetAllPositionsRes,
+  GetLiquidations,
+  GetLiquidationsRes,
 
   // utils
   GetBalance,
