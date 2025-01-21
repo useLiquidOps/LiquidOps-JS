@@ -1,10 +1,10 @@
 import { Token } from "ao-tokens";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
-// // TODO: Add window, for node environments error
-// if (typeof window === "undefined") {
-//   global.window = {} as any;
-// }
+// TODO: Add window, for node environments/build error
+if (typeof window === "undefined") {
+  global.window = {} as any;
+}
 
 export interface GetBalance {
   token: TokenInput | string;
