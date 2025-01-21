@@ -31,17 +31,139 @@ bun i liquidops
 Here's a simple lending example to get you started:
 
 ```typescript
-import LiquidOps, { createDataItemSignerNode } from "liquidops";
+import LiquidOps from "liquidops";
+import { createDataItemSigner } from "@permaweb/aoconnect";
 
-const JWK = process.env.JWK;
-const signer = await createDataItemSignerNode(JWK);
+const signer = createDataItemSigner(window.arweaveWallet);
 
 const client = new LiquidOps(signer);
 ```
 
 ---
 
-## Configuration
+# Examples
+
+## Transaction Functions
+
+```typescript
+// Get transactions for a specific token and action
+const getTransactions = await client.getTransactions({
+  token: "QAR",
+  action: "lend",
+  walletAddress: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
+});
+```
+
+## Lending Functions
+
+```typescript
+// Lend tokens
+const lend = await client.lend({
+  token: "QAR",
+  quantity: 1n,
+});
+
+// Unlend tokens
+const unLend = await client.unLend({
+  token: "QAR",
+  quantity: 1n,
+});
+```
+
+## oToken Data Functions
+
+```typescript
+// Get APR for a token
+const getAPR = await client.getAPR({
+  token: "QAR",
+});
+
+// Get balances
+const getBalances = await client.getBalances({
+  token: "QAR",
+});
+
+// Get token info
+const getInfo = await client.getInfo({
+  token: "QAR",
+});
+
+// Get position for a wallet
+const getPosition = await client.getPosition({
+  token: "QAR",
+  recipient: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
+});
+
+// Get price for quantity
+const getPrice = await client.getPrice({
+  token: "QAR",
+  quantity: 1n
+});
+
+// Get reserves
+const getReserves = await client.getReserves({
+  token: "QAR",
+});
+```
+
+## Protocol Data Functions
+
+```typescript
+// Get all positions
+const getAllPositions = await client.getAllPositions({
+  token: "QAR",
+});
+
+// Get liquidations
+const getLiquidations = client.getLiquidations({
+  token: "QAR"
+});
+```
+
+## Utility Functions
+
+```typescript
+// Get balance
+const getBalance = await client.getBalance({
+  token: "QAR",
+  walletAddress: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
+});
+
+// Transfer tokens
+const transfer = await client.transfer({
+  token: "QAR",
+  recipient: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
+  quantity: 1n
+});
+```
+
+## Borrowing Functions
+
+```typescript
+// Borrow tokens
+const borrow = await client.borrow({
+  token: "QAR",
+  quantity: 1n,
+});
+
+// Repay borrowed tokens
+const repay = await client.repay({
+  token: "QAR",
+  quantity: 1n,
+});
+```
+
+## Liquidation Functions
+
+```typescript
+// Liquidate a position
+const liquidate = client.liquidate({
+  token: "QAR",
+  rewardToken: "STETH",
+  targetUserAddress: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
+  quantity: 1n,
+});
+```
 
 ---
 
