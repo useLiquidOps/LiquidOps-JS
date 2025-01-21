@@ -118,3 +118,14 @@ const walletAddress = await ownerToAddress(JWK.n);
 // });
 
 // console.log(repay);
+
+// // liquidation
+
+// const liquidate = client.liquidate({
+//   token: "QAR",
+//   rewardToken: "STETH",
+//   targetUserAddress: "",
+//   quantity: 1n,
+// });
+
+// console.log(liquidate);

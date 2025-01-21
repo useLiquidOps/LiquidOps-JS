@@ -33,8 +33,13 @@ import {
   GetAllPositions,
   GetAllPositionsRes,
 } from "./functions/protocolData/getAllPositions";
+import {
+  liquidate,
+  Liquidate,
+  LiquidateRes,
+} from "./functions/liquidation/liquidate";
 // LO helpful data
-import { oTokens, tokens } from "./ao/utils/tokenAddressData";
+import { oTokens, tokens, controllers } from "./ao/utils/tokenAddressData";
 // AO misc types/functions
 import { connectToAO, AoUtils } from "./ao/utils/connect";
 import { Services } from "@permaweb/aoconnect/dist/index.common";
@@ -128,6 +133,12 @@ class LiquidOps {
     return transfer(this.aoUtils, params);
   }
 
+  // liquidation
+
+  async liquidate(params: Liquidate): Promise<LiquidateRes> {
+    return liquidate(this.aoUtils, params);
+  }
+
   // process data
 
   static oTokens = oTokens;
@@ -175,6 +186,10 @@ export type {
   Transfer,
   TransferRes,
 
+  // liquidation
+  Liquidate,
+  LiquidateRes,
+
   // Utility types for constructor/setup
   AoUtils,
   Signer,
@@ -182,4 +197,4 @@ export type {
 };
 
 // Re-export static properties
-export { oTokens, tokens };
+export { oTokens, tokens, controllers };

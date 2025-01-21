@@ -3,8 +3,10 @@ import {
   SupportedTokensAddresses,
   SupportedOTokensTickers,
   SupportedOTokensAddresses,
+  SupportedControllerAddresses,
   tokens,
   oTokens,
+  tokenData,
 } from "./tokenAddressData";
 
 export type TokenInput = SupportedTokensTickers | SupportedTokensAddresses;
@@ -12,6 +14,7 @@ export type TokenInput = SupportedTokensTickers | SupportedTokensAddresses;
 export interface TokenInfo {
   tokenAddress: SupportedTokensAddresses;
   oTokenAddress: SupportedOTokensAddresses;
+  controllerAddress: SupportedControllerAddresses;
 }
 
 export function tokenInput(token: TokenInput): TokenInfo {
@@ -24,6 +27,7 @@ export function tokenInput(token: TokenInput): TokenInfo {
     return {
       tokenAddress,
       oTokenAddress: oTokens[`o${ticker}` as SupportedOTokensTickers],
+      controllerAddress: tokenData[ticker].controllerAddress,
     };
   }
 
