@@ -97,7 +97,7 @@ const getPosition = await client.getPosition({
 // Get price for quantity
 const getPrice = await client.getPrice({
   token: "QAR",
-  quantity: 1n
+  quantity: 1n,
 });
 
 // Get reserves
@@ -116,7 +116,7 @@ const getAllPositions = await client.getAllPositions({
 
 // Get liquidations
 const getLiquidations = client.getLiquidations({
-  token: "QAR"
+  token: "QAR",
 });
 ```
 
@@ -133,7 +133,7 @@ const getBalance = await client.getBalance({
 const transfer = await client.transfer({
   token: "QAR",
   recipient: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
-  quantity: 1n
+  quantity: 1n,
 });
 ```
 
