@@ -37,13 +37,11 @@ const JWK = process.env.JWK;
 const signer = await createDataItemSignerNode(JWK);
 
 const client = new LiquidOps(signer);
-
 ```
 
 ---
 
 ## Configuration
-
 
 ---
 
