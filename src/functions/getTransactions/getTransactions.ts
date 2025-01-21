@@ -96,7 +96,7 @@ function processTransactions(
       id: node.id,
       tags: {},
       block: {
-        timestamp: node.block.timestamp,
+        timestamp: node?.block?.timestamp ?? 0,
       },
     };
 
