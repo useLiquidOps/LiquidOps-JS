@@ -61,8 +61,8 @@
     "access": "public"
   },
   "scripts": {
-    "dev": "bun run build && bun run link",
-    "build": "bun run prettier && tsup src/index.ts --format cjs,esm --dts",
+    "dev": "bun run prettier && bun run build && bun run link",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
     "test": "bun test",
     "prettier": "prettier --write .",
     "link": "bun link"
