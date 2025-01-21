@@ -12,21 +12,21 @@ export const tokenData: Record<string, TokenData> = {
     address: "3addpL9j4OdWBKbvGucFtg5BoZycBNwlA8vy3h9VZhE",
     oTicker: "oQAR",
     oAddress: "KNpCAntte9l1_AZm7Yn5AGmN-j8C_UURCxcxCb0oiOA",
-    controllerAddress: "", // TODO: wait for Marton to deploy
+    controllerAddress: "QDrMlGmiMnKNL4QiAvlhbzZ-AzZH8CFRELXfnufboLw",
   },
   STETH: {
     ticker: "STETH",
     address: "3addpL9j4OdWBKbvGucFtg5BoZycBNwlA8vy3h9VZhE",
     oTicker: "oSTETH",
     oAddress: "KNpCAntte9l1_AZm7Yn5AGmN-j8C_UURCxcxCb0oiOA",
-    controllerAddress: "", // TODO: wait for Marton to deploy
+    controllerAddress: "QDrMlGmiMnKNL4QiAvlhbzZ-AzZH8CFRELXfnufboLw",
   },
   DAI: {
     ticker: "DAI",
     address: "3addpL9j4OdWBKbvGucFtg5BoZycBNwlA8vy3h9VZhE",
     oTicker: "oDAI",
     oAddress: "KNpCAntte9l1_AZm7Yn5AGmN-j8C_UURCxcxCb0oiOA",
-    controllerAddress: "", // TODO: wait for Marton to deploy
+    controllerAddress: "QDrMlGmiMnKNL4QiAvlhbzZ-AzZH8CFRELXfnufboLw",
   },
 };
 
