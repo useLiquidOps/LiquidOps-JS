@@ -75,11 +75,17 @@ interface TransactionNode {
     name: string;
     value: string;
   }[];
+  block: {
+    timestamp: number;
+  }
 }
 
 export interface Transaction {
   id: string;
   tags: Record<string, string>;
+  block: {
+    timestamp: number;
+  }
 }
 
 function processTransactions(
@@ -89,6 +95,9 @@ function processTransactions(
     const processedTransaction: Transaction = {
       id: node.id,
       tags: {},
+      block: {
+        timestamp: node.block.timestamp,
+      }
     };
 
     node.tags.forEach((tag) => {

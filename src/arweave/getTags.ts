@@ -48,6 +48,9 @@ export async function getTags({
                 name
                 value
               }
+              block {
+                  timestamp
+              }
             }
           }
           pageInfo {

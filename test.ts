@@ -20,7 +20,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 //   walletAddress: walletAddress,
 // });
 
-// console.log(getTransactions);
+// console.log(JSON.stringify(getTransactions, null, 2));
 
 // // lend
 
