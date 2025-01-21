@@ -86,6 +86,12 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(getAllPositions)
 
+// const getLiquidations = client.getLiquidations({
+//   token: "QAR"
+// });
+
+// console.log(getLiquidations);
+
 // // utils
 
 // const getBalance = await client.getBalance({

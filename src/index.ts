@@ -33,7 +33,11 @@ import {
   GetAllPositions,
   GetAllPositionsRes,
 } from "./functions/protocolData/getAllPositions";
-import { getLiquidations, GetLiquidations, GetLiquidationsRes } from "./functions/protocolData/getLiquidations";
+import {
+  getLiquidations,
+  GetLiquidations,
+  GetLiquidationsRes,
+} from "./functions/protocolData/getLiquidations";
 import {
   liquidate,
   Liquidate,

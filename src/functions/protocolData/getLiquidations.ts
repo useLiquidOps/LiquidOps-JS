@@ -37,10 +37,10 @@ export async function getLiquidations(
     // match positions to available liquidations to find available collateral to be liquidated
 
     const allPositions = await getAllPositions(aoUtils, {
-        token
-    })
+      token,
+    });
 
-    console.log(allPositions)
+    console.log(allPositions);
 
     return {
       capacity: BigInt(data.Capacity), // TODO: find res
