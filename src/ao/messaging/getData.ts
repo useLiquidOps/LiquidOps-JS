@@ -11,6 +11,8 @@ interface MessageTags {
   "borrowed-address"?: string;
   "Borrow-Id"?: string;
   "LO-Action"?: string;
+  Token?: string;
+  "Fill-Gaps"?: string;
 }
 
 interface GetDataRes extends MessageResult {

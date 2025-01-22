@@ -114,6 +114,12 @@ const getAllPositions = await client.getAllPositions({
   token: "QAR",
 });
 
+// Get historical APR
+
+const getHistoricalAPR = await client.getHistoricalAPR({
+  token: "QAR",
+});
+
 // Get liquidations
 const getLiquidations = client.getLiquidations({
   token: "QAR",

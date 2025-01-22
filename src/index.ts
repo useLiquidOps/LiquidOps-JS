@@ -34,6 +34,11 @@ import {
   GetAllPositionsRes,
 } from "./functions/protocolData/getAllPositions";
 import {
+  getHistoricalAPR,
+  GetHistoricalAPR,
+  GetHistoricalAPRRes,
+} from "./functions/protocolData/getHistoricalAPR";
+import {
   getLiquidations,
   GetLiquidations,
   GetLiquidationsRes,
@@ -129,6 +134,12 @@ class LiquidOps {
     return getAllPositions(this.aoUtils, params);
   }
 
+  async getHistoricalAPR(
+    params: GetHistoricalAPR,
+  ): Promise<GetHistoricalAPRRes[]> {
+    return getHistoricalAPR(this.aoUtils, params);
+  }
+
   async getLiquidations(params: GetLiquidations): Promise<GetLiquidationsRes> {
     return getLiquidations(this.aoUtils, params);
   }
@@ -190,6 +201,8 @@ export type {
   // protocol data
   GetAllPositions,
   GetAllPositionsRes,
+  GetHistoricalAPR,
+  GetHistoricalAPRRes,
   GetLiquidations,
   GetLiquidationsRes,
 
