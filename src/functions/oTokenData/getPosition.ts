@@ -12,6 +12,7 @@ export interface GetPositionRes {
   usedCapacity: string;
   collateralTicker: string;
   collateralDenomination: string;
+  totalCollateral: string;
 }
 
 interface Tag {
@@ -45,6 +46,7 @@ export async function getPosition(
       usedCapacity: tagsObject["Used-Capacity"],
       collateralTicker: tagsObject["Collateral-Ticker"],
       collateralDenomination: tagsObject["Collateral-Denomination"],
+      totalCollateral: tagsObject["Total-Collateral"],
     };
   } catch (error) {
     throw new Error("Error in getPosition function: " + error);
