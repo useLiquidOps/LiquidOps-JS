@@ -64,7 +64,8 @@
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "test": "bun test",
     "prettier": "prettier --write .",
-    "link": "bun link"
+    "link": "bun link",
+    "script": "bun run dev && bun run test.ts"
   },
   "type": "module",
   "types": "dist/index.d.ts"

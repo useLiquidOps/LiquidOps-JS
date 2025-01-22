@@ -29,23 +29,18 @@ export async function getLiquidations(
     });
 
     const availableLiquidations = JSON.parse(res.Messages[0].Data);
-    const data = Object.values(availableLiquidations)[0] as {
-      Capacity: string; // TODO: find res
-      "Used-Capacity": string; // TODO: find res
-    };
+    console.log(availableLiquidations);
 
     // match positions to available liquidations to find available collateral to be liquidated
 
-    const allPositions = await getAllPositions(aoUtils, {
-      token,
-    });
+    // const allPositions = await getAllPositions(aoUtils, {
+    //   token,
+    // });
 
-    console.log(allPositions);
+    // console.log(allPositions);
 
-    return {
-      capacity: BigInt(data.Capacity), // TODO: find res
-      usedCapacity: BigInt(data["Used-Capacity"]), // TODO: find res
-    };
+    // @ts-ignore
+    return 1;
   } catch (error) {
     throw new Error(`Error in getLiquidations function: ${error}`);
   }

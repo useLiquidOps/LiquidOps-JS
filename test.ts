@@ -92,8 +92,8 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(getHistoricalAPR);
 
-// const getLiquidations = client.getLiquidations({
-//   token: "QAR"
+// const getLiquidations = await client.getLiquidations({
+//   token: "QAR",
 // });
 
 // console.log(getLiquidations);
@@ -133,10 +133,10 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // // liquidation
 
-// const liquidate = client.liquidate({
+// const liquidate = await client.liquidate({
 //   token: "QAR",
 //   rewardToken: "STETH",
-//   targetUserAddress: "",
+//   targetUserAddress: "ljvCPN31XCLPkBo9FUeB7vAK0VC6-eY52-CS-6Iho8U",
 //   quantity: 1n,
 // });
 
