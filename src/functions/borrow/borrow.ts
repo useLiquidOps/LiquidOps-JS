@@ -39,6 +39,9 @@ export async function borrow(
         { name: "Action", value: "Borrow" },
         { name: "Quantity", value: quantity.toString() },
         { name: "Protocol-Name", value: "LiquidOps" },
+        { name: "Analytics-Tag", value: "Borrow" },
+        { name: "timestamp", value: JSON.stringify(Date.now()) },
+        { name: "token", value: tokenAddress },
       ],
       signer: aoUtils.signer,
     });

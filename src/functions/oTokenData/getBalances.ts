@@ -2,6 +2,11 @@ import { getData } from "../../ao/messaging/getData";
 import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
+// // TODO: Add window, for node environments error
+// if (typeof window === "undefined") {
+//   global.window = {} as any;
+// }
+
 export interface GetBalances {
   token: TokenInput;
 }

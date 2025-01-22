@@ -29,7 +29,7 @@ export async function unLend(
       throw new Error("Please specify a token and quantity.");
     }
 
-    const { oTokenAddress } = tokenInput(token);
+    const { oTokenAddress, tokenAddress } = tokenInput(token);
 
     const transferID = await aoUtils.message({
       process: oTokenAddress,
@@ -37,6 +37,10 @@ export async function unLend(
         { name: "Action", value: "Redeem" },
         { name: "Quantity", value: quantity.toString() },
         { name: "Protocol-Name", value: "LiquidOps" },
+        { name: "Analytics-Tag", value: "UnLend" },
+        { name: "Analytics-Tag", value: "UnLend" },
+        { name: "timestamp", value: JSON.stringify(Date.now()) },
+        { name: "token", value: tokenAddress },
       ],
       signer: aoUtils.signer,
     });

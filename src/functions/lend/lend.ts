@@ -40,6 +40,9 @@ export async function lend(
         { name: "Recipient", value: oTokenAddress },
         { name: "X-Action", value: "Mint" },
         { name: "Protocol-Name", value: "LiquidOps" },
+        { name: "Analytics-Tag", value: "Lend" },
+        { name: "timestamp", value: JSON.stringify(Date.now()) },
+        { name: "token", value: tokenAddress },
       ],
       signer: aoUtils.signer,
     });

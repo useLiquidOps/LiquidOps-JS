@@ -42,6 +42,9 @@ export async function repay(
         { name: "X-Action", value: "Repay" },
         { name: "Protocol-Name", value: "LiquidOps" },
         ...(onBehalfOf ? [{ name: "X-On-Behalf", value: onBehalfOf }] : []),
+        { name: "Analytics-Tag", value: "Repay" },
+        { name: "timestamp", value: JSON.stringify(Date.now()) },
+        { name: "token", value: tokenAddress },
       ],
       signer: aoUtils.signer,
     });
