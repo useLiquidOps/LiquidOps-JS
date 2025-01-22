@@ -9,7 +9,7 @@ import {
 } from "./functions/getTransactions/getTransactions";
 import { repay, Repay, RepayRes } from "./functions/borrow/repay";
 import { getAPR, GetAPR } from "./functions/oTokenData/getAPR";
-import { getBalance, GetBalance } from "./functions/utils/getBalance";
+// import { getBalance, GetBalance } from "./functions/utils/getBalance";
 import {
   getReserves,
   GetReserves,
@@ -51,6 +51,7 @@ import { Services } from "@permaweb/aoconnect/dist/index.common";
 type Configs = Services;
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 type Signer = AoConnectTypes["signer"];
+import { TokenInput, tokenInput } from "./ao/utils/tokenInput";
 
 class LiquidOps {
   private aoUtils: AoUtils;
@@ -134,9 +135,9 @@ class LiquidOps {
 
   // utils
 
-  async getBalance(params: GetBalance): Promise<BigInt> {
-    return getBalance(params);
-  }
+  // async getBalance(params: GetBalance): Promise<BigInt> {
+  //   return getBalance(params);
+  // }
 
   async transfer(params: Transfer): Promise<TransferRes> {
     return transfer(this.aoUtils, params);
@@ -193,7 +194,7 @@ export type {
   GetLiquidationsRes,
 
   // utils
-  GetBalance,
+  // GetBalance,
   Transfer,
   TransferRes,
 
@@ -205,7 +206,8 @@ export type {
   AoUtils,
   Signer,
   Configs,
+  TokenInput,
 };
 
 // Re-export static properties
-export { oTokens, tokens, controllers };
+export { oTokens, tokens, controllers, tokenInput };
