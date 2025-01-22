@@ -52,11 +52,11 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(getBalances);
 
-// const getInfo = await client.getInfo({
-//   token: "QAR",
-// });
+const getInfo = await client.getInfo({
+  token: "QAR",
+});
 
-// console.log(getInfo)
+console.log(getInfo);
 
 // const getPosition = await client.getPosition({
 //   token: "QAR",

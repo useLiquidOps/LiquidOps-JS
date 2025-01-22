@@ -1,4 +1,4 @@
-import { getData } from "../../ao/messaging/getData";
+import { sendData } from "../../ao/messaging/sendData";
 import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
@@ -24,7 +24,7 @@ export async function transfer(
 
     const { tokenAddress } = tokenInput(token);
 
-    const res = await getData(aoUtils, {
+    const res = await sendData(aoUtils, {
       Target: tokenAddress,
       Action: "Transfer",
       Recipient: recipient,

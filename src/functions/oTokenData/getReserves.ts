@@ -27,7 +27,7 @@ export async function getReserves(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res = await getData(aoUtils, {
+    const res = await getData({
       Target: oTokenAddress,
       Action: "Get-Reserves",
     });

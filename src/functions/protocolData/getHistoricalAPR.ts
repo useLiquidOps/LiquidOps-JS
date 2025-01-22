@@ -23,7 +23,7 @@ export async function getHistoricalAPR(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const response = await getData(aoUtils, {
+    const response = await getData({
       Target: "D3AlSUAtbWKcozsrvckRuCY6TVkAY1rWtLYGoGf6KIA", // APR Agent address
       Action: "Get-Data",
       Token: oTokenAddress,

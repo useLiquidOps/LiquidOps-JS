@@ -23,7 +23,7 @@ export async function getLiquidations(
 
     const { controllerAddress } = tokenInput(token);
 
-    const res = await getData(aoUtils, {
+    const res = await getData({
       Target: controllerAddress,
       Action: "Get-Auctions",
     });

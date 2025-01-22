@@ -29,7 +29,7 @@ export async function getInfo(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res = await getData(aoUtils, {
+    const res = await getData({
       Target: oTokenAddress,
       Action: "Info",
     });

@@ -1,5 +1,5 @@
-import { AoUtils } from "../utils/connect";
-import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+import { dryrun } from "@permaweb/aoconnect";
+import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 
 interface MessageTags {
   Target: string;
@@ -15,14 +15,9 @@ interface MessageTags {
   "Fill-Gaps"?: string;
 }
 
-interface GetDataRes extends MessageResult {
-  initialMessageID: string;
-}
+type GetDataRes = DryRunResult;
 
-export async function getData(
-  aoUtils: AoUtils,
-  messageTags: MessageTags,
-): Promise<GetDataRes> {
+export async function getData(messageTags: MessageTags): Promise<GetDataRes> {
   const convertedMessageTags = Object.entries(messageTags).map(
     ([name, value]) => ({
       name,
@@ -33,21 +28,11 @@ export async function getData(
 
   const targetProcessID = messageTags["Target"];
 
-  let messageID;
   try {
-    messageID = await aoUtils.message({
+    const { Messages, Spawns, Output, Error } = await dryrun({
       process: targetProcessID,
+      data: "",
       tags: convertedMessageTags,
-      signer: aoUtils.signer,
-    });
-  } catch (error) {
-    throw new Error(`Error sending ao message: ${error}`);
-  }
-
-  try {
-    const { Messages, Spawns, Output, Error } = await aoUtils.result({
-      message: messageID,
-      process: targetProcessID,
     });
 
     return {
@@ -55,9 +40,8 @@ export async function getData(
       Spawns,
       Output,
       Error,
-      initialMessageID: messageID,
     };
   } catch (error) {
-    throw new Error(`Error reading ao message result: ${error}`);
+    throw new Error(`Error sending ao dryrun: ${error}`);
   }
 }

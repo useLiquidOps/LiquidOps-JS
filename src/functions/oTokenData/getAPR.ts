@@ -22,7 +22,7 @@ export async function getAPR(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const checkDataRes = await getData(aoUtils, {
+    const checkDataRes = await getData({
       Target: oTokenAddress,
       Action: "Get-APR",
     });

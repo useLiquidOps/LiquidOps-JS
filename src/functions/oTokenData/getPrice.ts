@@ -18,7 +18,7 @@ export async function getPrice(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const message = await getData(aoUtils, {
+    const message = await getData({
       Target: oTokenAddress,
       Action: "Get-Price",
       ...(quantity && { Quantity: quantity.toString() }),
