@@ -31,23 +31,23 @@ export async function getTransactions(
     const { oTokenAddress, tokenAddress } = tokenInput(token);
 
     if (action === "borrow") {
-      // tags.push({ name: "Target", values: [oTokenAddress] }); // TODO: find correct way of tagging
+      tags.push({ name: "recipient", values: [oTokenAddress] });
       tags.push({ name: "Action", values: ["Borrow"] });
       tags.push({ name: "Analytics-Tag", values: ["Borrow"] });
     } else if (action === "repay") {
-      // tags.push({ name: "Target", values: [tokenAddress] }); // TODO: find correct way of tagging
+      tags.push({ name: "recipient", values: [tokenAddress] });
       tags.push({ name: "Action", values: ["Transfer"] });
       tags.push({ name: "Recipient", values: [oTokenAddress] });
       tags.push({ name: "X-Action", values: ["Repay"] });
       tags.push({ name: "Analytics-Tag", values: ["Repay"] });
     } else if (action === "lend") {
-      // tags.push({ name: "Target", values: [tokenAddress] }); // TODO: find correct way of tagging
+      tags.push({ name: "recipient", values: [tokenAddress] });
       tags.push({ name: "Action", values: ["Transfer"] });
       tags.push({ name: "Recipient", values: [oTokenAddress] });
       tags.push({ name: "X-Action", values: ["Mint"] });
       tags.push({ name: "Analytics-Tag", values: ["Lend"] });
     } else if (action === "unLend") {
-      // tags.push({ name: "Target", values: [oTokenAddress] }); // TODO: find correct way of tagging
+      tags.push({ name: "recipient", values: [oTokenAddress] });
       tags.push({ name: "Action", values: ["Redeem"] });
       tags.push({ name: "Analytics-Tag", values: ["UnLend"] });
     } else {

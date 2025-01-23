@@ -26,16 +26,31 @@ export async function getTags({
       "https://arweave-search.goldsky.com/graphql";
     const gql = arGql({ endpointUrl: gqlEndpoint });
 
-    const formattedTags = tags.map((tag) => ({
+    // Find and extract recipient tag if it exists
+    const recipientTag = tags.find((tag) => tag.name === "recipient");
+    const recipientValue = recipientTag
+      ? Array.isArray(recipientTag.values)
+        ? recipientTag.values[0]
+        : recipientTag.values
+      : undefined;
+    const filteredTags = tags.filter((tag) => tag.name !== "recipient");
+
+    const formattedTags = filteredTags.map((tag) => ({
       name: tag.name,
       values: Array.isArray(tag.values) ? tag.values : [tag.values],
     }));
 
     const query = `
-      query GetTransactions($tags: [TagFilter!], $cursor: String${owner ? ", $owner: String!" : ""}) {
+      query GetTransactions(
+        $tags: [TagFilter!], 
+        $cursor: String
+        ${owner ? ", $owner: String!" : ""}
+        ${recipientValue ? ", $recipients: [String!]" : ""}
+      ) {
         transactions(
           tags: $tags
           ${owner ? "owners: [$owner]" : ""}
+          ${recipientValue ? "recipients: $recipients" : ""}
           first: 100
           after: $cursor
           sort: HEIGHT_DESC
@@ -64,11 +79,12 @@ export async function getTags({
       tags: formattedTags,
       cursor: cursor || "",
       ...(owner && { owner }),
+      ...(recipientValue && { recipients: [recipientValue] }),
     };
 
     const response = await gql.run(query, variables);
 
-    // @ts-ignore, ar-gql package error type incorrect
+    // @ts-ignore
     if (response.errors?.[0]?.message === "internal server error") {
       throw new Error("GraphQL endpoint internal server error.");
     }

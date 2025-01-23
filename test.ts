@@ -16,7 +16,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // const getTransactions = await client.getTransactions({
 //   token: "QAR",
-//   action: "lend",
+//   action: "borrow",
 //   walletAddress: walletAddress,
 // });
 
