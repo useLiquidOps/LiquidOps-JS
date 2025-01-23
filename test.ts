@@ -101,7 +101,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 // // utils
 
 // const getBalance = await client.getBalance({
-//   token: "QAR",
+//   token: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
 //   walletAddress: walletAddress
 // });
 
