@@ -49,7 +49,12 @@ import {
   LiquidateRes,
 } from "./functions/liquidation/liquidate";
 // LO helpful data
-import { oTokens, tokens, controllers } from "./ao/utils/tokenAddressData";
+import {
+  oTokens,
+  tokens,
+  controllers,
+  tokenData,
+} from "./ao/utils/tokenAddressData";
 // AO misc types/functions
 import { connectToAO, AoUtils } from "./ao/utils/connect";
 import { Services } from "@permaweb/aoconnect/dist/index.common";
@@ -223,4 +228,4 @@ export type {
 };
 
 // Re-export static properties
-export { oTokens, tokens, controllers, tokenInput };
+export { oTokens, tokens, controllers, tokenInput, tokenData };
