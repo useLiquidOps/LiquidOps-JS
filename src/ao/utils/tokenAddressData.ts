@@ -6,27 +6,29 @@ export interface TokenData {
   controllerAddress: string;
 }
 
+const controllerAddress = "vYlv6Dx8ZGt4oGaqsXaPjh9qi8iS8eQsoU9Ai65km4A";
+
 export const tokenData: Record<string, TokenData> = {
   QAR: {
     ticker: "QAR",
-    address: "3addpL9j4OdWBKbvGucFtg5BoZycBNwlA8vy3h9VZhE",
+    address: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
     oTicker: "oQAR",
-    oAddress: "KNpCAntte9l1_AZm7Yn5AGmN-j8C_UURCxcxCb0oiOA",
-    controllerAddress: "QDrMlGmiMnKNL4QiAvlhbzZ-AzZH8CFRELXfnufboLw", // TODO: wait for Marton to deploy
+    oAddress: "qwprjR3EbRQBeCO70swm6cEKgFL8PvLX7ZRbm7BTLAA",
+    controllerAddress,
   },
   STETH: {
     ticker: "STETH",
-    address: "3addpL9j4OdWBKbvGucFtg5BoZycBNwlA8vy3h9VZhE",
+    address: "GUJI7zjPoJ0uAHIBWiYrKL2bpwfltTZFXNL4J-IV8AI",
     oTicker: "oSTETH",
-    oAddress: "KNpCAntte9l1_AZm7Yn5AGmN-j8C_UURCxcxCb0oiOA",
-    controllerAddress: "QDrMlGmiMnKNL4QiAvlhbzZ-AzZH8CFRELXfnufboLw", // TODO: wait for Marton to deploy
+    oAddress: "AkztgkChEE-evw-2cXhZ5M-XtKdQ7QFsHbU0QSGVLbU",
+    controllerAddress,
   },
   USDC: {
     ticker: "USDC",
-    address: "3addpL9j4OdWBKbvGucFtg5BoZycBNwlA8vy3h9VZhE",
+    address: "EoGGnxiSIUr0C5aZhTA_c8WipuASleomMrvyvuJCKvM",
     oTicker: "oUSDC",
-    oAddress: "KNpCAntte9l1_AZm7Yn5AGmN-j8C_UURCxcxCb0oiOA",
-    controllerAddress: "QDrMlGmiMnKNL4QiAvlhbzZ-AzZH8CFRELXfnufboLw", // TODO: wait for Marton to deploy
+    oAddress: "b5O1gc70knHdRA6JkDXI95FdmL3EGROWPDn9f8du3RU",
+    controllerAddress,
   },
 };
 
