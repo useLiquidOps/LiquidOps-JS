@@ -43,13 +43,59 @@ const client = new LiquidOps(signer);
 
 # Examples
 
+## Token Data and Utilities
+
+```typescript
+// Access supported token data
+import { tokenData, tokens, oTokens, controllers } from "liquidops";
+
+// Get token details (name, icon, addresses)  
+const qarData = tokenData.QAR;
+/* {
+    name: "Quantum Arweave",
+    ticker: "QAR", 
+    address: "XJYGT9...",
+    oTicker: "oQAR",
+    oAddress: "CbT2b...",
+    controllerAddress: "vYlv6...",
+    // ...other metadata
+} */
+
+// Get base token addresses
+const tokenAddress = tokens.QAR;  // "XJYGT9..."
+
+// Get oToken addresses 
+const oTokenAddress = oTokens.oQAR;  // "CbT2b..."
+
+// Get controller addresses
+const controllerAddress = controllers.QAR;  // "vYlv6..."
+
+// Helper function to resolve token addresses and related data
+import { tokenInput, type TokenInput } from "liquidops";
+
+// Can use either ticker or address
+const resolved = tokenInput("QAR");  
+// OR
+const resolved = tokenInput("XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU");
+
+/* Returns:
+{
+  tokenAddress: "XJYGT9...",    // Base token address
+  oTokenAddress: "CbT2b...",    // oToken address
+  controllerAddress: "vYlv6..." // Controller contract address
+}
+*/
+```
+
+Currently supported tokens: QAR (Test Quantum Arweave), STETH (Test Staked Ethereum), USDC (Test USD Circle)
+
 ## Transaction Functions
 
 ```typescript
 // Get transactions for a specific token and action
 const getTransactions = await client.getTransactions({
   token: "QAR",
-  action: "lend",
+  action: "lend", // "lend" | "unLend" | "borrow" | "repay";
   walletAddress: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
 });
 ```
