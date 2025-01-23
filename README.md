@@ -131,7 +131,7 @@ const getLiquidations = client.getLiquidations({
 ```typescript
 // Get balance
 const getBalance = await client.getBalance({
-  token: "QAR",
+  token: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
   walletAddress: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
 });
 

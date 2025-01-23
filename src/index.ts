@@ -9,7 +9,7 @@ import {
 } from "./functions/getTransactions/getTransactions";
 import { repay, Repay, RepayRes } from "./functions/borrow/repay";
 import { getAPR, GetAPR } from "./functions/oTokenData/getAPR";
-// import { getBalance, GetBalance } from "./functions/utils/getBalance";
+import { getBalance, GetBalance } from "./functions/utils/getBalance";
 import {
   getReserves,
   GetReserves,
@@ -63,6 +63,7 @@ type Configs = Services;
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 type Signer = AoConnectTypes["signer"];
 import { TokenInput, tokenInput } from "./ao/utils/tokenInput";
+import { Quantity } from "ao-tokens";
 
 class LiquidOps {
   private aoUtils: AoUtils;
@@ -115,7 +116,7 @@ class LiquidOps {
   }
 
   async getBalances(params: GetBalances): Promise<GetBalancesRes> {
-    return getBalances(this.aoUtils, params);
+    return getBalances(params);
   }
 
   async getInfo(params: GetInfo): Promise<GetInfoRes> {
@@ -152,9 +153,9 @@ class LiquidOps {
 
   // utils
 
-  // async getBalance(params: GetBalance): Promise<BigInt> {
-  //   return getBalance(params);
-  // }
+  async getBalance(params: GetBalance): Promise<Quantity> {
+    return getBalance(params);
+  }
 
   async transfer(params: Transfer): Promise<TransferRes> {
     return transfer(this.aoUtils, params);
@@ -216,6 +217,8 @@ export type {
   // GetBalance,
   Transfer,
   TransferRes,
+  GetBalance,
+  Quantity,
 
   // liquidation
   Liquidate,

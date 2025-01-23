@@ -1,11 +1,5 @@
 import { getData } from "../../ao/messaging/getData";
-import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
-
-// // TODO: Add window, for node environments error
-// if (typeof window === "undefined") {
-//   global.window = {} as any;
-// }
 
 export interface GetBalances {
   token: TokenInput;
@@ -15,10 +9,9 @@ export interface GetBalancesRes {
   [address: string]: BigInt;
 }
 
-export async function getBalances(
-  aoUtils: AoUtils,
-  { token }: GetBalances,
-): Promise<GetBalancesRes> {
+export async function getBalances({
+  token,
+}: GetBalances): Promise<GetBalancesRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
