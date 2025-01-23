@@ -30,7 +30,7 @@ export const tokenData: Record<string, TokenData> = {
     oTicker: "oSTETH",
     oAddress: "AkztgkChEE-evw-2cXhZ5M-XtKdQ7QFsHbU0QSGVLbU",
     controllerAddress,
-    cleanTicker: "qAR",
+    cleanTicker: "stETH",
   },
   USDC: {
     name: "USD Circle",
@@ -40,7 +40,7 @@ export const tokenData: Record<string, TokenData> = {
     oTicker: "oUSDC",
     oAddress: "b5O1gc70knHdRA6JkDXI95FdmL3EGROWPDn9f8du3RU",
     controllerAddress,
-    cleanTicker: "qAR",
+    cleanTicker: "USDC",
   },
 };
 
