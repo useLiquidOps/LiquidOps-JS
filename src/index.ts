@@ -54,6 +54,7 @@ import {
   tokens,
   controllers,
   tokenData,
+  TokenData,
 } from "./ao/utils/tokenAddressData";
 // AO misc types/functions
 import { connectToAO, AoUtils } from "./ao/utils/connect";
@@ -225,6 +226,7 @@ export type {
   Signer,
   Configs,
   TokenInput,
+  TokenData,
 };
 
 // Re-export static properties
