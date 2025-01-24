@@ -19,7 +19,7 @@ export const tokenData: Record<string, TokenData> = {
     ticker: "QAR",
     address: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
     oTicker: "oQAR",
-    oAddress: "pB4H_Cx6l6iYyoHkL5BXKN1CRCfCZg_9gsdJn7yHkbU",
+    oAddress: "P8V4eM6IXJyWp1UQ8sZYb3Fj6dC5_0HyVcWR1i6pdnA",
     controllerAddress,
     cleanTicker: "qAR",
     denomination: BigInt(12)
@@ -30,7 +30,7 @@ export const tokenData: Record<string, TokenData> = {
     ticker: "STETH",
     address: "GUJI7zjPoJ0uAHIBWiYrKL2bpwfltTZFXNL4J-IV8AI",
     oTicker: "oSTETH",
-    oAddress: "KYjqy1hydtguYG91scr-tX5MChEZoo4U3GIjJvLtTDk",
+    oAddress: "bDr9pPBcEubeZxy7olAO4wWBJ6UE-hntI0XfZc1mi9E",
     controllerAddress,
     cleanTicker: "stETH",
     denomination: BigInt(12)
@@ -41,7 +41,7 @@ export const tokenData: Record<string, TokenData> = {
     ticker: "USDC",
     address: "EoGGnxiSIUr0C5aZhTA_c8WipuASleomMrvyvuJCKvM",
     oTicker: "oUSDC",
-    oAddress: "aUnUdFLgYzJ9ph1csrwQEtCieTfTTb1M_cX2XjB3kPc",
+    oAddress: "qxAJdeve11TH0FWeZkC01ivk7rqkpqG9JLaW-F4JcD4",
     controllerAddress,
     cleanTicker: "USDC",
     denomination: BigInt(12)
