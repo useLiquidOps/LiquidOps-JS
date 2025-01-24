@@ -44,7 +44,7 @@ export async function getPosition(
     return {
       capacity: tagsObject["Capacity"],
       usedCapacity: tagsObject["Used-Capacity"],
-      collateralTicker: tagsObject["Collateral-Ticker"],
+      collateralTicker: tagsObject["Collateral-Ticker"] === "AR" ? "qAR" : tagsObject["Collateral-Ticker"],
       collateralDenomination: tagsObject["Collateral-Denomination"],
       totalCollateral: tagsObject["Total-Collateral"],
     };
