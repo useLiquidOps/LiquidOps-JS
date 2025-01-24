@@ -40,7 +40,7 @@ export async function getInfo(
 
     return {
       name: tagsObject["Name"],
-      ticker: tagsObject["Ticker"],
+      ticker: tagsObject["Ticker"] === "AR" ? "qAR" : tagsObject["Ticker"],
       logo: tagsObject["Logo"],
       denomination: tagsObject["Denomination"],
     };
