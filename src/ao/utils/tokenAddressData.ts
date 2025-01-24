@@ -7,6 +7,7 @@ export interface TokenData {
   oAddress: string;
   controllerAddress: string;
   cleanTicker: string;
+  denomination: bigint;
 }
 
 const controllerAddress = "vYlv6Dx8ZGt4oGaqsXaPjh9qi8iS8eQsoU9Ai65km4A";
@@ -21,6 +22,7 @@ export const tokenData: Record<string, TokenData> = {
     oAddress: "CbT2bAre7pSOysBogfisvTTmMYOzvaOzr-JpLZAOMc0",
     controllerAddress,
     cleanTicker: "qAR",
+    denomination: BigInt(12)
   },
   STETH: {
     name: "Staked Ethereum",
@@ -31,6 +33,7 @@ export const tokenData: Record<string, TokenData> = {
     oAddress: "kpDWHtULYdfzVhtaHXl2h6d8eysy9fbI2TSMiap6AN8",
     controllerAddress,
     cleanTicker: "stETH",
+    denomination: BigInt(12)
   },
   USDC: {
     name: "USD Circle",
@@ -41,6 +44,7 @@ export const tokenData: Record<string, TokenData> = {
     oAddress: "gRBqYaznSn44lj7_KeBo46PYPM-_fvqXn0Xnddp9_sA",
     controllerAddress,
     cleanTicker: "USDC",
+    denomination: BigInt(12)
   },
 };
 
