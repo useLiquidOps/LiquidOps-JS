@@ -49,7 +49,7 @@ const client = new LiquidOps(signer);
 // Access supported token data
 import { tokenData, tokens, oTokens, controllers } from "liquidops";
 
-// Get token details (name, icon, addresses)  
+// Get token details (name, icon, addresses)
 const qarData = tokenData.QAR;
 /* {
     name: "Quantum Arweave",
@@ -62,19 +62,19 @@ const qarData = tokenData.QAR;
 } */
 
 // Get base token addresses
-const tokenAddress = tokens.QAR;  // "XJYGT9..."
+const tokenAddress = tokens.QAR; // "XJYGT9..."
 
-// Get oToken addresses 
-const oTokenAddress = oTokens.oQAR;  // "CbT2b..."
+// Get oToken addresses
+const oTokenAddress = oTokens.oQAR; // "CbT2b..."
 
 // Get controller addresses
-const controllerAddress = controllers.QAR;  // "vYlv6..."
+const controllerAddress = controllers.QAR; // "vYlv6..."
 
 // Helper function to resolve token addresses and related data
 import { tokenInput, type TokenInput } from "liquidops";
 
 // Can use either ticker or address
-const resolved = tokenInput("QAR");  
+const resolved = tokenInput("QAR");
 // OR
 const resolved = tokenInput("XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU");
 

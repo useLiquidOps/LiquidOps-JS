@@ -4,7 +4,6 @@ import { SendMessage } from "@permaweb/aoconnect/dist/lib/message";
 import { ReadResult } from "@permaweb/aoconnect/dist/lib/result";
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 
-
 export type Services = {
   /**
    * - the url of the desried Gateway.
@@ -31,7 +30,6 @@ export type Services = {
    */
   CU_URL?: string;
 };
-
 
 const DEFAULT_SERVICES: Services = {
   MU_URL: "https://mu.ao-testnet.xyz",
