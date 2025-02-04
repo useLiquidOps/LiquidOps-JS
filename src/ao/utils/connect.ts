@@ -1,9 +1,37 @@
 import { connect } from "@permaweb/aoconnect";
-import { Services } from "@permaweb/aoconnect/dist/index.common";
 import { SpawnProcess } from "@permaweb/aoconnect/dist/lib/spawn";
 import { SendMessage } from "@permaweb/aoconnect/dist/lib/message";
 import { ReadResult } from "@permaweb/aoconnect/dist/lib/result";
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
+
+
+export type Services = {
+  /**
+   * - the url of the desried Gateway.
+   */
+  GATEWAY_URL?: string;
+  /**
+   * - the url of the desired Arweave Gateway GraphQL Server
+   */
+  GRAPHQL_URL?: string;
+  /**
+   * - the number of times to retry querying the gateway, utilizing an exponential backoff
+   */
+  GRAPHQL_MAX_RETRIES?: number;
+  /**
+   * - the initial backoff, in milliseconds (moot if GRAPHQL_MAX_RETRIES is set to 0)
+   */
+  GRAPHQL_RETRY_BACKOFF?: number;
+  /**
+   * - the url of the desried ao Messenger Unit.
+   */
+  MU_URL?: string;
+  /**
+   * - the url of the desried ao Compute Unit.
+   */
+  CU_URL?: string;
+};
+
 
 const DEFAULT_SERVICES: Services = {
   MU_URL: "https://mu.ao-testnet.xyz",

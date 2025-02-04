@@ -58,8 +58,8 @@ import {
 } from "./ao/utils/tokenAddressData";
 // AO misc types/functions
 import { connectToAO, AoUtils } from "./ao/utils/connect";
-// import { Services } from "@permaweb/aoconnect/dist/index.common";
-// type Configs = Services;
+import { Services } from "./ao/utils/connect";
+type Configs = Services;
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 type Signer = AoConnectTypes["signer"];
 import { TokenInput, tokenInput } from "./ao/utils/tokenInput";
@@ -68,7 +68,7 @@ import { Quantity } from "ao-tokens";
 class LiquidOps {
   private aoUtils: AoUtils;
 
-  constructor(signer: Signer, configs: any = {}) {
+  constructor(signer: Signer, configs: Configs = {}) {
     if (!signer) {
       throw new Error("Please specify a ao createDataItemSigner signer");
     }
@@ -227,7 +227,7 @@ export type {
   // Utility types for constructor/setup
   AoUtils,
   Signer,
-  // Configs,
+  Configs,
   TokenInput,
   TokenData,
 };
