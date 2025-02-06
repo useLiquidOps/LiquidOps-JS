@@ -15,7 +15,7 @@ export interface TokenInfo {
   tokenAddress: SupportedTokensAddresses;
   oTokenAddress: SupportedOTokensAddresses;
   controllerAddress: SupportedControllerAddresses;
-  ticker: SupportedTokensTickers
+  ticker: SupportedTokensTickers;
 }
 
 export function tokenInput(token: TokenInput): TokenInfo {
@@ -29,7 +29,7 @@ export function tokenInput(token: TokenInput): TokenInfo {
       tokenAddress,
       oTokenAddress: oTokens[`o${ticker}` as SupportedOTokensTickers],
       controllerAddress: tokenData[ticker].controllerAddress,
-      ticker
+      ticker,
     };
   }
 
