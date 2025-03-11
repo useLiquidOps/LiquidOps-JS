@@ -1,6 +1,6 @@
 {
   "name": "liquidops",
-  "version": "0.1.31",
+  "version": "0.1.32",
   "author": "Lorimer Jenkins (lorimer@liquidops.io), Marton Lederer (marton@liquidops.io)",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
     "arbundles": "^0.11.2"
   },
   "peerDependencies": {
-    "@permaweb/aoconnect": ">= 0.0.62 < 1"
+    "@permaweb/aoconnect": ">= 0.0.77 < 1"
   },
   "devDependencies": {
     "@types/bun": "^1.1.10",
