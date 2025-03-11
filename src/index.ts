@@ -63,7 +63,7 @@ import {
 } from "./ao/utils/tokenAddressData";
 // AO misc types/functions
 import { connectToAO, AoUtils } from "./ao/utils/connect";
-import { Services } from "@permaweb/aoconnect/dist/index.common";
+import { Services } from "./ao/utils/connect";
 type Configs = Services;
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 type Signer = AoConnectTypes["signer"];
