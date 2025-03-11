@@ -6,6 +6,10 @@ import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 
 export type Services = {
   /**
+   * - the mode to connect to ao ("legacy" or "mainnet")
+   */
+  MODE?: "legacy" | "mainnet";
+  /**
    * - the url of the desried Gateway.
    */
   GATEWAY_URL?: string;
@@ -32,6 +36,7 @@ export type Services = {
 };
 
 const DEFAULT_SERVICES: Services = {
+  MODE: "legacy",
   MU_URL: "https://mu.ao-testnet.xyz",
   CU_URL: "https://cu.ao-testnet.xyz",
   GATEWAY_URL: "https://arweave.net",
@@ -39,6 +44,7 @@ const DEFAULT_SERVICES: Services = {
 
 export function connectToAO(services?: Partial<Services>) {
   const {
+    MODE = DEFAULT_SERVICES.MODE,
     GRAPHQL_URL,
     GRAPHQL_MAX_RETRIES,
     GRAPHQL_RETRY_BACKOFF,
@@ -48,8 +54,8 @@ export function connectToAO(services?: Partial<Services>) {
   } = services || {};
 
   const { spawn, message, result } = connect({
-    // @ts-ignore
-    MODE: "legacy",
+    // @ts-ignore, MODE is needed here but is not in the aoconnect type yet
+    MODE,
     GATEWAY_URL,
     GRAPHQL_URL,
     GRAPHQL_MAX_RETRIES,
