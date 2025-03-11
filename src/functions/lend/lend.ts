@@ -6,7 +6,7 @@ import {
   findTransactionIds,
 } from "../../ao/messaging/validationUtils";
 
-const LEND_CONFIG = {
+export const LEND_CONFIG = {
   action: "Mint",
   expectedTxCount: 2,
   confirmationTag: "Mint-Confirmation",

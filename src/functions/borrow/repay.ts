@@ -6,7 +6,7 @@ import {
   findTransactionIds,
 } from "../../ao/messaging/validationUtils";
 
-const REPAY_CONFIG = {
+export const REPAY_CONFIG = {
   action: "Repay",
   expectedTxCount: 2,
   confirmationTag: "Repay-Confirmation",

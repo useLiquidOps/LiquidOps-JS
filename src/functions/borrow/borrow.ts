@@ -7,7 +7,7 @@ import {
 } from "../../ao/messaging/validationUtils";
 import { getTags } from "../../arweave/getTags";
 
-const BORROW_CONFIG = {
+export const BORROW_CONFIG = {
   action: "Borrow",
   expectedTxCount: 2,
   confirmationTag: "Borrow-Confirmation",

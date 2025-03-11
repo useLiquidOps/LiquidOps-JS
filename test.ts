@@ -115,6 +115,14 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(transfer)
 
+// const getResult = await client.getResult({
+//   transferID: "0RY-eSVV156qxyuHBs3GPO2pwsIvmA-yI1oKS1ABSyI",
+//   tokenAddress: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
+//   action: "lend",
+// });
+
+// console.log(getResult);
+
 // // borrow
 
 // const borrow = await client.borrow({

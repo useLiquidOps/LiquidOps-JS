@@ -19,6 +19,11 @@ import { getPrice, GetPrice } from "./functions/oTokenData/getPrice";
 import { getInfo, GetInfo, GetInfoRes } from "./functions/oTokenData/getInfo";
 import { transfer, Transfer, TransferRes } from "./functions/utils/transfer";
 import {
+  getResult,
+  GetResult,
+  GetResultRes,
+} from "./functions/utils/getResult";
+import {
   getPosition,
   GetPosition,
   GetPositionRes,
@@ -161,6 +166,10 @@ class LiquidOps {
     return transfer(this.aoUtils, params);
   }
 
+  async getResult(params: GetResult): Promise<GetResultRes> {
+    return getResult(this.aoUtils, params);
+  }
+
   // liquidation
 
   async liquidate(params: Liquidate): Promise<LiquidateRes> {
@@ -219,6 +228,8 @@ export type {
   TransferRes,
   GetBalance,
   Quantity,
+  GetResult,
+  GetResultRes,
 
   // liquidation
   Liquidate,

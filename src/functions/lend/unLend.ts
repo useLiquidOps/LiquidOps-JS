@@ -5,7 +5,7 @@ import {
   validateTransaction,
 } from "../../ao/messaging/validationUtils";
 
-const UNLEND_CONFIG = {
+export const UNLEND_CONFIG = {
   action: "Redeem",
   expectedTxCount: 1,
   confirmationTag: "Redeem-Confirmation",
