@@ -48,6 +48,8 @@ export function connectToAO(services?: Partial<Services>) {
   } = services || {};
 
   const { spawn, message, result } = connect({
+    // @ts-ignore
+    MODE: "legacy",
     GATEWAY_URL,
     GRAPHQL_URL,
     GRAPHQL_MAX_RETRIES,
