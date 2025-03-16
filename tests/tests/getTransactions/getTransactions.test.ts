@@ -11,9 +11,7 @@ test("getTransactions function", async () => {
 
   const JWK: JWKInterface = JSON.parse(process.env.JWK);
   const signer = createDataItemSignerBun(JWK);
-  const client = new LiquidOps(signer, {
-    CU_URL: "https://cu.ar-io.dev",
-  });
+  const client = new LiquidOps(signer);
 
   const walletAddress = await ownerToAddress(JWK.n);
 
