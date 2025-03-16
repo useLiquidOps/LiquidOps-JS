@@ -30,7 +30,7 @@ bun i liquidops
 
 # SDK docs
 
-Please head to [LiquidOps JS docs](https://docs.liquidops.io/liquidops-js)
+Please head to [LiquidOps JS docs](https://docs.liquidops.io/developers/liquidops-js)
 
 ---
 
