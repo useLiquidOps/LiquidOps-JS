@@ -10,12 +10,7 @@ import {
 import { repay, Repay, RepayRes } from "./functions/borrow/repay";
 import { getAPR, GetAPR } from "./functions/oTokenData/getAPR";
 import { getBalance, GetBalance } from "./functions/utils/getBalance";
-import {
-  getReserves,
-  GetReserves,
-  GetReservesRes,
-} from "./functions/oTokenData/getReserves";
-import { getPrice, GetPrice } from "./functions/oTokenData/getPrice";
+import { getExchangeRate, GetExchangeRate } from "./functions/oTokenData/getExchangeRate";
 import { getInfo, GetInfo, GetInfoRes } from "./functions/oTokenData/getInfo";
 import { transfer, Transfer, TransferRes } from "./functions/utils/transfer";
 import {
@@ -132,12 +127,8 @@ class LiquidOps {
     return getPosition(this.aoUtils, params);
   }
 
-  async getPrice(params: GetPrice): Promise<BigInt> {
-    return getPrice(this.aoUtils, params);
-  }
-
-  async getReserves(params: GetReserves): Promise<GetReservesRes> {
-    return getReserves(this.aoUtils, params);
+  async getExchangeRate(params: GetExchangeRate): Promise<BigInt> {
+    return getExchangeRate(this.aoUtils, params);
   }
 
   // protocol data
@@ -210,9 +201,7 @@ export type {
   GetInfoRes,
   GetPosition,
   GetPositionRes,
-  GetPrice,
-  GetReserves,
-  GetReservesRes,
+  GetExchangeRate,
 
   // protocol data
   GetAllPositions,

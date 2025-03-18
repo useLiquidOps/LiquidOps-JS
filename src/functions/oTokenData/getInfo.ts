@@ -11,6 +11,8 @@ export interface GetInfoRes {
   ticker: string;
   logo: string;
   denomination: string;
+  cash: string;
+  totalBorrows: string;
 }
 
 interface Tag {
@@ -43,6 +45,8 @@ export async function getInfo(
       ticker: tagsObject["Ticker"] === "AR" ? "qAR" : tagsObject["Ticker"],
       logo: tagsObject["Logo"],
       denomination: tagsObject["Denomination"],
+      cash: tagsObject["Cash"],
+      totalBorrows: tagsObject["Total-Borrows"],
     };
   } catch (error) {
     throw new Error("Error in getInfo function: " + error);

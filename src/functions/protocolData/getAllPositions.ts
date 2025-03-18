@@ -8,7 +8,7 @@ export interface GetAllPositions {
 
 export interface GetAllPositionsRes {
   capacity: BigInt;
-  usedCapacity: BigInt;
+  borrowBalance: BigInt;
 }
 
 export async function getAllPositions(
@@ -30,12 +30,12 @@ export async function getAllPositions(
     const positions = JSON.parse(res.Messages[0].Data);
     const data = Object.values(positions)[0] as {
       Capacity: string;
-      "Used-Capacity": string;
+      "Borrow-Balance": string;
     };
 
     return {
       capacity: BigInt(data.Capacity),
-      usedCapacity: BigInt(data["Used-Capacity"]),
+      borrowBalance: BigInt(data["Borrow-Balance"]),
     };
   } catch (error) {
     throw new Error(`Error in getAllPositions function: ${error}`);
