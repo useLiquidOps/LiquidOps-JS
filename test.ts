@@ -1,6 +1,6 @@
 import LiquidOps from "./src";
 import createDataItemSignerBun from "./tests/testsHelpers/bunSigner/index";
-import { JWKInterface } from "arbundles/node";
+import { JWKInterface } from "./tests/testsHelpers/bunSigner/jwk-interface";
 import { ownerToAddress } from "./tests/testsHelpers/arweaveUtils";
 
 if (!process.env.JWK) {
@@ -92,12 +92,6 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(getHistoricalAPR);
 
-// const getLiquidations = await client.getLiquidations({
-//   token: "QAR",
-// });
-
-// console.log(getLiquidations);
-
 // // utils
 
 // const getBalance = await client.getBalance({
@@ -149,3 +143,9 @@ const walletAddress = await ownerToAddress(JWK.n);
 // });
 
 // console.log(liquidate);
+
+// const getLiquidations = await client.getLiquidations({
+//   token: "QAR",
+// });
+
+// console.log(getLiquidations);
