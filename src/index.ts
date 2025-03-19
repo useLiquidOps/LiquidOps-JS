@@ -10,7 +10,10 @@ import {
 import { repay, Repay, RepayRes } from "./functions/borrow/repay";
 import { getAPR, GetAPR } from "./functions/oTokenData/getAPR";
 import { getBalance, GetBalance } from "./functions/utils/getBalance";
-import { getExchangeRate, GetExchangeRate } from "./functions/oTokenData/getExchangeRate";
+import {
+  getExchangeRate,
+  GetExchangeRate,
+} from "./functions/oTokenData/getExchangeRate";
 import { getInfo, GetInfo, GetInfoRes } from "./functions/oTokenData/getInfo";
 import { transfer, Transfer, TransferRes } from "./functions/utils/transfer";
 import {
@@ -134,7 +137,7 @@ class LiquidOps {
   // protocol data
 
   async getAllPositions(params: GetAllPositions): Promise<GetAllPositionsRes> {
-    return getAllPositions(this.aoUtils, params);
+    return getAllPositions(params);
   }
 
   async getHistoricalAPR(

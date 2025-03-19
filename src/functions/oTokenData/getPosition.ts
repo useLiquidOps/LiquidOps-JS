@@ -13,7 +13,7 @@ export interface GetPositionRes {
   collateralTicker: string;
   collateralDenomination: string;
   collateralization: string;
-  liquidationLimit: string
+  liquidationLimit: string;
 }
 
 interface Tag {
@@ -51,7 +51,7 @@ export async function getPosition(
           : tagsObject["Collateral-Ticker"],
       collateralDenomination: tagsObject["Collateral-Denomination"],
       collateralization: tagsObject["Collateralization"],
-      liquidationLimit: tagsObject["Liquidation-Limit"]
+      liquidationLimit: tagsObject["Liquidation-Limit"],
     };
   } catch (error) {
     throw new Error("Error in getPosition function: " + error);

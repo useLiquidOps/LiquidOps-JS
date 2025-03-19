@@ -1,5 +1,4 @@
 import { getData } from "../../ao/messaging/getData";
-import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetAllPositions {
@@ -7,14 +6,17 @@ export interface GetAllPositions {
 }
 
 export interface GetAllPositionsRes {
-  capacity: BigInt;
-  borrowBalance: BigInt;
+  [walletAddress: string]: {
+    borrowBalance: BigInt;
+    capacity: BigInt;
+    collateralization: BigInt;
+    liquidationLimit: BigInt;
+  };
 }
 
-export async function getAllPositions(
-  aoUtils: AoUtils,
-  { token }: GetAllPositions,
-): Promise<GetAllPositionsRes> {
+export async function getAllPositions({
+  token,
+}: GetAllPositions): Promise<GetAllPositionsRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -27,16 +29,22 @@ export async function getAllPositions(
       Action: "Positions",
     });
 
-    const positions = JSON.parse(res.Messages[0].Data);
-    const data = Object.values(positions)[0] as {
-      Capacity: string;
-      "Borrow-Balance": string;
-    };
+    const allPositions = JSON.parse(res.Messages[0].Data);
 
-    return {
-      capacity: BigInt(data.Capacity),
-      borrowBalance: BigInt(data["Borrow-Balance"]),
-    };
+    const transformedPositions: GetAllPositionsRes = {};
+
+    for (const walletAddress in allPositions) {
+      const originalPosition = allPositions[walletAddress];
+
+      transformedPositions[walletAddress] = {
+        borrowBalance: BigInt(originalPosition["Borrow-Balance"]),
+        capacity: BigInt(originalPosition.Capacity),
+        collateralization: BigInt(originalPosition["Collateralization"]),
+        liquidationLimit: BigInt(originalPosition["Liquidation-Limit"]),
+      };
+    }
+
+    return transformedPositions;
   } catch (error) {
     throw new Error(`Error in getAllPositions function: ${error}`);
   }
