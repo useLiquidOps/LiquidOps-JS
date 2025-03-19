@@ -1,7 +1,7 @@
 import { expect, test, describe } from "bun:test";
 import LiquidOps from "../../../src";
 import createDataItemSignerBun from "../../testsHelpers/bunSigner";
-import { JWKInterface } from "arbundles/node";
+import { JWKInterface } from "../../testsHelpers/bunSigner/jwk-interface";
 import { LendRes } from "../../../src/functions/lend/lend";
 
 test(

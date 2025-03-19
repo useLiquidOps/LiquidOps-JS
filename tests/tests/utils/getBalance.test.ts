@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import LiquidOps from "../../../src";
 import createDataItemSignerBun from "../../testsHelpers/bunSigner";
-import { JWKInterface } from "arbundles/node";
+import { JWKInterface } from "../../testsHelpers/bunSigner/jwk-interface";
 import { ownerToAddress } from "../../testsHelpers/arweaveUtils";
 
 test("getBalance function", async () => {
