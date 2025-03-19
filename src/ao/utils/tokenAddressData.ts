@@ -24,17 +24,6 @@ export const tokenData: Record<string, TokenData> = {
     cleanTicker: "qAR",
     denomination: BigInt(12),
   },
-  STETH: {
-    name: "Staked Ethereum",
-    icon: "UHjR0nY25BJ61LVSugyXCSoig07jv84LA6Wp_kYRfYI",
-    ticker: "STETH",
-    address: "GUJI7zjPoJ0uAHIBWiYrKL2bpwfltTZFXNL4J-IV8AI",
-    oTicker: "oSTETH",
-    oAddress: "pc_NJapeY-q2IeLGlOj5_bQxh0MDnq63VdrBFOCBhYc",
-    controllerAddress,
-    cleanTicker: "stETH",
-    denomination: BigInt(12),
-  },
   USDC: {
     name: "USD Circle",
     icon: "iNYk0bDqUiH0eLT2rbYjYAI5i126R4ye8iAZb55IaIM",
