@@ -7,7 +7,7 @@
     "url": "git+https://github.com/useLiquidOps/package.git"
   },
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "dependencies": {
     "ao-tokens": "^0.0.5",
     "ar-gql": "^2.0.2",
@@ -17,22 +17,23 @@
     "@permaweb/aoconnect": ">= 0.0.77 < 1"
   },
   "devDependencies": {
+    "@permaweb/aoconnect": "^0.0.77",
     "@types/bun": "^1.1.10",
     "@types/node": "^22.5.5",
+    "base64-js": "^1.5.1",
+    "base64url": "^3.0.1",
     "bun-types": "^1.1.27",
     "prettier": "^3.0.3",
     "ts-jest": "^29.1.1",
     "tslib": "^2.5.0",
     "tsup": "^8.0.1",
-    "typescript": "^5.0.4",
-    "base64-js": "^1.5.1",
-    "base64url": "^3.0.1"
+    "typescript": "^5.0.4"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "bugs": {
