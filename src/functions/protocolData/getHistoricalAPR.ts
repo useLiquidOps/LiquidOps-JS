@@ -12,9 +12,10 @@ export interface GetHistoricalAPRRes {
   timestamp: number;
 }
 
-export async function getHistoricalAPR(
-  { token, fillGaps = true }: GetHistoricalAPR,
-): Promise<GetHistoricalAPRRes[]> {
+export async function getHistoricalAPR({
+  token,
+  fillGaps = true,
+}: GetHistoricalAPR): Promise<GetHistoricalAPRRes[]> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");

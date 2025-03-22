@@ -10,9 +10,7 @@ export interface APRResponse {
   "Rate-Multiplier": string;
 }
 
-export async function getAPR(
-  { token }: GetAPR,
-): Promise<number> {
+export async function getAPR({ token }: GetAPR): Promise<number> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");

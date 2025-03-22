@@ -19,9 +19,7 @@ interface Tag {
   value: string;
 }
 
-export async function getInfo(
-  { token }: GetInfo,
-): Promise<GetInfoRes> {
+export async function getInfo({ token }: GetInfo): Promise<GetInfoRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
