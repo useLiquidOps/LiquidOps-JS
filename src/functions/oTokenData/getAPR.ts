@@ -1,5 +1,4 @@
 import { getData } from "../../ao/messaging/getData";
-import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetAPR {
@@ -11,10 +10,7 @@ export interface APRResponse {
   "Rate-Multiplier": string;
 }
 
-export async function getAPR(
-  aoUtils: AoUtils,
-  { token }: GetAPR,
-): Promise<number> {
+export async function getAPR({ token }: GetAPR): Promise<number> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");

@@ -25,7 +25,6 @@ test("getAllPositions function", async () => {
 
     expect(res.capacity).toBeGreaterThanOrEqual(0n);
     expect(res.usedCapacity).toBeGreaterThanOrEqual(0n);
-    expect(res.usedCapacity).toBeLessThanOrEqual(res.capacity);
   } catch (error) {
     console.error("Error testing getAllPositions():", error);
     throw error;

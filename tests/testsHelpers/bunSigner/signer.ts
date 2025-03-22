@@ -3,8 +3,8 @@ import { Buffer } from "node:buffer";
 import { Tag, DataItem } from "warp-arbundles";
 import base64url from "base64url";
 
-import { JWKInterface } from "./jwk-interface.ts";
-import BunCryptoDriver from "./bun-crypto-driver.ts";
+import { JWKInterface } from "./jwk-interface";
+import BunCryptoDriver from "./bun-crypto-driver";
 
 abstract class Signer {
   readonly signer?: any;

@@ -1,5 +1,4 @@
 import { getData } from "../../ao/messaging/getData";
-import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetExchangeRate {
@@ -7,10 +6,10 @@ export interface GetExchangeRate {
   quantity?: BigInt;
 }
 
-export async function getExchangeRate(
-  aoUtils: AoUtils,
-  { token, quantity }: GetExchangeRate,
-): Promise<BigInt> {
+export async function getExchangeRate({
+  token,
+  quantity,
+}: GetExchangeRate): Promise<BigInt> {
   try {
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");

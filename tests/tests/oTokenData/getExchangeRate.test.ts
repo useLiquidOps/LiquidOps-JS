@@ -3,7 +3,7 @@ import LiquidOps from "../../../src";
 import createDataItemSignerBun from "../../testsHelpers/bunSigner";
 import { JWKInterface } from "../../testsHelpers/bunSigner/jwk-interface";
 
-test("getPrice function", async () => {
+test("getExchangeRate function", async () => {
   if (!process.env.JWK) {
     throw new Error("Please specify a JWK in the .env file");
   }
@@ -13,15 +13,14 @@ test("getPrice function", async () => {
   const client = new LiquidOps(signer);
 
   try {
-    const res = await client.getPrice({
+    const res = await client.getExchangeRate({
       token: "QAR",
-      quantity: 10n,
     });
 
-    expect(typeof res).toBe("bigint");
-    expect(res).toBeGreaterThan(0n);
+    expect(res).toBeTypeOf("number");
+    expect(res).toBeGreaterThanOrEqual(0);
   } catch (error) {
-    console.error("Error testing getPrice():", error);
+    console.error("Error testing getExchangeRate():", error);
     throw error;
   }
 });

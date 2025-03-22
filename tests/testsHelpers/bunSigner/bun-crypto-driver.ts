@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { Buffer } from "node:buffer";
-import { JWKInterface, JWKPublicInterface } from "./jwk-interface.ts";
-import * as ArweaveUtils from "./utils.ts";
+import { JWKInterface, JWKPublicInterface } from "./jwk-interface";
+import * as ArweaveUtils from "./utils";
 
 interface SignatureOptions {
   saltLength?: number;
