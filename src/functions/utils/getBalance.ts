@@ -1,4 +1,5 @@
-import { Token, Quantity } from "ao-tokens";
+import { Token } from "ao-tokens";
+import { Quantity } from "ao-tokens";
 
 export interface GetBalance {
   tokenAddress: string;
