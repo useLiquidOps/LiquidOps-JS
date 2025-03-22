@@ -1,5 +1,4 @@
 import { getData } from "../../ao/messaging/getData";
-import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetAPR {
@@ -12,7 +11,6 @@ export interface APRResponse {
 }
 
 export async function getAPR(
-  aoUtils: AoUtils,
   { token }: GetAPR,
 ): Promise<number> {
   try {

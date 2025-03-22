@@ -1,5 +1,4 @@
 import { getData } from "../../ao/messaging/getData";
-import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetPosition {
@@ -22,7 +21,6 @@ interface Tag {
 }
 
 export async function getPosition(
-  aoUtils: AoUtils,
   { token, recipient }: GetPosition,
 ): Promise<GetPositionRes> {
   try {

@@ -115,7 +115,7 @@ class LiquidOps {
   // oTokenData
 
   async getAPR(params: GetAPR): Promise<number> {
-    return getAPR(this.aoUtils, params);
+    return getAPR(params);
   }
 
   async getBalances(params: GetBalances): Promise<GetBalancesRes> {
@@ -123,15 +123,15 @@ class LiquidOps {
   }
 
   async getInfo(params: GetInfo): Promise<GetInfoRes> {
-    return getInfo(this.aoUtils, params);
+    return getInfo(params);
   }
 
   async getPosition(params: GetPosition): Promise<GetPositionRes> {
-    return getPosition(this.aoUtils, params);
+    return getPosition(params);
   }
 
   async getExchangeRate(params: GetExchangeRate): Promise<BigInt> {
-    return getExchangeRate(this.aoUtils, params);
+    return getExchangeRate(params);
   }
 
   // protocol data
@@ -143,7 +143,7 @@ class LiquidOps {
   async getHistoricalAPR(
     params: GetHistoricalAPR,
   ): Promise<GetHistoricalAPRRes[]> {
-    return getHistoricalAPR(this.aoUtils, params);
+    return getHistoricalAPR(params);
   }
 
   // utils

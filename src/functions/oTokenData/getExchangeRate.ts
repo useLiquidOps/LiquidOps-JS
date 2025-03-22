@@ -1,5 +1,4 @@
 import { getData } from "../../ao/messaging/getData";
-import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetExchangeRate {
@@ -8,7 +7,6 @@ export interface GetExchangeRate {
 }
 
 export async function getExchangeRate(
-  aoUtils: AoUtils,
   { token, quantity }: GetExchangeRate,
 ): Promise<BigInt> {
   try {
