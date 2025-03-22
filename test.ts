@@ -144,8 +144,8 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(liquidate);
 
-// const getLiquidations = await client.getLiquidations({
-//   token: "QAR",
-// });
+const getLiquidations = await client.getLiquidations({
+  token: "QAR",
+});
 
-// console.log(getLiquidations);
+console.log(getLiquidations);

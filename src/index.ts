@@ -42,15 +42,15 @@ import {
   GetHistoricalAPRRes,
 } from "./functions/protocolData/getHistoricalAPR";
 import {
-  getLiquidations,
-  GetLiquidations,
-  GetLiquidationsRes,
-} from "./functions/protocolData/getLiquidations";
-import {
   liquidate,
   Liquidate,
   LiquidateRes,
-} from "./functions/liquidation/liquidate";
+} from "./functions/liquidations/liquidate";
+import {
+  getLiquidations,
+  GetLiquidations,
+  GetLiquidationsRes,
+} from "./functions/liquidations/getLiquidations";
 // LO helpful data
 import {
   oTokens,
@@ -146,10 +146,6 @@ class LiquidOps {
     return getHistoricalAPR(this.aoUtils, params);
   }
 
-  async getLiquidations(params: GetLiquidations): Promise<GetLiquidationsRes> {
-    return getLiquidations(this.aoUtils, params);
-  }
-
   // utils
 
   async getBalance(params: GetBalance): Promise<Quantity> {
@@ -168,6 +164,10 @@ class LiquidOps {
 
   async liquidate(params: Liquidate): Promise<LiquidateRes> {
     return liquidate(this.aoUtils, params);
+  }
+
+  async getLiquidations(params: GetLiquidations): Promise<GetLiquidationsRes> {
+    return getLiquidations(params);
   }
 
   // process data
@@ -211,8 +211,6 @@ export type {
   GetAllPositionsRes,
   GetHistoricalAPR,
   GetHistoricalAPRRes,
-  GetLiquidations,
-  GetLiquidationsRes,
 
   // utils
   // GetBalance,
@@ -226,6 +224,8 @@ export type {
   // liquidation
   Liquidate,
   LiquidateRes,
+  GetLiquidations,
+  GetLiquidationsRes,
 
   // Utility types for constructor/setup
   AoUtils,

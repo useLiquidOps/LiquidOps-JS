@@ -13,6 +13,7 @@ interface MessageTags {
   "LO-Action"?: string;
   Token?: string;
   "Fill-Gaps"?: string;
+  Tickers?: string;
 }
 
 type GetDataRes = DryRunResult;
