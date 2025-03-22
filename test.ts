@@ -12,112 +12,7 @@ const signer = createDataItemSignerBun(JWK);
 const client = new LiquidOps(signer);
 const walletAddress = await ownerToAddress(JWK.n);
 
-// // get transactions
-
-// const getTransactions = await client.getTransactions({
-//   token: "QAR",
-//   action: "borrow",
-//   walletAddress: walletAddress,
-// });
-
-// console.log(JSON.stringify(getTransactions, null, 2));
-
-// // lend
-
-// const lend = await client.lend({
-//   token: "QAR",
-//   quantity: 1n,
-// });
-
-// console.log(lend);
-
-// const unLend = await client.unLend({
-//   token: "QAR",
-//   quantity: 1n,
-// });
-
-// console.log(unLend);
-
-// // oTokenData
-
-// const getAPR = await client.getAPR({
-//   token: "QAR",
-// });
-
-// console.log(getAPR);
-
-// const getBalances = await client.getBalances({
-//   token: "QAR",
-// });
-
-// console.log(getBalances);
-
-// const getInfo = await client.getInfo({
-//   token: "QAR",
-// });
-
-// console.log(getInfo);
-
-// const getPosition = await client.getPosition({
-//   token: "QAR",
-//   recipient: walletAddress
-// });
-
-// console.log(getPosition)
-
-// const getPrice = await client.getPrice({
-//   token: "QAR",
-//   quantity: BigInt(1)
-// });
-
-// console.log(getPrice)
-
-// const getReserves = await client.getReserves({
-//   token: "QAR",
-// });
-
-// console.log(getReserves)
-
-// // protocolData
-
-// const getAllPositions = await client.getAllPositions({
-//   token: "QAR",
-// });
-
-// console.log(getAllPositions);
-
-// const getHistoricalAPR = await client.getHistoricalAPR({
-//   token: "QAR",
-// });
-
-// console.log(getHistoricalAPR);
-
-// // utils
-
-// const getBalance = await client.getBalance({
-//   tokenAddress: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
-//   walletAddress: walletAddress
-// });
-
-// console.log(getBalance)
-
-// const transfer = await client.transfer({
-//   token: "QAR",
-//   recipient: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
-//   quantity: 1n
-// });
-
-// console.log(transfer)
-
-// const getResult = await client.getResult({
-//   transferID: "0RY-eSVV156qxyuHBs3GPO2pwsIvmA-yI1oKS1ABSyI",
-//   tokenAddress: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
-//   action: "lend",
-// });
-
-// console.log(getResult);
-
-// // borrow
+//--------------------------------------------------------------------------------------------------------------- borrow
 
 // const borrow = await client.borrow({
 //   token: "QAR",
@@ -133,7 +28,39 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(repay);
 
-// // liquidation
+//--------------------------------------------------------------------------------------------------------------- getTransactions
+
+// const getTransactions = await client.getTransactions({
+//   token: "QAR",
+//   action: "borrow",
+//   walletAddress: walletAddress,
+// });
+
+// console.log(JSON.stringify(getTransactions, null, 2));
+
+//--------------------------------------------------------------------------------------------------------------- lend
+
+// const lend = await client.lend({
+//   token: "QAR",
+//   quantity: 1n,
+// });
+
+// console.log(lend);
+
+// const unLend = await client.unLend({
+//   token: "QAR",
+//   quantity: 1n,
+// });
+
+// console.log(unLend);
+
+//--------------------------------------------------------------------------------------------------------------- liquidations
+
+// const getLiquidations = await client.getLiquidations({
+//   token: "QAR",
+// });
+
+// console.log(getLiquidations);
 
 // const liquidate = await client.liquidate({
 //   token: "QAR",
@@ -144,8 +71,74 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(liquidate);
 
-// const getLiquidations = await client.getLiquidations({
+//--------------------------------------------------------------------------------------------------------------- oTokenData
+
+// const getAPR = await client.getAPR({
 //   token: "QAR",
 // });
 
-// console.log(getLiquidations);
+// console.log(getAPR);
+
+// const getBalances = await client.getBalances({
+//   token: "QAR",
+// });
+
+// console.log(getBalances);
+
+// const getExchangeRate = await client.getExchangeRate({
+//   token: "QAR",
+// });
+
+// console.log(getExchangeRate);
+
+// const getInfo = await client.getInfo({
+//   token: "QAR",
+// });
+
+// console.log(getInfo);
+
+// const getPosition = await client.getPosition({
+//   token: "QAR",
+//   recipient: walletAddress
+// });
+
+// console.log(getPosition)
+
+//--------------------------------------------------------------------------------------------------------------- protocolData
+
+// const getAllPositions = await client.getAllPositions({
+//   token: "QAR",
+// });
+
+// console.log(getAllPositions);
+
+// const getHistoricalAPR = await client.getHistoricalAPR({
+//   token: "QAR",
+// });
+
+// console.log(getHistoricalAPR);
+
+//--------------------------------------------------------------------------------------------------------------- utils
+
+// const getBalance = await client.getBalance({
+//   tokenAddress: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
+//   walletAddress: walletAddress
+// });
+
+// console.log(getBalance)
+
+// const getResult = await client.getResult({
+//   transferID: "0RY-eSVV156qxyuHBs3GPO2pwsIvmA-yI1oKS1ABSyI",
+//   tokenAddress: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
+//   action: "lend",
+// });
+
+// console.log(getResult);
+
+// const transfer = await client.transfer({
+//   token: "QAR",
+//   recipient: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
+//   quantity: 1n
+// });
+
+// console.log(transfer)
