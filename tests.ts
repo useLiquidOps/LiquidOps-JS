@@ -21,6 +21,8 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(borrow);
 
+//-------------------------------
+
 // const repay = await client.repay({
 //   token: "QAR",
 //   quantity: 1n,
@@ -47,6 +49,8 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(lend);
 
+//-------------------------------
+
 // const unLend = await client.unLend({
 //   token: "QAR",
 //   quantity: 1n,
@@ -62,9 +66,11 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(getLiquidations);
 
+//-------------------------------
+
 // const liquidate = await client.liquidate({
 //   token: "QAR",
-//   rewardToken: "STETH",
+//   rewardToken: "USDC",
 //   targetUserAddress: "ljvCPN31XCLPkBo9FUeB7vAK0VC6-eY52-CS-6Iho8U",
 //   quantity: 1n,
 // });
@@ -79,11 +85,15 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(getAPR);
 
+//-------------------------------
+
 // const getBalances = await client.getBalances({
 //   token: "QAR",
 // });
 
 // console.log(getBalances);
+
+//-------------------------------
 
 // const getExchangeRate = await client.getExchangeRate({
 //   token: "QAR",
@@ -91,11 +101,15 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(getExchangeRate);
 
+//-------------------------------
+
 // const getInfo = await client.getInfo({
 //   token: "QAR",
 // });
 
 // console.log(getInfo);
+
+//-------------------------------
 
 // const getPosition = await client.getPosition({
 //   token: "QAR",
@@ -112,6 +126,8 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(getAllPositions);
 
+//-------------------------------
+
 // const getHistoricalAPR = await client.getHistoricalAPR({
 //   token: "QAR",
 // });
@@ -125,7 +141,9 @@ const walletAddress = await ownerToAddress(JWK.n);
 //   walletAddress: walletAddress
 // });
 
-// console.log(getBalance)
+// console.log(getBalance);
+
+//-------------------------------
 
 // const getResult = await client.getResult({
 //   transferID: "0RY-eSVV156qxyuHBs3GPO2pwsIvmA-yI1oKS1ABSyI",
@@ -135,6 +153,8 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(getResult);
 
+//-------------------------------
+
 // const transfer = await client.transfer({
 //   token: "QAR",
 //   recipient: "psh5nUh3VF22Pr8LeoV1K2blRNOOnoVH0BbZ85yRick",
@@ -142,3 +162,5 @@ const walletAddress = await ownerToAddress(JWK.n);
 // });
 
 // console.log(transfer)
+
+//-------------------------------
