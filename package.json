@@ -1,7 +1,7 @@
 {
   "name": "liquidops",
   "version": "0.1.40",
-  "author": "Lorimer Jenkins (lorimer@liquidops.io), Marton Lederer (marton@liquidops.io)",
+  "author": "Lorimer Jenkins <lorimer@liquidops.io>, Marton Lederer <marton@liquidops.io>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/useLiquidOps/package.git"
