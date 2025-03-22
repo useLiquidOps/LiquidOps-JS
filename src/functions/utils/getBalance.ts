@@ -1,4 +1,5 @@
-import * as aoTokens from "ao-tokens";
+const aoTokens = require("ao-tokens");
+const { Token, Quantity } = aoTokens;
 
 export interface GetBalance {
   tokenAddress: string;
@@ -8,15 +9,15 @@ export interface GetBalance {
 export async function getBalance({
   tokenAddress,
   walletAddress,
-}: GetBalance): Promise<aoTokens.Quantity> {
+}: GetBalance): Promise<typeof Quantity> {
   if (!tokenAddress || !walletAddress) {
     throw new Error("Please specify a tokenAddress and walletAddress.");
   }
 
   try {
-    const tokenInstance = await aoTokens.Token(tokenAddress);
+    const tokenInstance = await Token(tokenAddress);
     const balance = await tokenInstance.getBalance(walletAddress);
-    return new aoTokens.Quantity(balance.raw, tokenInstance.info.Denomination);
+    return new Quantity(balance.raw, tokenInstance.info.Denomination);
   } catch (error) {
     throw new Error("Error getting balance: " + error);
   }

@@ -95,7 +95,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 // // utils
 
 // const getBalance = await client.getBalance({
-//   token: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
+//   tokenAddress: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
 //   walletAddress: walletAddress
 // });
 
@@ -144,8 +144,8 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(liquidate);
 
-const getLiquidations = await client.getLiquidations({
-  token: "QAR",
-});
+// const getLiquidations = await client.getLiquidations({
+//   token: "QAR",
+// });
 
-console.log(getLiquidations);
+// console.log(getLiquidations);
