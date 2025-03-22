@@ -2,10 +2,10 @@ import { expect, test, describe } from "bun:test";
 import LiquidOps from "../../../src";
 import createDataItemSignerBun from "../../testsHelpers/bunSigner";
 import { JWKInterface } from "../../testsHelpers/bunSigner/jwk-interface";
-import { LendRes } from "../../../src/functions/lend/lend";
+import { LiquidateRes } from "../../../src";
 
 test(
-  "lend function",
+  "liquidate function",
   async () => {
     if (!process.env.JWK) {
       throw new Error("Please specify a JWK in the .env file");
@@ -15,21 +15,15 @@ test(
     const signer = createDataItemSignerBun(JWK);
     const client = new LiquidOps(signer);
 
-    const res = (await client.lend({
+    // change this to a for loop to test all supported tokens
+    const res = (await client.liquidate({
       token: "QAR",
+      rewardToken: "USDC",
+      targetUserAddress: "",
       quantity: 1n,
-    })) as LendRes;
+    })) as LiquidateRes;
 
-    expect(res).toHaveProperty("status");
-    expect(res).toHaveProperty("transferID");
-    expect(typeof res.transferID).toBe("string");
-
-    if (res.status === true) {
-      expect(res.debitID).toBeDefined();
-      expect(res.creditID).toBeDefined();
-    } else if (res.status === "pending") {
-      expect(res.response).toBe("Transaction pending.");
-    }
+    // TODO: excpect types and finish test
   },
   { timeout: 30000 },
 );

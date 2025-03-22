@@ -11,11 +11,9 @@ import { repay, Repay, RepayRes } from "./functions/borrow/repay";
 import { getAPR, GetAPR } from "./functions/oTokenData/getAPR";
 import { getBalance, GetBalance } from "./functions/utils/getBalance";
 import {
-  getReserves,
-  GetReserves,
-  GetReservesRes,
-} from "./functions/oTokenData/getReserves";
-import { getPrice, GetPrice } from "./functions/oTokenData/getPrice";
+  getExchangeRate,
+  GetExchangeRate,
+} from "./functions/oTokenData/getExchangeRate";
 import { getInfo, GetInfo, GetInfoRes } from "./functions/oTokenData/getInfo";
 import { transfer, Transfer, TransferRes } from "./functions/utils/transfer";
 import {
@@ -44,15 +42,15 @@ import {
   GetHistoricalAPRRes,
 } from "./functions/protocolData/getHistoricalAPR";
 import {
-  getLiquidations,
-  GetLiquidations,
-  GetLiquidationsRes,
-} from "./functions/protocolData/getLiquidations";
-import {
   liquidate,
   Liquidate,
   LiquidateRes,
-} from "./functions/liquidation/liquidate";
+} from "./functions/liquidations/liquidate";
+import {
+  getLiquidations,
+  GetLiquidations,
+  GetLiquidationsRes,
+} from "./functions/liquidations/getLiquidations";
 // LO helpful data
 import {
   oTokens,
@@ -132,28 +130,20 @@ class LiquidOps {
     return getPosition(this.aoUtils, params);
   }
 
-  async getPrice(params: GetPrice): Promise<BigInt> {
-    return getPrice(this.aoUtils, params);
-  }
-
-  async getReserves(params: GetReserves): Promise<GetReservesRes> {
-    return getReserves(this.aoUtils, params);
+  async getExchangeRate(params: GetExchangeRate): Promise<BigInt> {
+    return getExchangeRate(this.aoUtils, params);
   }
 
   // protocol data
 
   async getAllPositions(params: GetAllPositions): Promise<GetAllPositionsRes> {
-    return getAllPositions(this.aoUtils, params);
+    return getAllPositions(params);
   }
 
   async getHistoricalAPR(
     params: GetHistoricalAPR,
   ): Promise<GetHistoricalAPRRes[]> {
     return getHistoricalAPR(this.aoUtils, params);
-  }
-
-  async getLiquidations(params: GetLiquidations): Promise<GetLiquidationsRes> {
-    return getLiquidations(this.aoUtils, params);
   }
 
   // utils
@@ -174,6 +164,10 @@ class LiquidOps {
 
   async liquidate(params: Liquidate): Promise<LiquidateRes> {
     return liquidate(this.aoUtils, params);
+  }
+
+  async getLiquidations(params: GetLiquidations): Promise<GetLiquidationsRes> {
+    return getLiquidations(params);
   }
 
   // process data
@@ -210,17 +204,13 @@ export type {
   GetInfoRes,
   GetPosition,
   GetPositionRes,
-  GetPrice,
-  GetReserves,
-  GetReservesRes,
+  GetExchangeRate,
 
   // protocol data
   GetAllPositions,
   GetAllPositionsRes,
   GetHistoricalAPR,
   GetHistoricalAPRRes,
-  GetLiquidations,
-  GetLiquidationsRes,
 
   // utils
   // GetBalance,
@@ -234,6 +224,8 @@ export type {
   // liquidation
   Liquidate,
   LiquidateRes,
+  GetLiquidations,
+  GetLiquidationsRes,
 
   // Utility types for constructor/setup
   AoUtils,

@@ -2,14 +2,14 @@ import { getData } from "../../ao/messaging/getData";
 import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
-export interface GetPrice {
+export interface GetExchangeRate {
   token: TokenInput;
   quantity?: BigInt;
 }
 
-export async function getPrice(
+export async function getExchangeRate(
   aoUtils: AoUtils,
-  { token, quantity }: GetPrice,
+  { token, quantity }: GetExchangeRate,
 ): Promise<BigInt> {
   try {
     if (!token || !quantity) {
@@ -20,16 +20,16 @@ export async function getPrice(
 
     const message = await getData({
       Target: oTokenAddress,
-      Action: "Get-Price",
+      Action: "Exchange-Rate-Current",
       ...(quantity && { Quantity: quantity.toString() }),
     });
 
-    const priceTag = message.Messages[0].Tags.find(
-      (tag: { name: string; value: string }) => tag.name === "Price",
+    const valueTag = message.Messages[0].Tags.find(
+      (tag: { name: string; value: string }) => tag.name === "Value",
     );
 
-    return BigInt(priceTag.value);
+    return BigInt(valueTag.value);
   } catch (error) {
-    throw new Error("Error in getPrice function: " + error);
+    throw new Error("Error in getExchangeRate function: " + error);
   }
 }

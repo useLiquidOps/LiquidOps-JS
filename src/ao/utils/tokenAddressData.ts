@@ -8,43 +8,37 @@ export interface TokenData {
   controllerAddress: string;
   cleanTicker: string;
   denomination: bigint;
+  collateralEnabled: boolean;
 }
 
 const controllerAddress = "vYlv6Dx8ZGt4oGaqsXaPjh9qi8iS8eQsoU9Ai65km4A";
+export const redstoneOracleAddress =
+  "5ndbRn7nQiAiQdiPc7AlY2idJGsakQotTRQr1f1UFj8";
 
 export const tokenData: Record<string, TokenData> = {
   QAR: {
     name: "Quantum Arweave",
     icon: "8VLMb0c9NATl4iczfwpMDe1Eh8kFWIUpSlIkcGfDFzM",
     ticker: "QAR",
-    address: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
+    address: "rjYl6i4cDpE4c-OIJ7srTrcNulrf8Xw4Y8pDZDBAOUs",
     oTicker: "oQAR",
-    oAddress: "uesgg1cLT9aFK8S5GeZYQLqkEDOw2Fq6SZHUP3s4lIk",
+    oAddress: "G_nw_FqdNv-tz8cQmd8vJZkjMs42HBJjY7HzyVfh51U",
     controllerAddress,
     cleanTicker: "qAR",
     denomination: BigInt(12),
-  },
-  STETH: {
-    name: "Staked Ethereum",
-    icon: "UHjR0nY25BJ61LVSugyXCSoig07jv84LA6Wp_kYRfYI",
-    ticker: "STETH",
-    address: "GUJI7zjPoJ0uAHIBWiYrKL2bpwfltTZFXNL4J-IV8AI",
-    oTicker: "oSTETH",
-    oAddress: "pc_NJapeY-q2IeLGlOj5_bQxh0MDnq63VdrBFOCBhYc",
-    controllerAddress,
-    cleanTicker: "stETH",
-    denomination: BigInt(12),
+    collateralEnabled: true,
   },
   USDC: {
     name: "USD Circle",
     icon: "iNYk0bDqUiH0eLT2rbYjYAI5i126R4ye8iAZb55IaIM",
     ticker: "USDC",
-    address: "EoGGnxiSIUr0C5aZhTA_c8WipuASleomMrvyvuJCKvM",
+    address: "zFEDdM1uAW1n3dwgzLUTO0GGFbCMdEXfDQjNc3Gbong",
     oTicker: "oUSDC",
-    oAddress: "uVibsGXRRntY-50oQbrNgtoDCHUEmVmXm0fYN80nvrM",
+    oAddress: "_mqEcN6LtjkpI4cgw2JZ30WOgmwO83uIZ5ivXg5uWz0",
     controllerAddress,
     cleanTicker: "USDC",
     denomination: BigInt(12),
+    collateralEnabled: true,
   },
 };
 
@@ -74,4 +68,11 @@ export const controllers: Record<
     ticker,
     data.controllerAddress,
   ]),
+);
+
+export const collateralEnabledTickers = Object.keys(tokenData).filter(
+  (ticker) => tokenData[ticker as SupportedTokensTickers].collateralEnabled,
+);
+export const collateralEnabledOTickers = collateralEnabledTickers.map(
+  (ticker) => tokenData[ticker as SupportedTokensTickers].oTicker,
 );
