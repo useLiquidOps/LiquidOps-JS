@@ -1,5 +1,4 @@
-const aoTokens = require("ao-tokens");
-const { Token, Quantity } = aoTokens;
+import { Token, Quantity } from "ao-tokens";
 
 export interface GetBalance {
   tokenAddress: string;
@@ -9,7 +8,7 @@ export interface GetBalance {
 export async function getBalance({
   tokenAddress,
   walletAddress,
-}: GetBalance): Promise<typeof Quantity> {
+}: GetBalance): Promise<Quantity> {
   if (!tokenAddress || !walletAddress) {
     throw new Error("Please specify a tokenAddress and walletAddress.");
   }
