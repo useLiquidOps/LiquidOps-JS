@@ -9,15 +9,16 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "dependencies": {
-    "ao-tokens": "^0.0.5",
     "ar-gql": "^2.0.2",
     "arbundles": "^0.11.2"
   },
   "peerDependencies": {
-    "@permaweb/aoconnect": ">= 0.0.77 < 1"
+    "@permaweb/aoconnect": ">= 0.0.77 < 1",
+    "ao-tokens": ">= 0.0.5"
   },
   "devDependencies": {
     "@permaweb/aoconnect": "^0.0.77",
+    "ao-tokens": "^0.0.5",
     "@types/bun": "^1.1.10",
     "@types/node": "^22.5.5",
     "base64-js": "^1.5.1",
