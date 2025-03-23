@@ -3,7 +3,7 @@ import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetPosition {
   token: TokenInput;
-  recipient?: string;
+  recipient: string;
 }
 
 export interface GetPositionRes {

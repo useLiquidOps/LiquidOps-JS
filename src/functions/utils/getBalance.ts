@@ -5,10 +5,12 @@ export interface GetBalance {
   walletAddress: string;
 }
 
+export type GetBalanceRes = Quantity;
+
 export async function getBalance({
   tokenAddress,
   walletAddress,
-}: GetBalance): Promise<Quantity> {
+}: GetBalance): Promise<GetBalanceRes> {
   if (!tokenAddress || !walletAddress) {
     throw new Error("Please specify a tokenAddress and walletAddress.");
   }

@@ -3,13 +3,15 @@ import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetExchangeRate {
   token: TokenInput;
-  quantity?: BigInt;
+  quantity: BigInt;
 }
+
+export type GetExchangeRateRes = BigInt;
 
 export async function getExchangeRate({
   token,
   quantity,
-}: GetExchangeRate): Promise<BigInt> {
+}: GetExchangeRate): Promise<GetExchangeRateRes> {
   try {
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");

@@ -97,6 +97,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // const getExchangeRate = await client.getExchangeRate({
 //   token: "QAR",
+//   quantity: 1n
 // });
 
 // console.log(getExchangeRate);
@@ -116,7 +117,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 //   recipient: walletAddress
 // });
 
-// console.log(getPosition)
+// console.log(getPosition);
 
 //--------------------------------------------------------------------------------------------------------------- protocolData
 
@@ -138,7 +139,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // const getBalance = await client.getBalance({
 //   tokenAddress: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
-//   walletAddress: walletAddress
+//   walletAddress: walletAddress,
 // });
 
 // console.log(getBalance);

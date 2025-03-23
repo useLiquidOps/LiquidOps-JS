@@ -11,7 +11,7 @@ export interface TokenData {
   collateralEnabled: boolean;
 }
 
-const controllerAddress = "vYlv6Dx8ZGt4oGaqsXaPjh9qi8iS8eQsoU9Ai65km4A";
+export const controllerAddress = "vYlv6Dx8ZGt4oGaqsXaPjh9qi8iS8eQsoU9Ai65km4A";
 export const redstoneOracleAddress =
   "5ndbRn7nQiAiQdiPc7AlY2idJGsakQotTRQr1f1UFj8";
 export const APRAgentAddress = "D3AlSUAtbWKcozsrvckRuCY6TVkAY1rWtLYGoGf6KIA";
@@ -59,16 +59,6 @@ export const oTokens: Record<
   SupportedOTokensAddresses
 > = Object.fromEntries(
   Object.entries(tokenData).map(([_, data]) => [data.oTicker, data.oAddress]),
-);
-
-export const controllers: Record<
-  SupportedTokensTickers,
-  SupportedControllerAddresses
-> = Object.fromEntries(
-  Object.entries(tokenData).map(([ticker, data]) => [
-    ticker,
-    data.controllerAddress,
-  ]),
 );
 
 export const collateralEnabledTickers = Object.keys(tokenData).filter(

@@ -7,7 +7,9 @@ export interface GetHistoricalAPR {
   fillGaps?: boolean;
 }
 
-export interface GetHistoricalAPRRes {
+export type GetHistoricalAPRRes = APR[];
+
+interface APR {
   apr: number;
   timestamp: number;
 }
@@ -15,7 +17,7 @@ export interface GetHistoricalAPRRes {
 export async function getHistoricalAPR({
   token,
   fillGaps = true,
-}: GetHistoricalAPR): Promise<GetHistoricalAPRRes[]> {
+}: GetHistoricalAPR): Promise<GetHistoricalAPRRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -31,11 +33,23 @@ export async function getHistoricalAPR({
     });
 
     if (!response.Messages?.[0]?.Data) {
-      throw new Error("No historical APR data received");
+      const errorTag = response.Messages[0].Tags.find(
+        (tag: { name: string; value: string }) => tag.name === "Error",
+      );
+      if (errorTag.value === "No data about this market") {
+        return [
+          {
+            apr: 0,
+            timestamp: Date.now(),
+          },
+        ];
+      } else {
+        throw new Error("No historical APR data received");
+      }
     }
 
     return JSON.parse(response.Messages[0].Data);
   } catch (error) {
-    throw new Error("Error in getAPR function: " + error);
+    throw new Error("Error in getHistoricalAPR function: " + error);
   }
 }
