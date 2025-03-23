@@ -1,7 +1,7 @@
 import { createData } from "warp-arbundles";
 
-import ArweaveSigner from "./signer.ts";
-import { JWKInterface } from "./jwk-interface.ts";
+import ArweaveSigner from "./signer";
+import { JWKInterface } from "./jwk-interface";
 
 const createDataItemSignerBun = (wallet: JWKInterface) => {
   const signer = ({ data, tags, target, anchor }: any) => {

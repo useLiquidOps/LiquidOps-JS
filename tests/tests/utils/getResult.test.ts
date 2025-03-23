@@ -2,7 +2,6 @@ import { expect, test } from "bun:test";
 import LiquidOps from "../../../src";
 import createDataItemSignerBun from "../../testsHelpers/bunSigner";
 import { JWKInterface } from "../../testsHelpers/bunSigner/jwk-interface";
-import { ownerToAddress } from "../../testsHelpers/arweaveUtils";
 
 test("getResult function", async () => {
   if (!process.env.JWK) {
@@ -12,7 +11,6 @@ test("getResult function", async () => {
   const JWK: JWKInterface = JSON.parse(process.env.JWK);
   const signer = createDataItemSignerBun(JWK);
   const client = new LiquidOps(signer);
-  const walletAddress = await ownerToAddress(JWK.n);
 
   try {
     const res = await client.getResult({

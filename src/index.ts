@@ -1,36 +1,50 @@
-// LO functions
-import { lend, Lend, LendRes } from "./functions/lend/lend";
-import { unLend, UnLend, UnLendRes } from "./functions/lend/unLend";
+// borrow
 import { borrow, Borrow, BorrowRes } from "./functions/borrow/borrow";
+import { repay, Repay, RepayRes } from "./functions/borrow/repay";
+
+// getTransactions
 import {
   getTransactions,
   GetTransactions,
   GetTransactionsRes,
 } from "./functions/getTransactions/getTransactions";
-import { repay, Repay, RepayRes } from "./functions/borrow/repay";
-import { getAPR, GetAPR } from "./functions/oTokenData/getAPR";
-import { getBalance, GetBalance } from "./functions/utils/getBalance";
+
+// lend
+import { lend, Lend, LendRes } from "./functions/lend/lend";
+import { unLend, UnLend, UnLendRes } from "./functions/lend/unLend";
+
+// liquidations
+import {
+  getLiquidations,
+  GetLiquidations,
+  GetLiquidationsRes,
+} from "./functions/liquidations/getLiquidations";
+import {
+  liquidate,
+  Liquidate,
+  LiquidateRes,
+} from "./functions/liquidations/liquidate";
+
+// oTokenData
+import { getAPR, GetAPR, GetAPRRes } from "./functions/oTokenData/getAPR";
+import {
+  getBalance,
+  GetBalance,
+  GetBalanceRes,
+} from "./functions/utils/getBalance";
 import {
   getExchangeRate,
   GetExchangeRate,
+  GetExchangeRateRes,
 } from "./functions/oTokenData/getExchangeRate";
 import { getInfo, GetInfo, GetInfoRes } from "./functions/oTokenData/getInfo";
-import { transfer, Transfer, TransferRes } from "./functions/utils/transfer";
-import {
-  getResult,
-  GetResult,
-  GetResultRes,
-} from "./functions/utils/getResult";
 import {
   getPosition,
   GetPosition,
   GetPositionRes,
 } from "./functions/oTokenData/getPosition";
-import {
-  getBalances,
-  GetBalances,
-  GetBalancesRes,
-} from "./functions/oTokenData/getBalances";
+
+// protocolData
 import {
   getAllPositions,
   GetAllPositions,
@@ -41,37 +55,41 @@ import {
   GetHistoricalAPR,
   GetHistoricalAPRRes,
 } from "./functions/protocolData/getHistoricalAPR";
+
+// utils
 import {
-  liquidate,
-  Liquidate,
-  LiquidateRes,
-} from "./functions/liquidations/liquidate";
+  getBalances,
+  GetBalances,
+  GetBalancesRes,
+} from "./functions/oTokenData/getBalances";
 import {
-  getLiquidations,
-  GetLiquidations,
-  GetLiquidationsRes,
-} from "./functions/liquidations/getLiquidations";
+  getResult,
+  GetResult,
+  GetResultRes,
+} from "./functions/utils/getResult";
+import { transfer, Transfer, TransferRes } from "./functions/utils/transfer";
+
 // LO helpful data
 import {
   oTokens,
   tokens,
-  controllers,
+  controllerAddress,
   tokenData,
   TokenData,
 } from "./ao/utils/tokenAddressData";
-// AO misc types/functions
+import { TokenInput, tokenInput } from "./ao/utils/tokenInput";
+
+// Class needed types/funtions
 import { connectToAO, AoUtils } from "./ao/utils/connect";
 import { Services } from "./ao/utils/connect";
 type Configs = Services;
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 type Signer = AoConnectTypes["signer"];
-import { TokenInput, tokenInput } from "./ao/utils/tokenInput";
-import { Quantity } from "ao-tokens";
 
 class LiquidOps {
   private aoUtils: AoUtils;
 
-  constructor(signer: Signer, configs: Configs = {}) {
+  constructor(signer: Signer, configs: Omit<Configs, "MODE"> = {}) {
     if (!signer) {
       throw new Error("Please specify a ao createDataItemSigner signer");
     }
@@ -112,26 +130,36 @@ class LiquidOps {
     return unLend(this.aoUtils, params);
   }
 
+  // liquidations
+
+  async getLiquidations(params: GetLiquidations): Promise<GetLiquidationsRes> {
+    return getLiquidations(params);
+  }
+
+  async liquidate(params: Liquidate): Promise<LiquidateRes> {
+    return liquidate(this.aoUtils, params);
+  }
+
   // oTokenData
 
-  async getAPR(params: GetAPR): Promise<number> {
-    return getAPR(this.aoUtils, params);
+  async getAPR(params: GetAPR): Promise<GetAPRRes> {
+    return getAPR(params);
   }
 
   async getBalances(params: GetBalances): Promise<GetBalancesRes> {
     return getBalances(params);
   }
 
+  async getExchangeRate(params: GetExchangeRate): Promise<GetExchangeRateRes> {
+    return getExchangeRate(params);
+  }
+
   async getInfo(params: GetInfo): Promise<GetInfoRes> {
-    return getInfo(this.aoUtils, params);
+    return getInfo(params);
   }
 
   async getPosition(params: GetPosition): Promise<GetPositionRes> {
-    return getPosition(this.aoUtils, params);
-  }
-
-  async getExchangeRate(params: GetExchangeRate): Promise<BigInt> {
-    return getExchangeRate(this.aoUtils, params);
+    return getPosition(params);
   }
 
   // protocol data
@@ -142,32 +170,22 @@ class LiquidOps {
 
   async getHistoricalAPR(
     params: GetHistoricalAPR,
-  ): Promise<GetHistoricalAPRRes[]> {
-    return getHistoricalAPR(this.aoUtils, params);
+  ): Promise<GetHistoricalAPRRes> {
+    return getHistoricalAPR(params);
   }
 
   // utils
 
-  async getBalance(params: GetBalance): Promise<Quantity> {
+  async getBalance(params: GetBalance): Promise<GetBalanceRes> {
     return getBalance(params);
-  }
-
-  async transfer(params: Transfer): Promise<TransferRes> {
-    return transfer(this.aoUtils, params);
   }
 
   async getResult(params: GetResult): Promise<GetResultRes> {
     return getResult(this.aoUtils, params);
   }
 
-  // liquidation
-
-  async liquidate(params: Liquidate): Promise<LiquidateRes> {
-    return liquidate(this.aoUtils, params);
-  }
-
-  async getLiquidations(params: GetLiquidations): Promise<GetLiquidationsRes> {
-    return getLiquidations(params);
+  async transfer(params: Transfer): Promise<TransferRes> {
+    return transfer(this.aoUtils, params);
   }
 
   // process data
@@ -196,15 +214,23 @@ export type {
   UnLend,
   UnLendRes,
 
+  // liquidations
+  GetLiquidations,
+  GetLiquidationsRes,
+  Liquidate,
+  LiquidateRes,
+
   // oTokenData
   GetAPR,
+  GetAPRRes,
   GetBalances,
   GetBalancesRes,
+  GetExchangeRate,
+  GetExchangeRateRes,
   GetInfo,
   GetInfoRes,
   GetPosition,
   GetPositionRes,
-  GetExchangeRate,
 
   // protocol data
   GetAllPositions,
@@ -213,19 +239,12 @@ export type {
   GetHistoricalAPRRes,
 
   // utils
-  // GetBalance,
-  Transfer,
-  TransferRes,
   GetBalance,
-  Quantity,
+  GetBalanceRes,
   GetResult,
   GetResultRes,
-
-  // liquidation
-  Liquidate,
-  LiquidateRes,
-  GetLiquidations,
-  GetLiquidationsRes,
+  Transfer,
+  TransferRes,
 
   // Utility types for constructor/setup
   AoUtils,
@@ -236,4 +255,4 @@ export type {
 };
 
 // Re-export static properties
-export { oTokens, tokens, controllers, tokenInput, tokenData };
+export { oTokens, tokens, controllerAddress, tokenInput, tokenData };

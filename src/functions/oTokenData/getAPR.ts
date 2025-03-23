@@ -1,20 +1,13 @@
 import { getData } from "../../ao/messaging/getData";
-import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetAPR {
   token: TokenInput;
 }
 
-export interface APRResponse {
-  "Annual-Percentage-Rate": string;
-  "Rate-Multiplier": string;
-}
+export type GetAPRRes = number;
 
-export async function getAPR(
-  aoUtils: AoUtils,
-  { token }: GetAPR,
-): Promise<number> {
+export async function getAPR({ token }: GetAPR): Promise<GetAPRRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -28,7 +21,10 @@ export async function getAPR(
     });
 
     const tags = checkDataRes.Messages[0].Tags;
-    const aprResponse: APRResponse = {
+    const aprResponse: {
+      "Annual-Percentage-Rate": string;
+      "Rate-Multiplier": string;
+    } = {
       "Annual-Percentage-Rate": "",
       "Rate-Multiplier": "",
     };

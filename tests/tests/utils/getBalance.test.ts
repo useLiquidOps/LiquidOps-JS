@@ -16,7 +16,7 @@ test("getBalance function", async () => {
 
   try {
     const res = await client.getBalance({
-      token: "QAR",
+      tokenAddress: "XJYGT9ZrVdzQ5d7FzptIsKrJtEF4jWPbgC91bXuBAwU",
       walletAddress,
     });
 

@@ -23,13 +23,13 @@ test("getPosition function", async () => {
 
     expect(res).toBeTypeOf("object");
     expect(res.capacity).toBeTypeOf("string");
-    expect(res.usedCapacity).toBeTypeOf("string");
+    expect(res.borrowBalance).toBeTypeOf("string");
     expect(res.collateralTicker).toBeTypeOf("string");
     expect(res.collateralDenomination).toBeTypeOf("string");
 
     expect(BigInt(res.capacity)).toBeGreaterThanOrEqual(0n);
-    expect(BigInt(res.usedCapacity)).toBeGreaterThanOrEqual(0n);
-    expect(BigInt(res.usedCapacity)).toBeLessThanOrEqual(BigInt(res.capacity));
+    expect(BigInt(res.borrowBalance)).toBeGreaterThanOrEqual(0n);
+    expect(BigInt(res.borrowBalance)).toBeLessThanOrEqual(BigInt(res.capacity));
     expect(res.collateralTicker.length).toBeGreaterThan(0);
     expect(BigInt(res.collateralDenomination)).toBeGreaterThan(0n);
   } catch (error) {

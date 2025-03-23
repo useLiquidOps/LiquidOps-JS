@@ -1,21 +1,23 @@
 import { getData } from "../../ao/messaging/getData";
-import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
+import { APRAgentAddress } from "../../ao/utils/tokenAddressData";
 
 export interface GetHistoricalAPR {
   token: TokenInput;
   fillGaps?: boolean;
 }
 
-export interface GetHistoricalAPRRes {
+export type GetHistoricalAPRRes = APR[];
+
+interface APR {
   apr: number;
   timestamp: number;
 }
 
-export async function getHistoricalAPR(
-  aoUtils: AoUtils,
-  { token, fillGaps = true }: GetHistoricalAPR,
-): Promise<GetHistoricalAPRRes[]> {
+export async function getHistoricalAPR({
+  token,
+  fillGaps = true,
+}: GetHistoricalAPR): Promise<GetHistoricalAPRRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -24,18 +26,30 @@ export async function getHistoricalAPR(
     const { oTokenAddress } = tokenInput(token);
 
     const response = await getData({
-      Target: "D3AlSUAtbWKcozsrvckRuCY6TVkAY1rWtLYGoGf6KIA", // APR Agent address
+      Target: APRAgentAddress,
       Action: "Get-Data",
       Token: oTokenAddress,
       "Fill-Gaps": fillGaps.toString(),
     });
 
     if (!response.Messages?.[0]?.Data) {
-      throw new Error("No historical APR data received");
+      const errorTag = response.Messages[0].Tags.find(
+        (tag: { name: string; value: string }) => tag.name === "Error",
+      );
+      if (errorTag.value === "No data about this market") {
+        return [
+          {
+            apr: 0,
+            timestamp: Date.now(),
+          },
+        ];
+      } else {
+        throw new Error("No historical APR data received");
+      }
     }
 
     return JSON.parse(response.Messages[0].Data);
   } catch (error) {
-    throw new Error("Error in getAPR function: " + error);
+    throw new Error("Error in getHistoricalAPR function: " + error);
   }
 }

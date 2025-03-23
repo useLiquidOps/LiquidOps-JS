@@ -1,10 +1,9 @@
 import { getData } from "../../ao/messaging/getData";
-import { AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetPosition {
   token: TokenInput;
-  recipient?: string;
+  recipient: string;
 }
 
 export interface GetPositionRes {
@@ -21,10 +20,10 @@ interface Tag {
   value: string;
 }
 
-export async function getPosition(
-  aoUtils: AoUtils,
-  { token, recipient }: GetPosition,
-): Promise<GetPositionRes> {
+export async function getPosition({
+  token,
+  recipient,
+}: GetPosition): Promise<GetPositionRes> {
   try {
     if (!token || !recipient) {
       throw new Error("Please specify a token and recipient.");
