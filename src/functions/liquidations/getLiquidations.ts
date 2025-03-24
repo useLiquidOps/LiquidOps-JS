@@ -14,9 +14,12 @@ export interface GetLiquidations {
   token: TokenInput;
 }
 
-export type GetLiquidationsRes = Map<string, QualifyingPosition>;
+export interface GetLiquidationsRes {
+  liquidations: Map<string, QualifyingPosition>;
+  prices: RedstonePrices;
+};
 
-interface QualifyingPosition {
+export interface QualifyingPosition {
   /* The tokens that can be liquidated */
   debts: {
     ticker: string;
@@ -28,8 +31,10 @@ interface QualifyingPosition {
     quantity: BigInt;
   }[];
   /** The current discount percentage for this liquidation (multiplied by the precision factor) */
-  discount: number;
+  discount: BigInt;
 }
+
+export type RedstonePrices = Record<string, { t: number, a: string, v: number }>;
 
 interface Tag {
   name: string;
@@ -70,6 +75,9 @@ export async function getLiquidations({
     if (!token) {
       throw new Error("Please specify a token.");
     }
+    if (!Number.isInteger(precisionFactor)) {
+      throw new Error("The precision factor has to be an integer");
+    }
 
     // Get list of tokens to process
     const tokensList = Object.keys(tokens);
@@ -98,7 +106,7 @@ export async function getLiquidations({
     ]);
     
     // parse prices and auctions
-    const prices = JSON.parse(redstonePriceFeedRes.Messages[0].Data);
+    const prices: RedstonePrices = JSON.parse(redstonePriceFeedRes.Messages[0].Data);
     const auctions: Record<string, number> = JSON.parse(auctionsRes.Messages[0].Data);
 
     // maximum discount percentage and discount period
@@ -172,12 +180,9 @@ export async function getLiquidations({
       }
 
       // calculate the discount for this user
-      const discount = Math.max(
-        Math.floor(
-          (discountInterval - timeSinceDiscovery) * maxDiscount * precisionFactor / discountInterval
-        ),
-        0
-      );
+      const discount = BigInt(Math.max(Math.floor(
+        (discountInterval - timeSinceDiscovery) * maxDiscount * precisionFactor / discountInterval
+      ), 0));
 
       // the final position that can be liquidated, with rewards and collaterals
       const qualifyingPos: QualifyingPosition = {
@@ -209,7 +214,10 @@ export async function getLiquidations({
       res.set(walletAddress, qualifyingPos);
     }
 
-    return res;
+    return {
+      liquidations: res,
+      prices
+    };
   } catch (error) {
     throw new Error(`Error in getLiquidations function: ${error}`);
   }
