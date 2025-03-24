@@ -13,7 +13,7 @@ export interface TokenData {
 
 export const controllerAddress = "vYlv6Dx8ZGt4oGaqsXaPjh9qi8iS8eQsoU9Ai65km4A";
 export const redstoneOracleAddress =
-  "5ndbRn7nQiAiQdiPc7AlY2idJGsakQotTRQr1f1UFj8";
+  "R5rRjBFS90qIGaohtzd1IoyPwZD0qJZ25QXkP7_p5a0";
 export const APRAgentAddress = "D3AlSUAtbWKcozsrvckRuCY6TVkAY1rWtLYGoGf6KIA";
 
 export const tokenData: Record<string, TokenData> = {
