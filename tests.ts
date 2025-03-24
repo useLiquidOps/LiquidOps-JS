@@ -104,6 +104,14 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 //-------------------------------
 
+const getGlobalPosition = await client.getGlobalPosition({
+  walletAddress: walletAddress
+});
+
+console.log(getGlobalPosition);
+
+//-------------------------------
+
 // const getInfo = await client.getInfo({
 //   token: "QAR",
 // });

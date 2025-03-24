@@ -43,6 +43,7 @@ import {
   GetExchangeRate,
   GetExchangeRateRes,
 } from "./functions/oTokenData/getExchangeRate";
+import { getGlobalPosition, GetGlobalPosition, GetGlobalPositionRes } from "./functions/oTokenData/getGlobalPosition";
 import { getInfo, GetInfo, GetInfoRes } from "./functions/oTokenData/getInfo";
 import {
   getPosition,
@@ -166,6 +167,10 @@ class LiquidOps {
     return getExchangeRate(params);
   }
 
+  async getGlobalPosition(params: GetGlobalPosition): Promise<GetGlobalPositionRes> {
+    return getGlobalPosition(params)
+  }
+
   async getInfo(params: GetInfo): Promise<GetInfoRes> {
     return getInfo(params);
   }
@@ -242,6 +247,8 @@ export type {
   GetBalancesRes,
   GetExchangeRate,
   GetExchangeRateRes,
+  GetGlobalPosition,
+  GetGlobalPositionRes,
   GetInfo,
   GetInfoRes,
   GetPosition,
