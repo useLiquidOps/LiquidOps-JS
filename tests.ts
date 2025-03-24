@@ -104,11 +104,11 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 //-------------------------------
 
-const getGlobalPosition = await client.getGlobalPosition({
-  walletAddress: walletAddress
-});
+// const getGlobalPosition = await client.getGlobalPosition({
+//   walletAddress: walletAddress
+// });
 
-console.log(getGlobalPosition);
+// console.log(getGlobalPosition);
 
 //-------------------------------
 

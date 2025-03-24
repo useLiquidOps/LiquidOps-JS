@@ -17,7 +17,7 @@ export interface GetLiquidations {
 export interface GetLiquidationsRes {
   liquidations: Map<string, QualifyingPosition>;
   prices: RedstonePrices;
-};
+}
 
 export interface QualifyingPosition {
   /* The tokens that can be liquidated */
@@ -34,7 +34,10 @@ export interface QualifyingPosition {
   discount: BigInt;
 }
 
-export type RedstonePrices = Record<string, { t: number, a: string, v: number }>;
+export type RedstonePrices = Record<
+  string,
+  { t: number; a: string; v: number }
+>;
 
 interface Tag {
   name: string;
@@ -68,9 +71,10 @@ interface GlobalPosition {
   };
 }
 
-export async function getLiquidations({
-  token,
-}: GetLiquidations, precisionFactor: number): Promise<GetLiquidationsRes> {
+export async function getLiquidations(
+  { token }: GetLiquidations,
+  precisionFactor: number,
+): Promise<GetLiquidationsRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -82,32 +86,39 @@ export async function getLiquidations({
     // Get list of tokens to process
     const tokensList = Object.keys(tokens);
 
-    const [redstonePriceFeedRes, positionsList, auctionsRes] = await Promise.all([
-      // Make a request to RedStone oracle process for prices (same used onchain)
-      getData({
-        Target: redstoneOracleAddress,
-        Action: "v2.Request-Latest-Data",
-        Tickers: JSON.stringify(collateralEnabledTickers.map((ticker) =>
-          ticker === "QAR" ? "AR" : ticker,
-        )),
-      }),
-      // Get positions for each token
-      Promise.all(
-        tokensList.map(async (token) => ({
-          token,
-          positions: await getAllPositions({ token })
-        }))
-      ),
-      // get discovered liquidations
-      getData({
-        Target: controllerAddress,
-        Action: "Get-Auctions"
-      })
-    ]);
-    
+    const [redstonePriceFeedRes, positionsList, auctionsRes] =
+      await Promise.all([
+        // Make a request to RedStone oracle process for prices (same used onchain)
+        getData({
+          Target: redstoneOracleAddress,
+          Action: "v2.Request-Latest-Data",
+          Tickers: JSON.stringify(
+            collateralEnabledTickers.map((ticker) =>
+              ticker === "QAR" ? "AR" : ticker,
+            ),
+          ),
+        }),
+        // Get positions for each token
+        Promise.all(
+          tokensList.map(async (token) => ({
+            token,
+            positions: await getAllPositions({ token }),
+          })),
+        ),
+        // get discovered liquidations
+        getData({
+          Target: controllerAddress,
+          Action: "Get-Auctions",
+        }),
+      ]);
+
     // parse prices and auctions
-    const prices: RedstonePrices = JSON.parse(redstonePriceFeedRes.Messages[0].Data);
-    const auctions: Record<string, number> = JSON.parse(auctionsRes.Messages[0].Data);
+    const prices: RedstonePrices = JSON.parse(
+      redstonePriceFeedRes.Messages[0].Data,
+    );
+    const auctions: Record<string, number> = JSON.parse(
+      auctionsRes.Messages[0].Data,
+    );
 
     // maximum discount percentage and discount period
     const auctionTags = Object.fromEntries(
@@ -123,26 +134,32 @@ export async function getLiquidations({
     for (const { token, positions: localPositions } of positionsList) {
       // token data
       const tokenPrice = prices[token === "QAR" ? "AR" : token].v;
-      const tokenDenomination = tokenData[token as SupportedTokensTickers].denomination;
+      const tokenDenomination =
+        tokenData[token as SupportedTokensTickers].denomination;
 
       // Use the token's specific denomination for scaling
       const scale = BigInt(10) ** tokenDenomination;
       const priceScaled = BigInt(Math.round(tokenPrice * Number(scale)));
 
       // loop through all positions, add them to the global positions
-      for (const [walletAddress, position] of Object.entries<TokenPosition>(localPositions)) {
+      for (const [walletAddress, position] of Object.entries<TokenPosition>(
+        localPositions,
+      )) {
         const posValueUSD = {
-          borrowBalanceUSD: position.borrowBalance as bigint * priceScaled / scale,
-          capacityUSD: position.capacity as bigint * priceScaled / scale,
-          collateralizationUSD: position.collateralization as bigint * priceScaled / scale,
-          liquidationLimitUSD: position.liquidationLimit as bigint * priceScaled / scale
+          borrowBalanceUSD:
+            ((position.borrowBalance as bigint) * priceScaled) / scale,
+          capacityUSD: ((position.capacity as bigint) * priceScaled) / scale,
+          collateralizationUSD:
+            ((position.collateralization as bigint) * priceScaled) / scale,
+          liquidationLimitUSD:
+            ((position.liquidationLimit as bigint) * priceScaled) / scale,
         };
 
         if (!globalPositions.has(walletAddress)) {
           // no global position calculated for this user yet
           globalPositions.set(walletAddress, {
             ...posValueUSD,
-            tokenPositions: { [token]: position }
+            tokenPositions: { [token]: position },
           });
         } else {
           // update existing global position
@@ -172,7 +189,8 @@ export async function getLiquidations({
 
       // time calculations for the discount
       const currentTime = Date.now();
-      let timeSinceDiscovery = currentTime - (auctions[walletAddress] || currentTime);
+      let timeSinceDiscovery =
+        currentTime - (auctions[walletAddress] || currentTime);
 
       // maximum price reached, no discount applied
       if (timeSinceDiscovery > discountInterval) {
@@ -180,32 +198,42 @@ export async function getLiquidations({
       }
 
       // calculate the discount for this user
-      const discount = BigInt(Math.max(Math.floor(
-        (discountInterval - timeSinceDiscovery) * maxDiscount * precisionFactor / discountInterval
-      ), 0));
+      const discount = BigInt(
+        Math.max(
+          Math.floor(
+            ((discountInterval - timeSinceDiscovery) *
+              maxDiscount *
+              precisionFactor) /
+              discountInterval,
+          ),
+          0,
+        ),
+      );
 
       // the final position that can be liquidated, with rewards and collaterals
       const qualifyingPos: QualifyingPosition = {
         debts: [],
         collaterals: [],
-        discount
+        discount,
       };
 
       // find rewards and debt
-      for (const [token, localPosition] of Object.entries<TokenPosition>(position.tokenPositions)) {
+      for (const [token, localPosition] of Object.entries<TokenPosition>(
+        position.tokenPositions,
+      )) {
         // found a debt
-        if (localPosition.borrowBalance as bigint > BigInt(0)) {
+        if ((localPosition.borrowBalance as bigint) > BigInt(0)) {
           qualifyingPos.debts.push({
             ticker: token,
-            quantity: localPosition.borrowBalance
+            quantity: localPosition.borrowBalance,
           });
         }
 
         // found a reward
-        if (localPosition.collateralization as bigint > BigInt(0)) {
+        if ((localPosition.collateralization as bigint) > BigInt(0)) {
           qualifyingPos.collaterals.push({
             ticker: token,
-            quantity: localPosition.collateralization
+            quantity: localPosition.collateralization,
           });
         }
       }
@@ -216,7 +244,7 @@ export async function getLiquidations({
 
     return {
       liquidations: res,
-      prices
+      prices,
     };
   } catch (error) {
     throw new Error(`Error in getLiquidations function: ${error}`);

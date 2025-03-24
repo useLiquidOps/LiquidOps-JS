@@ -28,7 +28,7 @@ interface GlobalPosition {
   };
 }
 
-type RedstonePrices = Record<string, { t: number, a: string, v: number }>;
+type RedstonePrices = Record<string, { t: number; a: string; v: number }>;
 
 export interface GetGlobalPositionRes {
   globalPosition: GlobalPosition;
@@ -54,31 +54,35 @@ export async function getGlobalPosition({
     const redstonePriceFeedRes = await getData({
       Target: redstoneOracleAddress,
       Action: "v2.Request-Latest-Data",
-      Tickers: JSON.stringify(collateralEnabledTickers.map((ticker) =>
-        ticker === "QAR" ? "AR" : ticker,
-      )),
+      Tickers: JSON.stringify(
+        collateralEnabledTickers.map((ticker) =>
+          ticker === "QAR" ? "AR" : ticker,
+        ),
+      ),
     });
-    
+
     // Parse prices
-    const prices: RedstonePrices = JSON.parse(redstonePriceFeedRes.Messages[0].Data);
+    const prices: RedstonePrices = JSON.parse(
+      redstonePriceFeedRes.Messages[0].Data,
+    );
 
     // Fetch positions for each token
     const positionsPromises = tokensList.map(async (token) => {
       try {
-        const position = await getPosition({ 
-          token, 
-          recipient: walletAddress 
+        const position = await getPosition({
+          token,
+          recipient: walletAddress,
         });
-        
+
         return {
           token,
-          position
+          position,
         };
       } catch (error) {
         // If position doesn't exist for this token, return null
         return {
           token,
-          position: null
+          position: null,
         };
       }
     });
@@ -91,21 +95,21 @@ export async function getGlobalPosition({
       capacityUSD: BigInt(0),
       collateralizationUSD: BigInt(0),
       liquidationLimitUSD: BigInt(0),
-      tokenPositions: {}
+      tokenPositions: {},
     };
 
     // Calculate global position for the wallet across all tokens
     for (const { token, position } of positionsResults) {
       // Skip if position doesn't exist for this token
       if (!position) continue;
-      
+
       // Parse values to BigInt
       const tokenPosition: TokenPosition = {
         borrowBalance: BigInt(position.borrowBalance || 0),
         capacity: BigInt(position.capacity || 0),
         collateralization: BigInt(position.collateralization || 0),
         liquidationLimit: BigInt(position.liquidationLimit || 0),
-        ticker: token
+        ticker: token,
       };
 
       // Store the token position
@@ -113,17 +117,21 @@ export async function getGlobalPosition({
 
       // Get token price and denomination for USD conversion
       const tokenPrice = prices[token === "QAR" ? "AR" : token].v;
-      const tokenDenomination = tokenData[token as SupportedTokensTickers].denomination;
+      const tokenDenomination =
+        tokenData[token as SupportedTokensTickers].denomination;
 
       // Use the token's specific denomination for scaling
       const scale = BigInt(10) ** BigInt(tokenDenomination);
       const priceScaled = BigInt(Math.round(tokenPrice * Number(scale)));
 
       // Convert token values to USD
-      const borrowBalanceUSD = tokenPosition.borrowBalance * priceScaled / scale;
-      const capacityUSD = tokenPosition.capacity * priceScaled / scale;
-      const collateralizationUSD = tokenPosition.collateralization * priceScaled / scale;
-      const liquidationLimitUSD = tokenPosition.liquidationLimit * priceScaled / scale;
+      const borrowBalanceUSD =
+        (tokenPosition.borrowBalance * priceScaled) / scale;
+      const capacityUSD = (tokenPosition.capacity * priceScaled) / scale;
+      const collateralizationUSD =
+        (tokenPosition.collateralization * priceScaled) / scale;
+      const liquidationLimitUSD =
+        (tokenPosition.liquidationLimit * priceScaled) / scale;
 
       // Add to global position totals
       globalPosition.borrowBalanceUSD += borrowBalanceUSD;
@@ -134,7 +142,7 @@ export async function getGlobalPosition({
 
     return {
       globalPosition,
-      prices
+      prices,
     };
   } catch (error) {
     throw new Error(`Error in getGlobalPosition function: ${error}`);

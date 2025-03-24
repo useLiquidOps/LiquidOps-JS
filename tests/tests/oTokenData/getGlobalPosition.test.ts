@@ -17,10 +17,10 @@ test("getGlobalPosition function", async () => {
 
   try {
     const res = (await client.getGlobalPosition({
-        walletAddress
+      walletAddress,
     })) as GetGlobalPositionRes;
 
-   // TODO: excpect types and finish test
+    // TODO: excpect types and finish test
   } catch (error) {
     console.error("Error testing getGlobalPosition():", error);
     throw error;

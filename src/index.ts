@@ -15,6 +15,11 @@ import { unLend, UnLend, UnLendRes } from "./functions/lend/unLend";
 
 // liquidations
 import {
+  getDiscountedQuantity,
+  GetDiscountedQuantity,
+  GetDiscountedQuantityRes,
+} from "./functions/liquidations/getDiscountedQuantity";
+import {
   getLiquidations,
   GetLiquidations,
   GetLiquidationsRes,
@@ -26,10 +31,6 @@ import {
   Liquidate,
   LiquidateRes,
 } from "./functions/liquidations/liquidate";
-import {
-  GetDiscountedQuantity,
-  getDiscountedQuantity
-} from "./functions/liquidations/getDiscountedQuantity";
 
 // oTokenData
 import { getAPR, GetAPR, GetAPRRes } from "./functions/oTokenData/getAPR";
@@ -43,7 +44,11 @@ import {
   GetExchangeRate,
   GetExchangeRateRes,
 } from "./functions/oTokenData/getExchangeRate";
-import { getGlobalPosition, GetGlobalPosition, GetGlobalPositionRes } from "./functions/oTokenData/getGlobalPosition";
+import {
+  getGlobalPosition,
+  GetGlobalPosition,
+  GetGlobalPositionRes,
+} from "./functions/oTokenData/getGlobalPosition";
 import { getInfo, GetInfo, GetInfoRes } from "./functions/oTokenData/getInfo";
 import {
   getPosition,
@@ -139,6 +144,12 @@ class LiquidOps {
 
   // liquidations
 
+  getDiscountedQuantity(
+    params: GetDiscountedQuantity,
+  ): GetDiscountedQuantityRes {
+    return getDiscountedQuantity(params, LiquidOps.liquidationPrecisionFactor);
+  }
+
   static liquidationPrecisionFactor = 1000000;
 
   async getLiquidations(params: GetLiquidations): Promise<GetLiquidationsRes> {
@@ -147,10 +158,6 @@ class LiquidOps {
 
   async liquidate(params: Liquidate): Promise<LiquidateRes> {
     return liquidate(this.aoUtils, params);
-  }
-
-  getDiscountedQuantity(params: GetDiscountedQuantity) {
-    return getDiscountedQuantity(params, LiquidOps.liquidationPrecisionFactor);
   }
 
   // oTokenData
@@ -167,8 +174,10 @@ class LiquidOps {
     return getExchangeRate(params);
   }
 
-  async getGlobalPosition(params: GetGlobalPosition): Promise<GetGlobalPositionRes> {
-    return getGlobalPosition(params)
+  async getGlobalPosition(
+    params: GetGlobalPosition,
+  ): Promise<GetGlobalPositionRes> {
+    return getGlobalPosition(params);
   }
 
   async getInfo(params: GetInfo): Promise<GetInfoRes> {
@@ -232,13 +241,15 @@ export type {
   UnLendRes,
 
   // liquidations
+  GetDiscountedQuantity,
+  GetDiscountedQuantityRes,
   GetLiquidations,
   GetLiquidationsRes,
-  QualifyingPosition,
-  RedstonePrices,
   Liquidate,
   LiquidateRes,
-  GetDiscountedQuantity,
+  // addional helpful liquidation types
+  QualifyingPosition,
+  RedstonePrices,
 
   // oTokenData
   GetAPR,
