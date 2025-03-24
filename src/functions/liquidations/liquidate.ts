@@ -19,13 +19,14 @@ export interface Liquidate {
   rewardToken: TokenInput;
   targetUserAddress: string;
   quantity: BigInt;
+  minExpectedQuantity?: BigInt;
 }
 
 export interface LiquidateRes extends TransactionResult {}
 
 export async function liquidate(
   aoUtils: AoUtils,
-  { token, rewardToken, targetUserAddress, quantity }: Liquidate,
+  { token, rewardToken, targetUserAddress, quantity, minExpectedQuantity }: Liquidate,
 ): Promise<LiquidateRes> {
   try {
     if (!token || !rewardToken || !targetUserAddress || !quantity) {
@@ -46,6 +47,10 @@ export async function liquidate(
         { name: "Recipient", value: controllerAddress },
         { name: "X-Target", value: targetUserAddress },
         { name: "X-Reward-Token", value: rewardTokenAddress },
+        ...(minExpectedQuantity && [{
+          name: "X-Min-Expected-Quantity",
+          value: minExpectedQuantity.toString()
+        }] || []),
         { name: "Protocol-Name", value: "LiquidOps" },
       ],
       signer: aoUtils.signer,

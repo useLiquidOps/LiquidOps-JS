@@ -18,12 +18,18 @@ import {
   getLiquidations,
   GetLiquidations,
   GetLiquidationsRes,
+  QualifyingPosition,
+  RedstonePrices,
 } from "./functions/liquidations/getLiquidations";
 import {
   liquidate,
   Liquidate,
   LiquidateRes,
 } from "./functions/liquidations/liquidate";
+import {
+  GetDiscountedQuantity,
+  getDiscountedQuantity
+} from "./functions/liquidations/getDiscountedQuantity";
 
 // oTokenData
 import { getAPR, GetAPR, GetAPRRes } from "./functions/oTokenData/getAPR";
@@ -132,12 +138,18 @@ class LiquidOps {
 
   // liquidations
 
+  static liquidationPrecisionFactor = 1000000;
+
   async getLiquidations(params: GetLiquidations): Promise<GetLiquidationsRes> {
-    return getLiquidations(params);
+    return getLiquidations(params, LiquidOps.liquidationPrecisionFactor);
   }
 
   async liquidate(params: Liquidate): Promise<LiquidateRes> {
     return liquidate(this.aoUtils, params);
+  }
+
+  getDiscountedQuantity(params: GetDiscountedQuantity) {
+    return getDiscountedQuantity(params, LiquidOps.liquidationPrecisionFactor);
   }
 
   // oTokenData
@@ -217,8 +229,11 @@ export type {
   // liquidations
   GetLiquidations,
   GetLiquidationsRes,
+  QualifyingPosition,
+  RedstonePrices,
   Liquidate,
   LiquidateRes,
+  GetDiscountedQuantity,
 
   // oTokenData
   GetAPR,

@@ -5,6 +5,7 @@ import {
   tokens,
   tokenData,
   SupportedTokensTickers,
+  controllerAddress,
 } from "../../ao/utils/tokenAddressData";
 import { redstoneOracleAddress } from "../../ao/utils/tokenAddressData";
 import { getAllPositions } from "../protocolData/getAllPositions";
@@ -14,17 +15,30 @@ export interface GetLiquidations {
 }
 
 export interface GetLiquidationsRes {
-  // Ticker of the collateral the liquidator will pay with
-  [ticker: string]: Liquidations[];
+  liquidations: Map<string, QualifyingPosition>;
+  prices: RedstonePrices;
+};
+
+export interface QualifyingPosition {
+  /* The tokens that can be liquidated */
+  debts: {
+    ticker: string;
+    quantity: BigInt;
+  }[];
+  /* The available collaterals that can be received for the liquidation */
+  collaterals: {
+    ticker: string;
+    quantity: BigInt;
+  }[];
+  /** The current discount percentage for this liquidation (multiplied by the precision factor) */
+  discount: BigInt;
 }
 
-interface Liquidations {
-  target: string; // liquidation target wallet addr (the user that will get liquidated)
-  collaterals: {
-    // the array of collaterals the user holds in their position
-    ticker: string; // the collateral's ticker
-    quantity: BigInt; // the amount of tokens the user holds of this collateral
-  }[];
+export type RedstonePrices = Record<string, { t: number, a: string, v: number }>;
+
+interface Tag {
+  name: string;
+  value: string;
 }
 
 // Base token position with the core metrics
@@ -50,164 +64,160 @@ interface GlobalPosition {
   collateralizationUSD: BigInt;
   liquidationLimitUSD: BigInt;
   tokenPositions: {
-    [token: string]: TokenPositionUSD;
+    [token: string]: TokenPosition;
   };
 }
 
 export async function getLiquidations({
   token,
-}: GetLiquidations): Promise<GetLiquidationsRes> {
+}: GetLiquidations, precisionFactor: number): Promise<GetLiquidationsRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
     }
-
-    // Make a request to RedStone oracle process for prices (same used onchain)
-    const mappedTickers = collateralEnabledTickers.map((ticker) =>
-      ticker === "QAR" ? "AR" : ticker,
-    );
-    const redstonePriceFeedRes = await getData({
-      Target: redstoneOracleAddress,
-      Action: "v2.Request-Latest-Data",
-      Tickers: JSON.stringify(mappedTickers),
-    });
-
-    const prices = JSON.parse(redstonePriceFeedRes.Messages[0].Data);
+    if (!Number.isInteger(precisionFactor)) {
+      throw new Error("The precision factor has to be an integer");
+    }
 
     // Get list of tokens to process
     const tokensList = Object.keys(tokens);
 
-    // Get positions for each token
-    const positionsList = [];
-    for (const tokenTicker of tokensList) {
-      const allPositions = await getAllPositions({
-        token: tokenTicker,
-      });
-      positionsList.push(allPositions);
-    }
+    const [redstonePriceFeedRes, positionsList, auctionsRes] = await Promise.all([
+      // Make a request to RedStone oracle process for prices (same used onchain)
+      getData({
+        Target: redstoneOracleAddress,
+        Action: "v2.Request-Latest-Data",
+        Tickers: JSON.stringify(collateralEnabledTickers.map((ticker) =>
+          ticker === "QAR" ? "AR" : ticker,
+        )),
+      }),
+      // Get positions for each token
+      Promise.all(
+        tokensList.map(async (token) => ({
+          token,
+          positions: await getAllPositions({ token })
+        }))
+      ),
+      // get discovered liquidations
+      getData({
+        Target: controllerAddress,
+        Action: "Get-Auctions"
+      })
+    ]);
+    
+    // parse prices and auctions
+    const prices: RedstonePrices = JSON.parse(redstonePriceFeedRes.Messages[0].Data);
+    const auctions: Record<string, number> = JSON.parse(auctionsRes.Messages[0].Data);
 
-    // Create an object to store global positions by wallet address
-    const globalPositions: { [walletAddress: string]: GlobalPosition } = {};
+    // maximum discount percentage and discount period
+    const auctionTags = Object.fromEntries(
+      auctionsRes.Messages[0].Tags.map((tag: Tag) => [tag.name, tag.value]),
+    );
+    const maxDiscount = parseFloat(auctionTags["Initial-Discount"] || "0");
+    const discountInterval = parseInt(auctionTags["Discount-Interval"] || "0");
+
+    // Create a map to store global positions by wallet address
+    const globalPositions = new Map<string, GlobalPosition>();
 
     // Calculate global positions for all wallets across all tokens
-    for (let i = 0; i < positionsList.length; i++) {
-      const tokenPositions = positionsList[i] as {
-        [walletAddress: string]: TokenPosition;
-      };
-      const token = tokensList[i];
+    for (const { token, positions: localPositions } of positionsList) {
+      // token data
       const tokenPrice = prices[token === "QAR" ? "AR" : token].v;
+      const tokenDenomination = tokenData[token as SupportedTokensTickers].denomination;
 
-      // Get the token's denomination (decimal places)
-      const denomination =
-        tokenData[token as SupportedTokensTickers].denomination;
+      // Use the token's specific denomination for scaling
+      const scale = BigInt(10) ** tokenDenomination;
+      const priceScaled = BigInt(Math.round(tokenPrice * Number(scale)));
 
-      // Loop through each wallet's position for this token
-      for (const walletAddress in tokenPositions) {
-        const position = tokenPositions[walletAddress];
-
-        // If this wallet doesn't exist in globalPositions yet, initialize it
-        if (!globalPositions[walletAddress]) {
-          globalPositions[walletAddress] = {
-            borrowBalanceUSD: BigInt(0),
-            capacityUSD: BigInt(0),
-            collateralizationUSD: BigInt(0),
-            liquidationLimitUSD: BigInt(0),
-            tokenPositions: {},
-          };
-        }
-
-        // Use the token's specific denomination for scaling
-        const scale = BigInt(10) ** denomination;
-        const priceScaled = BigInt(Math.round(tokenPrice * Number(scale)));
-
-        // Calculate USD values with proper token-specific scaling
-        // Scale price and amount up, then divide by scale to be as precise as possible
-        const borrowBalanceUSD =
-          (Number(position.borrowBalance) * Number(priceScaled)) /
-          Number(scale);
-        const capacityUSD =
-          (Number(position.capacity) * Number(priceScaled)) / Number(scale);
-        const collateralizationUSD =
-          (Number(position.collateralization) * Number(priceScaled)) /
-          Number(scale);
-        const liquidationLimitUSD =
-          (Number(position.liquidationLimit) * Number(priceScaled)) /
-          Number(scale);
-
-        // Add to global positions
-        globalPositions[walletAddress].borrowBalanceUSD = BigInt(
-          Number(globalPositions[walletAddress].borrowBalanceUSD) +
-            borrowBalanceUSD,
-        );
-        globalPositions[walletAddress].capacityUSD = BigInt(
-          Number(globalPositions[walletAddress].capacityUSD) + capacityUSD,
-        );
-        globalPositions[walletAddress].collateralizationUSD = BigInt(
-          Number(globalPositions[walletAddress].collateralizationUSD) +
-            collateralizationUSD,
-        );
-        globalPositions[walletAddress].liquidationLimitUSD = BigInt(
-          Number(globalPositions[walletAddress].liquidationLimitUSD) +
-            liquidationLimitUSD,
-        );
-
-        // Store the individual token position for reference
-        globalPositions[walletAddress].tokenPositions[token] = {
-          borrowBalance: position.borrowBalance,
-          borrowBalanceUSD: BigInt(borrowBalanceUSD),
-          capacity: position.capacity,
-          capacityUSD: BigInt(capacityUSD),
-          collateralization: position.collateralization,
-          collateralizationUSD: BigInt(collateralizationUSD),
-          liquidationLimit: position.liquidationLimit,
-          liquidationLimitUSD: BigInt(liquidationLimitUSD),
+      // loop through all positions, add them to the global positions
+      for (const [walletAddress, position] of Object.entries<TokenPosition>(localPositions)) {
+        const posValueUSD = {
+          borrowBalanceUSD: position.borrowBalance as bigint * priceScaled / scale,
+          capacityUSD: position.capacity as bigint * priceScaled / scale,
+          collateralizationUSD: position.collateralization as bigint * priceScaled / scale,
+          liquidationLimitUSD: position.liquidationLimit as bigint * priceScaled / scale
         };
+
+        if (!globalPositions.has(walletAddress)) {
+          // no global position calculated for this user yet
+          globalPositions.set(walletAddress, {
+            ...posValueUSD,
+            tokenPositions: { [token]: position }
+          });
+        } else {
+          // update existing global position
+          const globalPos = globalPositions.get(walletAddress);
+
+          // @ts-expect-error
+          globalPos!.borrowBalanceUSD += posValueUSD.borrowBalanceUSD;
+          // @ts-expect-error
+          globalPos!.capacityUSD += posValueUSD.capacityUSD;
+          // @ts-expect-error
+          globalPos!.collateralizationUSD += posValueUSD.collateralizationUSD;
+          // @ts-expect-error
+          globalPos!.liquidationLimitUSD += posValueUSD.liquidationLimitUSD;
+          globalPos!.tokenPositions[token] = position;
+        }
       }
     }
 
     // Initialize available liquidations object
-    const availableLiquidations: GetLiquidationsRes = {};
+    const res = new Map<string, QualifyingPosition>();
 
     // Initialize liquidations object for each supported token
-    for (const ticker of tokensList) {
-      availableLiquidations[ticker] = [];
-    }
-
-    // Check each wallet's global position to see if it's eligible for liquidation
-    for (const walletAddress in globalPositions) {
-      const position = globalPositions[walletAddress];
-
+    for (const [walletAddress, position] of globalPositions) {
       // Check if the position is eligible for liquidation
-      // A position is eligible if borrowBalanceUSD >= liquidationLimitUSD
-      if (
-        Number(position.borrowBalanceUSD) >=
-        Number(position.liquidationLimitUSD)
-      ) {
-        // This wallet is eligible for liquidation
+      // A position is eligible if borrowBalanceUSD > liquidationLimitUSD
+      if (position.borrowBalanceUSD <= position.liquidationLimitUSD) continue;
 
-        // Collect all collaterals this wallet holds across all tokens
-        const collaterals: Array<{ ticker: string; quantity: BigInt }> = [];
+      // time calculations for the discount
+      const currentTime = Date.now();
+      let timeSinceDiscovery = currentTime - (auctions[walletAddress] || currentTime);
 
-        for (const tokenTicker in position.tokenPositions) {
-          const tokenPosition = position.tokenPositions[tokenTicker];
-          collaterals.push({
-            ticker: tokenTicker,
-            quantity: tokenPosition.collateralization,
+      // maximum price reached, no discount applied
+      if (timeSinceDiscovery > discountInterval) {
+        timeSinceDiscovery = discountInterval;
+      }
+
+      // calculate the discount for this user
+      const discount = BigInt(Math.max(Math.floor(
+        (discountInterval - timeSinceDiscovery) * maxDiscount * precisionFactor / discountInterval
+      ), 0));
+
+      // the final position that can be liquidated, with rewards and collaterals
+      const qualifyingPos: QualifyingPosition = {
+        debts: [],
+        collaterals: [],
+        discount
+      };
+
+      // find rewards and debt
+      for (const [token, localPosition] of Object.entries<TokenPosition>(position.tokenPositions)) {
+        // found a debt
+        if (localPosition.borrowBalance as bigint > BigInt(0)) {
+          qualifyingPos.debts.push({
+            ticker: token,
+            quantity: localPosition.borrowBalance
           });
         }
 
-        // Add this liquidation opportunity to each supported token's list
-        // TODO: check with Marton
-        for (const ticker of tokensList) {
-          availableLiquidations[ticker].push({
-            target: walletAddress,
-            collaterals: collaterals,
+        // found a reward
+        if (localPosition.collateralization as bigint > BigInt(0)) {
+          qualifyingPos.collaterals.push({
+            ticker: token,
+            quantity: localPosition.collateralization
           });
         }
       }
+
+      // add qualifying position as an opportunity to liquidate
+      res.set(walletAddress, qualifyingPos);
     }
 
-    return availableLiquidations;
+    return {
+      liquidations: res,
+      prices
+    };
   } catch (error) {
     throw new Error(`Error in getLiquidations function: ${error}`);
   }
