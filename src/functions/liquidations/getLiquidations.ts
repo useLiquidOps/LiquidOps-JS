@@ -27,6 +27,13 @@ interface QualifyingPosition {
     ticker: string;
     quantity: BigInt;
   }[];
+  /** The current discount percentage for this liquidation (multiplied by the precision factor) */
+  discount: number;
+}
+
+interface Tag {
+  name: string;
+  value: string;
 }
 
 // Base token position with the core metrics
@@ -58,7 +65,7 @@ interface GlobalPosition {
 
 export async function getLiquidations({
   token,
-}: GetLiquidations): Promise<GetLiquidationsRes> {
+}: GetLiquidations, precisionFactor: number): Promise<GetLiquidationsRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -67,7 +74,7 @@ export async function getLiquidations({
     // Get list of tokens to process
     const tokensList = Object.keys(tokens);
 
-    const [redstonePriceFeedRes, positionsList, auctions] = await Promise.all([
+    const [redstonePriceFeedRes, positionsList, auctionsRes] = await Promise.all([
       // Make a request to RedStone oracle process for prices (same used onchain)
       getData({
         Target: redstoneOracleAddress,
@@ -90,8 +97,16 @@ export async function getLiquidations({
       })
     ]);
     
-    // parse prices
+    // parse prices and auctions
     const prices = JSON.parse(redstonePriceFeedRes.Messages[0].Data);
+    const auctions: Record<string, number> = JSON.parse(auctionsRes.Messages[0].Data);
+
+    // maximum discount percentage and discount period
+    const auctionTags = Object.fromEntries(
+      auctionsRes.Messages[0].Tags.map((tag: Tag) => [tag.name, tag.value]),
+    );
+    const maxDiscount = parseFloat(auctionTags["Initial-Discount"] || "0");
+    const discountInterval = parseInt(auctionTags["Discount-Interval"] || "0");
 
     // Create a map to store global positions by wallet address
     const globalPositions = new Map<string, GlobalPosition>();
@@ -147,9 +162,28 @@ export async function getLiquidations({
       // A position is eligible if borrowBalanceUSD > liquidationLimitUSD
       if (position.borrowBalanceUSD <= position.liquidationLimitUSD) continue;
 
+      // time calculations for the discount
+      const currentTime = Date.now();
+      let timeSinceDiscovery = currentTime - (auctions[walletAddress] || currentTime);
+
+      // maximum price reached, no discount applied
+      if (timeSinceDiscovery > discountInterval) {
+        timeSinceDiscovery = discountInterval;
+      }
+
+      // calculate the discount for this user
+      const discount = Math.max(
+        Math.floor(
+          (discountInterval - timeSinceDiscovery) * maxDiscount * precisionFactor / discountInterval
+        ),
+        0
+      );
+
+      // the final position that can be liquidated, with rewards and collaterals
       const qualifyingPos: QualifyingPosition = {
         debts: [],
-        collaterals: []
+        collaterals: [],
+        discount
       };
 
       // find rewards and debt

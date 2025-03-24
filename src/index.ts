@@ -132,8 +132,10 @@ class LiquidOps {
 
   // liquidations
 
+  static liquidationPrecisionFactor = 1000000;
+
   async getLiquidations(params: GetLiquidations): Promise<GetLiquidationsRes> {
-    return getLiquidations(params);
+    return getLiquidations(params, LiquidOps.liquidationPrecisionFactor);
   }
 
   async liquidate(params: Liquidate): Promise<LiquidateRes> {
