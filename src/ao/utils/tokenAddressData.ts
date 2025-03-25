@@ -11,7 +11,7 @@ export interface TokenData {
   collateralEnabled: boolean;
 }
 
-export const controllerAddress = "vYlv6Dx8ZGt4oGaqsXaPjh9qi8iS8eQsoU9Ai65km4A";
+export const controllerAddress = "SmmMv0rJwfIDVM3RvY2-P729JFYwhdGSeGo2deynbfY";
 export const redstoneOracleAddress =
   "R5rRjBFS90qIGaohtzd1IoyPwZD0qJZ25QXkP7_p5a0";
 export const APRAgentAddress = "D3AlSUAtbWKcozsrvckRuCY6TVkAY1rWtLYGoGf6KIA";
@@ -21,9 +21,9 @@ export const tokenData: Record<string, TokenData> = {
     name: "Quantum Arweave",
     icon: "8VLMb0c9NATl4iczfwpMDe1Eh8kFWIUpSlIkcGfDFzM",
     ticker: "QAR",
-    address: "rjYl6i4cDpE4c-OIJ7srTrcNulrf8Xw4Y8pDZDBAOUs",
+    address: "NG-0lVX882MG5nhARrSzyprEK6ejonHpdUmaaMPsHE8",
     oTicker: "oQAR",
-    oAddress: "G_nw_FqdNv-tz8cQmd8vJZkjMs42HBJjY7HzyVfh51U",
+    oAddress: "fODpFVOb5weX9Yc-26AA82m2MhmT7N9L0TkynOsruK0",
     controllerAddress,
     cleanTicker: "qAR",
     denomination: BigInt(12),
@@ -33,9 +33,9 @@ export const tokenData: Record<string, TokenData> = {
     name: "Wrapped USD Circle",
     icon: "iNYk0bDqUiH0eLT2rbYjYAI5i126R4ye8iAZb55IaIM",
     ticker: "WUSDC",
-    address: "zFEDdM1uAW1n3dwgzLUTO0GGFbCMdEXfDQjNc3Gbong",
+    address: "7zH9dlMNoxprab9loshv3Y7WG45DOny_Vrq9KrXObdQ",
     oTicker: "oWUSDC",
-    oAddress: "_mqEcN6LtjkpI4cgw2JZ30WOgmwO83uIZ5ivXg5uWz0",
+    oAddress: "4MW7uLFtttSLWM-yWEqV9TGD6fSIDrqa4lbTgYL2qHg",
     controllerAddress,
     cleanTicker: "wUSDC",
     denomination: BigInt(12),
