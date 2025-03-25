@@ -29,7 +29,7 @@ export const tokenData: Record<string, TokenData> = {
     denomination: BigInt(12),
     collateralEnabled: true,
   },
-  USDC: {
+  WUSDC: {
     name: "Wrapped USD Circle",
     icon: "iNYk0bDqUiH0eLT2rbYjYAI5i126R4ye8iAZb55IaIM",
     ticker: "WUSDC",
