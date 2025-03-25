@@ -55,9 +55,11 @@ export async function getGlobalPosition({
       Target: redstoneOracleAddress,
       Action: "v2.Request-Latest-Data",
       Tickers: JSON.stringify(
-        collateralEnabledTickers.map((ticker) =>
-          ticker === "QAR" ? "AR" : ticker,
-        ),
+        collateralEnabledTickers.map((ticker) => {
+          if (ticker === "QAR") return "AR";
+          if (ticker === "WUSDC") return "USDC";
+          return ticker;
+        }),
       ),
     });
 
@@ -116,7 +118,7 @@ export async function getGlobalPosition({
       globalPosition.tokenPositions[token] = tokenPosition;
 
       // Get token price and denomination for USD conversion
-      const tokenPrice = prices[token === "QAR" ? "AR" : token].v;
+      const tokenPrice = prices[token === "QAR" ? "AR" : token === "WUSDC" ? "USDC" : token].v;
       const tokenDenomination =
         tokenData[token as SupportedTokensTickers].denomination;
 
