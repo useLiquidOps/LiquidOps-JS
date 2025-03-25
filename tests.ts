@@ -70,7 +70,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // const liquidate = await client.liquidate({
 //   token: "QAR",
-//   rewardToken: "USDC",
+//   rewardToken: "WUSDC",
 //   targetUserAddress: "ljvCPN31XCLPkBo9FUeB7vAK0VC6-eY52-CS-6Iho8U",
 //   quantity: 1n,
 // });
