@@ -118,7 +118,8 @@ export async function getGlobalPosition({
       globalPosition.tokenPositions[token] = tokenPosition;
 
       // Get token price and denomination for USD conversion
-      const tokenPrice = prices[token === "QAR" ? "AR" : token === "WUSDC" ? "USDC" : token].v;
+      const tokenPrice =
+        prices[token === "QAR" ? "AR" : token === "WUSDC" ? "USDC" : token].v;
       const tokenDenomination =
         tokenData[token as SupportedTokensTickers].denomination;
 

@@ -116,7 +116,7 @@ class LiquidOps {
     };
   }
 
-  // borrow
+  //--------------------------------------------------------------------------------------------------------------- borrow
 
   async borrow(params: Borrow): Promise<BorrowRes> {
     return borrow(this.aoUtils, params);
@@ -126,13 +126,13 @@ class LiquidOps {
     return repay(this.aoUtils, params);
   }
 
-  // getTransactions
+  //--------------------------------------------------------------------------------------------------------------- getTransactions
 
   async getTransactions(params: GetTransactions): Promise<GetTransactionsRes> {
     return getTransactions(this.aoUtils, params);
   }
 
-  // lend
+  //--------------------------------------------------------------------------------------------------------------- lend
 
   async lend(params: Lend): Promise<LendRes> {
     return lend(this.aoUtils, params);
@@ -142,7 +142,7 @@ class LiquidOps {
     return unLend(this.aoUtils, params);
   }
 
-  // liquidations
+  //--------------------------------------------------------------------------------------------------------------- liquidations
 
   getDiscountedQuantity(
     params: GetDiscountedQuantity,
@@ -160,7 +160,7 @@ class LiquidOps {
     return liquidate(this.aoUtils, params);
   }
 
-  // oTokenData
+  //--------------------------------------------------------------------------------------------------------------- oTokenData
 
   async getAPR(params: GetAPR): Promise<GetAPRRes> {
     return getAPR(params);
@@ -188,7 +188,7 @@ class LiquidOps {
     return getPosition(params);
   }
 
-  // protocol data
+  //--------------------------------------------------------------------------------------------------------------- protocolData
 
   async getAllPositions(params: GetAllPositions): Promise<GetAllPositionsRes> {
     return getAllPositions(params);
@@ -200,7 +200,7 @@ class LiquidOps {
     return getHistoricalAPR(params);
   }
 
-  // utils
+  //--------------------------------------------------------------------------------------------------------------- utils
 
   async getBalance(params: GetBalance): Promise<GetBalanceRes> {
     return getBalance(params);
@@ -214,7 +214,7 @@ class LiquidOps {
     return transfer(this.aoUtils, params);
   }
 
-  // process data
+  //--------------------------------------------------------------------------------------------------------------- process data
 
   static oTokens = oTokens;
   static tokens = tokens;
