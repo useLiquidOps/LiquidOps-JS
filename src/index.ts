@@ -21,7 +21,6 @@ import {
 } from "./functions/liquidations/getDiscountedQuantity";
 import {
   getLiquidations,
-  GetLiquidations,
   GetLiquidationsRes,
   QualifyingPosition,
   RedstonePrices,
@@ -152,8 +151,8 @@ class LiquidOps {
 
   static liquidationPrecisionFactor = 1000000;
 
-  async getLiquidations(params: GetLiquidations): Promise<GetLiquidationsRes> {
-    return getLiquidations(params, LiquidOps.liquidationPrecisionFactor);
+  async getLiquidations(): Promise<GetLiquidationsRes> {
+    return getLiquidations(LiquidOps.liquidationPrecisionFactor);
   }
 
   async liquidate(params: Liquidate): Promise<LiquidateRes> {
@@ -243,7 +242,6 @@ export type {
   // liquidations
   GetDiscountedQuantity,
   GetDiscountedQuantityRes,
-  GetLiquidations,
   GetLiquidationsRes,
   Liquidate,
   LiquidateRes,

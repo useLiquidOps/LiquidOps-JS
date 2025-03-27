@@ -10,10 +10,6 @@ import {
 import { redstoneOracleAddress } from "../../ao/utils/tokenAddressData";
 import { getAllPositions } from "../protocolData/getAllPositions";
 
-export interface GetLiquidations {
-  token: TokenInput;
-}
-
 export interface GetLiquidationsRes {
   liquidations: Map<string, QualifyingPosition>;
   usdDenomination: BigInt;
@@ -53,14 +49,6 @@ interface TokenPosition {
   liquidationLimit: BigInt;
 }
 
-// Extended token position with USD values
-interface TokenPositionUSD extends TokenPosition {
-  borrowBalanceUSD: BigInt;
-  capacityUSD: BigInt;
-  collateralizationUSD: BigInt;
-  liquidationLimitUSD: BigInt;
-}
-
 // Global position across all tokens
 interface GlobalPosition {
   borrowBalanceUSD: BigInt;
@@ -72,14 +60,8 @@ interface GlobalPosition {
   };
 }
 
-export async function getLiquidations(
-  { token }: GetLiquidations,
-  precisionFactor: number,
-): Promise<GetLiquidationsRes> {
+export async function getLiquidations(precisionFactor: number): Promise<GetLiquidationsRes> {
   try {
-    if (!token) {
-      throw new Error("Please specify a token.");
-    }
     if (!Number.isInteger(precisionFactor)) {
       throw new Error("The precision factor has to be an integer");
     }
