@@ -23,6 +23,7 @@ interface GlobalPosition {
   capacityUSD: bigint;
   collateralizationUSD: bigint;
   liquidationLimitUSD: bigint;
+  usdDenomination: bigint;
   tokenPositions: {
     [token: string]: TokenPosition;
   };
@@ -97,8 +98,12 @@ export async function getGlobalPosition({
       capacityUSD: BigInt(0),
       collateralizationUSD: BigInt(0),
       liquidationLimitUSD: BigInt(0),
+      usdDenomination: BigInt(0),
       tokenPositions: {},
     };
+
+    // Highest denomination used
+    let highestDenomination = BigInt(0);
 
     // Calculate global position for the wallet across all tokens
     for (const { token, position } of positionsResults) {
@@ -121,20 +126,27 @@ export async function getGlobalPosition({
       const tokenPrice =
         prices[token === "QAR" ? "AR" : token === "WUSDC" ? "USDC" : token].v;
       const tokenDenomination =
-        tokenData[token as SupportedTokensTickers].denomination;
+        tokenData[token as SupportedTokensTickers].baseDenomination;
+
+      // Set the highest denomination
+      if (highestDenomination < tokenDenomination)
+        highestDenomination = tokenDenomination;
 
       // Use the token's specific denomination for scaling
-      const scale = BigInt(10) ** BigInt(tokenDenomination);
+      const scale = BigInt(10) ** highestDenomination;
       const priceScaled = BigInt(Math.round(tokenPrice * Number(scale)));
+
+      // The scale difference caused by the different token denominations
+      const scaleDifference = BigInt(10) ** (highestDenomination - tokenDenomination)
 
       // Convert token values to USD
       const borrowBalanceUSD =
-        (tokenPosition.borrowBalance * priceScaled) / scale;
-      const capacityUSD = (tokenPosition.capacity * priceScaled) / scale;
+        (tokenPosition.borrowBalance * scaleDifference * priceScaled) / scale;
+      const capacityUSD = (tokenPosition.capacity * scaleDifference * priceScaled) / scale;
       const collateralizationUSD =
-        (tokenPosition.collateralization * priceScaled) / scale;
+        (tokenPosition.collateralization * scaleDifference * priceScaled) / scale;
       const liquidationLimitUSD =
-        (tokenPosition.liquidationLimit * priceScaled) / scale;
+        (tokenPosition.liquidationLimit * scaleDifference * priceScaled) / scale;
 
       // Add to global position totals
       globalPosition.borrowBalanceUSD += borrowBalanceUSD;
@@ -142,6 +154,9 @@ export async function getGlobalPosition({
       globalPosition.collateralizationUSD += collateralizationUSD;
       globalPosition.liquidationLimitUSD += liquidationLimitUSD;
     }
+
+    // Set USD denomination (should be the highest used denomination)
+    globalPosition.usdDenomination = highestDenomination;
 
     return {
       globalPosition,
