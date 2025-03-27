@@ -9,6 +9,7 @@ export interface TokenData {
   cleanTicker: string;
   denomination: bigint;
   collateralEnabled: boolean;
+  baseDenomination: bigint;
 }
 
 export const controllerAddress = "SmmMv0rJwfIDVM3RvY2-P729JFYwhdGSeGo2deynbfY";
@@ -28,6 +29,7 @@ export const tokenData: Record<string, TokenData> = {
     cleanTicker: "qAR",
     denomination: BigInt(12),
     collateralEnabled: true,
+    baseDenomination: BigInt(12),
   },
   WUSDC: {
     name: "Wrapped USD Circle",
@@ -40,6 +42,7 @@ export const tokenData: Record<string, TokenData> = {
     cleanTicker: "wUSDC",
     denomination: BigInt(12),
     collateralEnabled: true,
+    baseDenomination: BigInt(6),
   },
 };
 

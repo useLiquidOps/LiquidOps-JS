@@ -126,7 +126,7 @@ export async function getGlobalPosition({
       const tokenPrice =
         prices[token === "QAR" ? "AR" : token === "WUSDC" ? "USDC" : token].v;
       const tokenDenomination =
-        tokenData[token as SupportedTokensTickers].denomination;
+        tokenData[token as SupportedTokensTickers].baseDenomination;
 
       // Set the highest denomination
       if (highestDenomination < tokenDenomination)
