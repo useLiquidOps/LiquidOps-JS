@@ -10,12 +10,9 @@ import {
 import { redstoneOracleAddress } from "../../ao/utils/tokenAddressData";
 import { getAllPositions } from "../protocolData/getAllPositions";
 
-export interface GetLiquidations {
-  token: TokenInput;
-}
-
 export interface GetLiquidationsRes {
   liquidations: Map<string, QualifyingPosition>;
+  usdDenomination: BigInt;
   prices: RedstonePrices;
 }
 
@@ -52,14 +49,6 @@ interface TokenPosition {
   liquidationLimit: BigInt;
 }
 
-// Extended token position with USD values
-interface TokenPositionUSD extends TokenPosition {
-  borrowBalanceUSD: BigInt;
-  capacityUSD: BigInt;
-  collateralizationUSD: BigInt;
-  liquidationLimitUSD: BigInt;
-}
-
 // Global position across all tokens
 interface GlobalPosition {
   borrowBalanceUSD: BigInt;
@@ -71,14 +60,8 @@ interface GlobalPosition {
   };
 }
 
-export async function getLiquidations(
-  { token }: GetLiquidations,
-  precisionFactor: number,
-): Promise<GetLiquidationsRes> {
+export async function getLiquidations(precisionFactor: number): Promise<GetLiquidationsRes> {
   try {
-    if (!token) {
-      throw new Error("Please specify a token.");
-    }
     if (!Number.isInteger(precisionFactor)) {
       throw new Error("The precision factor has to be an integer");
     }
@@ -130,6 +113,9 @@ export async function getLiquidations(
     // Create a map to store global positions by wallet address
     const globalPositions = new Map<string, GlobalPosition>();
 
+    // Highest denomination used
+    let highestDenomination = BigInt(0);
+
     // Calculate global positions for all wallets across all tokens
     for (const { token, positions: localPositions } of positionsList) {
       // token data
@@ -137,9 +123,16 @@ export async function getLiquidations(
       const tokenDenomination =
         tokenData[token as SupportedTokensTickers].denomination;
 
+      // Set the highest denomination
+      if (highestDenomination < tokenDenomination)
+        highestDenomination = tokenDenomination;
+
       // Use the token's specific denomination for scaling
-      const scale = BigInt(10) ** tokenDenomination;
+      const scale = BigInt(10) ** highestDenomination;
       const priceScaled = BigInt(Math.round(tokenPrice * Number(scale)));
+
+      // The scale difference caused by the different token denominations
+      const scaleDifference = BigInt(10) ** (highestDenomination - tokenDenomination);
 
       // loop through all positions, add them to the global positions
       for (const [walletAddress, position] of Object.entries<TokenPosition>(
@@ -147,12 +140,12 @@ export async function getLiquidations(
       )) {
         const posValueUSD = {
           borrowBalanceUSD:
-            ((position.borrowBalance as bigint) * priceScaled) / scale,
-          capacityUSD: ((position.capacity as bigint) * priceScaled) / scale,
+            ((position.borrowBalance as bigint) * scaleDifference * priceScaled) / scale,
+          capacityUSD: ((position.capacity as bigint) * scaleDifference * priceScaled) / scale,
           collateralizationUSD:
-            ((position.collateralization as bigint) * priceScaled) / scale,
+            ((position.collateralization as bigint) * scaleDifference * priceScaled) / scale,
           liquidationLimitUSD:
-            ((position.liquidationLimit as bigint) * priceScaled) / scale,
+            ((position.liquidationLimit as bigint) * scaleDifference * priceScaled) / scale,
         };
 
         if (!globalPositions.has(walletAddress)) {
@@ -244,6 +237,7 @@ export async function getLiquidations(
 
     return {
       liquidations: res,
+      usdDenomination: highestDenomination,
       prices,
     };
   } catch (error) {
