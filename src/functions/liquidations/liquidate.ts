@@ -53,6 +53,7 @@ export async function liquidate(
         { name: "Recipient", value: controllerAddress },
         { name: "X-Target", value: targetUserAddress },
         { name: "X-Reward-Token", value: rewardTokenAddress },
+        { name: "X-Action", value: 'Liquidate' },
         ...((minExpectedQuantity && [
           {
             name: "X-Min-Expected-Quantity",
