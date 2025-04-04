@@ -1,23 +1,39 @@
 import { Quantity } from "ao-tokens";
-import { TokenInput } from "../../ao/utils/tokenInput";
-import { getBorrowAPR } from "./getBorrowAPR";
-import { getInfo } from "./getInfo";
+import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
+import { getBorrowAPR, GetBorrowAPRRes } from "./getBorrowAPR";
+import { getInfo, GetInfoRes } from "./getInfo";
 
 export interface GetSupplyAPR {
   token: TokenInput;
+  getInfoRes?: GetInfoRes;
+  getBorrowAPRRes?: GetBorrowAPRRes;
 }
 
 export type GetSupplyAPRRes = number;
 
 export async function getSupplyAPR({
   token,
+  getInfoRes,
+  getBorrowAPRRes,
 }: GetSupplyAPR): Promise<GetSupplyAPRRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
     }
 
-    const borrowAPY = await getBorrowAPR({ token });
+    if (!getBorrowAPRRes) {
+      getBorrowAPRRes = await getBorrowAPR({ token });
+    }
+    const borrowAPY = getBorrowAPRRes;
+
+    const { tokenAddress } = tokenInput(token);
+    // validate getInfoRes is for the correct token
+    if (getInfoRes && getInfoRes.collateralId !== tokenAddress) {
+      throw new Error("getInfoRes supplied does not match token supplied.");
+    }
+    if (!getInfoRes) {
+      getInfoRes = await getInfo({ token });
+    }
 
     const {
       totalBorrows,
@@ -26,7 +42,7 @@ export async function getSupplyAPR({
       totalSupply,
       collateralFactor,
       cash,
-    } = await getInfo({ token });
+    } = getInfoRes;
 
     const scaledTotalBorrows = new Quantity(totalBorrows, BigInt(denomination));
     const scaledTotalSupply = new Quantity(totalSupply, BigInt(denomination));
@@ -35,14 +51,20 @@ export async function getSupplyAPR({
     const scaledCollateralFactor = new Quantity(collateralFactor); // TODO: check with Marton
 
     // get maximum amount of borrows allowed in a pool
-    const scaledLTV = Quantity.__div(scaledCollateralFactor, 100) // TODO: check with Marton
-    const maximumPotentialBorrows = Quantity.__mul(scaledTotalSupply, scaledLTV)
+    const scaledLTV = Quantity.__div(scaledCollateralFactor, 100); // TODO: check with Marton
+    const maximumPotentialBorrows = Quantity.__mul(
+      scaledTotalSupply,
+      scaledLTV,
+    );
     // work out how much is not currently borrowed
-    const notBorrowed = Quantity.__sub(maximumPotentialBorrows, scaledTotalBorrows)
+    const notBorrowed = Quantity.__sub(
+      maximumPotentialBorrows,
+      scaledTotalBorrows,
+    );
     // work out the un-utilized funds
-    const unutilizedFunds = Quantity.__div(scaledCash, notBorrowed)
+    const unutilizedFunds = Quantity.__div(scaledCash, notBorrowed);
     // work out total amout pooled
-    const totalPooled = Quantity.__add(scaledTotalBorrows, unutilizedFunds)
+    const totalPooled = Quantity.__add(scaledTotalBorrows, unutilizedFunds);
 
     // calculate the utilization rate and transform it
     // into a number (since the maximum value is 1)
