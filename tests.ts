@@ -60,9 +60,9 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 //--------------------------------------------------------------------------------------------------------------- liquidations
 
-const getLiquidations = await client.getLiquidations();
+// const getLiquidations = await client.getLiquidations();
 
-console.log(getLiquidations);
+// console.log(getLiquidations);
 
 //-------------------------------
 
