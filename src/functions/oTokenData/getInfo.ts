@@ -17,7 +17,7 @@ export interface GetInfoRes {
   cash: string;
   oracle: string;
   logo: string;
-  reserveFactor: string
+  reserveFactor: string;
   denomination: string;
   collateralId: string;
   ticker: string;
@@ -46,8 +46,8 @@ export async function getInfo({ token }: GetInfo): Promise<GetInfoRes> {
     );
 
     return {
-      collateralDenomination: tagsObject['Collateral-Denomination'],
-      liquidationThreshold: tagsObject['Liquidation-Threshold'],
+      collateralDenomination: tagsObject["Collateral-Denomination"],
+      liquidationThreshold: tagsObject["Liquidation-Threshold"],
       totalSupply: tagsObject["Total-Supply"],
       totalBorrows: tagsObject["Total-Borrows"],
       valueLimit: tagsObject["Value-Limit"],
@@ -60,7 +60,7 @@ export async function getInfo({ token }: GetInfo): Promise<GetInfoRes> {
       reserveFactor: tagsObject["Reserve-Factor"],
       denomination: tagsObject["Denomination"],
       collateralId: tagsObject["Collateral-Id"],
-      ticker: tagsObject["Ticker"]
+      ticker: tagsObject["Ticker"],
     };
   } catch (error) {
     throw new Error("Error in getInfo function: " + error);
