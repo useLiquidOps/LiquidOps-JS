@@ -137,16 +137,20 @@ export async function getGlobalPosition({
       const priceScaled = BigInt(Math.round(tokenPrice * Number(scale)));
 
       // The scale difference caused by the different token denominations
-      const scaleDifference = BigInt(10) ** (highestDenomination - tokenDenomination)
+      const scaleDifference =
+        BigInt(10) ** (highestDenomination - tokenDenomination);
 
       // Convert token values to USD
       const borrowBalanceUSD =
         (tokenPosition.borrowBalance * scaleDifference * priceScaled) / scale;
-      const capacityUSD = (tokenPosition.capacity * scaleDifference * priceScaled) / scale;
+      const capacityUSD =
+        (tokenPosition.capacity * scaleDifference * priceScaled) / scale;
       const collateralizationUSD =
-        (tokenPosition.collateralization * scaleDifference * priceScaled) / scale;
+        (tokenPosition.collateralization * scaleDifference * priceScaled) /
+        scale;
       const liquidationLimitUSD =
-        (tokenPosition.liquidationLimit * scaleDifference * priceScaled) / scale;
+        (tokenPosition.liquidationLimit * scaleDifference * priceScaled) /
+        scale;
 
       // Add to global position totals
       globalPosition.borrowBalanceUSD += borrowBalanceUSD;

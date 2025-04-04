@@ -60,7 +60,9 @@ interface GlobalPosition {
   };
 }
 
-export async function getLiquidations(precisionFactor: number): Promise<GetLiquidationsRes> {
+export async function getLiquidations(
+  precisionFactor: number,
+): Promise<GetLiquidationsRes> {
   try {
     if (!Number.isInteger(precisionFactor)) {
       throw new Error("The precision factor has to be an integer");
@@ -132,7 +134,8 @@ export async function getLiquidations(precisionFactor: number): Promise<GetLiqui
       const priceScaled = BigInt(Math.round(tokenPrice * Number(scale)));
 
       // The scale difference caused by the different token denominations
-      const scaleDifference = BigInt(10) ** (highestDenomination - tokenDenomination);
+      const scaleDifference =
+        BigInt(10) ** (highestDenomination - tokenDenomination);
 
       // loop through all positions, add them to the global positions
       for (const [walletAddress, position] of Object.entries<TokenPosition>(
@@ -140,12 +143,23 @@ export async function getLiquidations(precisionFactor: number): Promise<GetLiqui
       )) {
         const posValueUSD = {
           borrowBalanceUSD:
-            ((position.borrowBalance as bigint) * scaleDifference * priceScaled) / scale,
-          capacityUSD: ((position.capacity as bigint) * scaleDifference * priceScaled) / scale,
+            ((position.borrowBalance as bigint) *
+              scaleDifference *
+              priceScaled) /
+            scale,
+          capacityUSD:
+            ((position.capacity as bigint) * scaleDifference * priceScaled) /
+            scale,
           collateralizationUSD:
-            ((position.collateralization as bigint) * scaleDifference * priceScaled) / scale,
+            ((position.collateralization as bigint) *
+              scaleDifference *
+              priceScaled) /
+            scale,
           liquidationLimitUSD:
-            ((position.liquidationLimit as bigint) * scaleDifference * priceScaled) / scale,
+            ((position.liquidationLimit as bigint) *
+              scaleDifference *
+              priceScaled) /
+            scale,
         };
 
         if (!globalPositions.has(walletAddress)) {
