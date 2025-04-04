@@ -2,6 +2,7 @@ import { Quantity } from "ao-tokens";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 import { getBorrowAPR, GetBorrowAPRRes } from "./getBorrowAPR";
 import { getInfo, GetInfoRes } from "./getInfo";
+import { dryRunAwait } from "../../ao/utils/dryRunAwait";
 
 export interface GetSupplyAPR {
   token: TokenInput;
@@ -26,6 +27,9 @@ export async function getSupplyAPR({
     }
     const borrowAPY = getBorrowAPRRes;
 
+    // add await for 1 second due to double dry run request
+    await dryRunAwait(1);
+
     const { tokenAddress } = tokenInput(token);
     // validate getInfoRes is for the correct token
     if (getInfoRes && getInfoRes.collateralId !== tokenAddress) {
@@ -37,21 +41,35 @@ export async function getSupplyAPR({
 
     const {
       totalBorrows,
-      denomination,
+      collateralDenomination,
       reserveFactor,
       totalSupply,
       collateralFactor,
       cash,
     } = getInfoRes;
 
-    const scaledTotalBorrows = new Quantity(totalBorrows, BigInt(denomination));
-    const scaledTotalSupply = new Quantity(totalSupply, BigInt(denomination));
-    const scaledCash = new Quantity(cash, BigInt(denomination));
+    const scaledCollateralDenomination = BigInt(collateralDenomination);
 
-    const scaledCollateralFactor = new Quantity(collateralFactor); // TODO: check with Marton
+    const scaledTotalBorrows = new Quantity(
+      totalBorrows,
+      scaledCollateralDenomination,
+    );
+    const scaledTotalSupply = new Quantity(
+      totalSupply,
+      scaledCollateralDenomination,
+    );
+    const scaledCash = new Quantity(cash, scaledCollateralDenomination);
+
+    const scaledCollateralFactor = new Quantity(
+      BigInt(0),
+      scaledCollateralDenomination,
+    ).fromString(collateralFactor);
 
     // get maximum amount of borrows allowed in a pool
-    const scaledLTV = Quantity.__div(scaledCollateralFactor, 100); // TODO: check with Marton
+    const scaledLTV = Quantity.__div(
+      scaledCollateralFactor,
+      new Quantity(BigInt(100), BigInt(0)),
+    );
     const maximumPotentialBorrows = Quantity.__mul(
       scaledTotalSupply,
       scaledLTV,
