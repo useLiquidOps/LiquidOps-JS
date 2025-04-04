@@ -8,6 +8,7 @@ import {
 } from "../../ao/utils/tokenAddressData";
 import { redstoneOracleAddress } from "../../ao/utils/tokenAddressData";
 import { getAllPositions } from "../protocolData/getAllPositions";
+import { dryRunAwait } from "../../ao/utils/dryRunAwait";
 
 export interface GetLiquidationsRes {
   liquidations: Map<string, QualifyingPosition>;
@@ -83,6 +84,9 @@ export async function getLiquidations(
       Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
     });
 
+    // add dry run await to not get rate limited
+    await dryRunAwait(1)
+
     // Get positions for each token
     const positionsList = [];
     for (const token of tokensList) {
@@ -91,6 +95,8 @@ export async function getLiquidations(
         token,
         positions,
       });
+      // add dry run await to not get rate limited
+      await dryRunAwait(1)
     }
 
     // get discovered liquidations
@@ -98,6 +104,8 @@ export async function getLiquidations(
       Target: controllerAddress,
       Action: "Get-Auctions",
     });
+    // add dry run await to not get rate limited
+    await dryRunAwait(1)
 
     // parse prices and auctions
     const prices: RedstonePrices = JSON.parse(
