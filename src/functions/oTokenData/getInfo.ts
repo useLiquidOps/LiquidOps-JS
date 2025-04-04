@@ -6,12 +6,21 @@ export interface GetInfo {
 }
 
 export interface GetInfoRes {
-  name: string;
-  ticker: string;
-  logo: string;
-  denomination: string;
-  cash: string;
+  collateralDenomination: string;
+  liquidationThreshold: string;
+  totalSupply: string;
   totalBorrows: string;
+  valueLimit: string;
+  name: string;
+  collateralFactor: string;
+  totalReserves: string;
+  cash: string;
+  oracle: string;
+  logo: string;
+  reserveFactor: string;
+  denomination: string;
+  collateralId: string;
+  ticker: string;
 }
 
 interface Tag {
@@ -37,12 +46,21 @@ export async function getInfo({ token }: GetInfo): Promise<GetInfoRes> {
     );
 
     return {
-      name: tagsObject["Name"],
-      ticker: tagsObject["Ticker"] === "AR" ? "qAR" : tagsObject["Ticker"],
-      logo: tagsObject["Logo"],
-      denomination: tagsObject["Denomination"],
-      cash: tagsObject["Cash"],
+      collateralDenomination: tagsObject["Collateral-Denomination"],
+      liquidationThreshold: tagsObject["Liquidation-Threshold"],
+      totalSupply: tagsObject["Total-Supply"],
       totalBorrows: tagsObject["Total-Borrows"],
+      valueLimit: tagsObject["Value-Limit"],
+      name: tagsObject["Name"],
+      collateralFactor: tagsObject["Collateral-Factor"],
+      totalReserves: tagsObject["Total-Reserves"],
+      cash: tagsObject["Cash"],
+      oracle: tagsObject["Oracle"],
+      logo: tagsObject["Logo"],
+      reserveFactor: tagsObject["Reserve-Factor"],
+      denomination: tagsObject["Denomination"],
+      collateralId: tagsObject["Collateral-Id"],
+      ticker: tagsObject["Ticker"],
     };
   } catch (error) {
     throw new Error("Error in getInfo function: " + error);

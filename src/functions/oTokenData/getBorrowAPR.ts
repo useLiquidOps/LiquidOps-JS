@@ -1,13 +1,15 @@
 import { getData } from "../../ao/messaging/getData";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
-export interface GetAPR {
+export interface GetBorrowAPR {
   token: TokenInput;
 }
 
-export type GetAPRRes = number;
+export type GetBorrowAPRRes = number;
 
-export async function getAPR({ token }: GetAPR): Promise<GetAPRRes> {
+export async function getBorrowAPR({
+  token,
+}: GetBorrowAPR): Promise<GetBorrowAPRRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -43,6 +45,6 @@ export async function getAPR({ token }: GetAPR): Promise<GetAPRRes> {
 
     return apr / rateMultiplier;
   } catch (error) {
-    throw new Error("Error in getAPR function: " + error);
+    throw new Error("Error in getBorrowAPR function: " + error);
   }
 }

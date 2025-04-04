@@ -136,7 +136,8 @@ export async function getLiquidations(
       const priceScaled = BigInt(Math.round(tokenPrice * Number(scale)));
 
       // The scale difference caused by the different token denominations
-      const scaleDifference = BigInt(10) ** (highestDenomination - tokenDenomination);
+      const scaleDifference =
+        BigInt(10) ** (highestDenomination - tokenDenomination);
 
       // loop through all positions, add them to the global positions
       for (const [walletAddress, position] of Object.entries<TokenPosition>(
@@ -144,12 +145,23 @@ export async function getLiquidations(
       )) {
         const posValueUSD = {
           borrowBalanceUSD:
-            ((position.borrowBalance as bigint) * scaleDifference * priceScaled) / scale,
-          capacityUSD: ((position.capacity as bigint) * scaleDifference * priceScaled) / scale,
+            ((position.borrowBalance as bigint) *
+              scaleDifference *
+              priceScaled) /
+            scale,
+          capacityUSD:
+            ((position.capacity as bigint) * scaleDifference * priceScaled) /
+            scale,
           collateralizationUSD:
-            ((position.collateralization as bigint) * scaleDifference * priceScaled) / scale,
+            ((position.collateralization as bigint) *
+              scaleDifference *
+              priceScaled) /
+            scale,
           liquidationLimitUSD:
-            ((position.liquidationLimit as bigint) * scaleDifference * priceScaled) / scale,
+            ((position.liquidationLimit as bigint) *
+              scaleDifference *
+              priceScaled) /
+            scale,
         };
 
         if (!globalPositions.has(walletAddress)) {

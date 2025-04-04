@@ -77,19 +77,19 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 //--------------------------------------------------------------------------------------------------------------- oTokenData
 
-// const getAPR = await client.getAPR({
-//   token: "QAR",
-// });
-
-// console.log(getAPR);
-
-//-------------------------------
-
 // const getBalances = await client.getBalances({
 //   token: "QAR",
 // });
 
 // console.log(getBalances);
+
+//-------------------------------
+
+// const getBorrowAPR = await client.getBorrowAPR({
+//   token: "QAR",
+// });
+
+// console.log(getBorrowAPR);
 
 //-------------------------------
 
@@ -124,6 +124,14 @@ const walletAddress = await ownerToAddress(JWK.n);
 // });
 
 // console.log(getPosition);
+
+//-------------------------------
+
+// const getSupplyAPR = await client.getSupplyAPR({
+//   token: "QAR",
+// });
+
+// console.log(getSupplyAPR);
 
 //--------------------------------------------------------------------------------------------------------------- protocolData
 

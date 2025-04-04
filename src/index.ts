@@ -32,12 +32,16 @@ import {
 } from "./functions/liquidations/liquidate";
 
 // oTokenData
-import { getAPR, GetAPR, GetAPRRes } from "./functions/oTokenData/getAPR";
 import {
-  getBalance,
-  GetBalance,
-  GetBalanceRes,
-} from "./functions/utils/getBalance";
+  getBalances,
+  GetBalances,
+  GetBalancesRes,
+} from "./functions/oTokenData/getBalances";
+import {
+  getBorrowAPR,
+  GetBorrowAPR,
+  GetBorrowAPRRes,
+} from "./functions/oTokenData/getBorrowAPR";
 import {
   getExchangeRate,
   GetExchangeRate,
@@ -54,6 +58,11 @@ import {
   GetPosition,
   GetPositionRes,
 } from "./functions/oTokenData/getPosition";
+import {
+  getSupplyAPR,
+  GetSupplyAPR,
+  GetSupplyAPRRes,
+} from "./functions/oTokenData/getSupplyAPR";
 
 // protocolData
 import {
@@ -69,10 +78,10 @@ import {
 
 // utils
 import {
-  getBalances,
-  GetBalances,
-  GetBalancesRes,
-} from "./functions/oTokenData/getBalances";
+  getBalance,
+  GetBalance,
+  GetBalanceRes,
+} from "./functions/utils/getBalance";
 import {
   getResult,
   GetResult,
@@ -161,12 +170,12 @@ class LiquidOps {
 
   //--------------------------------------------------------------------------------------------------------------- oTokenData
 
-  async getAPR(params: GetAPR): Promise<GetAPRRes> {
-    return getAPR(params);
-  }
-
   async getBalances(params: GetBalances): Promise<GetBalancesRes> {
     return getBalances(params);
+  }
+
+  async getBorrowAPR(params: GetBorrowAPR): Promise<GetBorrowAPRRes> {
+    return getBorrowAPR(params);
   }
 
   async getExchangeRate(params: GetExchangeRate): Promise<GetExchangeRateRes> {
@@ -185,6 +194,10 @@ class LiquidOps {
 
   async getPosition(params: GetPosition): Promise<GetPositionRes> {
     return getPosition(params);
+  }
+
+  async getSupplyAPR(params: GetSupplyAPR): Promise<GetSupplyAPRRes> {
+    return getSupplyAPR(params);
   }
 
   //--------------------------------------------------------------------------------------------------------------- protocolData
@@ -250,10 +263,10 @@ export type {
   RedstonePrices,
 
   // oTokenData
-  GetAPR,
-  GetAPRRes,
   GetBalances,
   GetBalancesRes,
+  GetBorrowAPR,
+  GetBorrowAPRRes,
   GetExchangeRate,
   GetExchangeRateRes,
   GetGlobalPosition,
@@ -262,6 +275,8 @@ export type {
   GetInfoRes,
   GetPosition,
   GetPositionRes,
+  GetSupplyAPR,
+  GetSupplyAPRRes,
 
   // protocol data
   GetAllPositions,
