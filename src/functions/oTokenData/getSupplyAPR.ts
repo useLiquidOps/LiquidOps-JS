@@ -24,11 +24,10 @@ export async function getSupplyAPR({
 
     if (!getBorrowAPRRes) {
       getBorrowAPRRes = await getBorrowAPR({ token });
+      // add await for 1 second due to double dry run request
+      await dryRunAwait(1);
     }
     const borrowAPY = getBorrowAPRRes;
-
-    // add await for 1 second due to double dry run request
-    await dryRunAwait(1);
 
     const { tokenAddress } = tokenInput(token);
     // validate getInfoRes is for the correct token
