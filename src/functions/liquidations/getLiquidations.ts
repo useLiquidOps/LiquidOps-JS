@@ -1,5 +1,4 @@
 import { getData } from "../../ao/messaging/getData";
-import { TokenInput } from "../../ao/utils/tokenInput";
 import {
   collateralEnabledTickers,
   tokens,
