@@ -59,6 +59,12 @@ interface GlobalPosition {
   };
 }
 
+function convertTicker(ticker: string): string {
+  if (ticker === "QAR") return "AR";
+  if (ticker === "WUSDC") return "USDC";
+  return ticker;
+}
+
 export async function getLiquidations(
   precisionFactor: number,
 ): Promise<GetLiquidationsRes> {
@@ -70,31 +76,28 @@ export async function getLiquidations(
     // Get list of tokens to process
     const tokensList = Object.keys(tokens);
 
-    const [redstonePriceFeedRes, positionsList, auctionsRes] =
-      await Promise.all([
-        // Make a request to RedStone oracle process for prices (same used onchain)
-        getData({
-          Target: redstoneOracleAddress,
-          Action: "v2.Request-Latest-Data",
-          Tickers: JSON.stringify(
-            collateralEnabledTickers.map((ticker) =>
-              ticker === "QAR" ? "AR" : ticker,
-            ),
-          ),
-        }),
-        // Get positions for each token
-        Promise.all(
-          tokensList.map(async (token) => ({
-            token,
-            positions: await getAllPositions({ token }),
-          })),
-        ),
-        // get discovered liquidations
-        getData({
-          Target: controllerAddress,
-          Action: "Get-Auctions",
-        }),
-      ]);
+    // Make a request to RedStone oracle process for prices (same used onchain)
+    const redstonePriceFeedRes = await getData({
+      Target: redstoneOracleAddress,
+      Action: "v2.Request-Latest-Data",
+      Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
+    });
+
+    // Get positions for each token
+    const positionsList = [];
+    for (const token of tokensList) {
+      const positions = await getAllPositions({ token });
+      positionsList.push({
+        token,
+        positions,
+      });
+    }
+
+    // get discovered liquidations
+    const auctionsRes = await getData({
+      Target: controllerAddress,
+      Action: "Get-Auctions",
+    });
 
     // parse prices and auctions
     const prices: RedstonePrices = JSON.parse(
@@ -120,7 +123,7 @@ export async function getLiquidations(
     // Calculate global positions for all wallets across all tokens
     for (const { token, positions: localPositions } of positionsList) {
       // token data
-      const tokenPrice = prices[token === "QAR" ? "AR" : token].v;
+      const tokenPrice = prices[convertTicker(token)].v;
       const tokenDenomination =
         tokenData[token as SupportedTokensTickers].denomination;
 
