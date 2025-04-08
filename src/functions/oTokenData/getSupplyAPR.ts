@@ -43,8 +43,6 @@ export async function getSupplyAPR({
       collateralDenomination,
       reserveFactor,
       totalSupply,
-      collateralFactor,
-      cash,
     } = getInfoRes;
 
     const scaledCollateralDenomination = BigInt(collateralDenomination);
@@ -57,46 +55,19 @@ export async function getSupplyAPR({
       totalSupply,
       scaledCollateralDenomination,
     );
-    const scaledCash = new Quantity(cash, scaledCollateralDenomination);
 
-    const scaledCollateralFactor = new Quantity(
-      BigInt(0),
-      scaledCollateralDenomination,
-    ).fromString(collateralFactor);
-
-    // get maximum amount of borrows allowed in a pool
-    const scaledLTV = Quantity.__div(
-      scaledCollateralFactor,
-      new Quantity(BigInt(100), BigInt(0)),
-    );
-    const maximumPotentialBorrows = Quantity.__mul(
-      scaledTotalSupply,
-      scaledLTV,
-    );
-    // work out how much is not currently borrowed
-    const notBorrowed = Quantity.__sub(
-      maximumPotentialBorrows,
-      scaledTotalBorrows,
-    );
-    // work out the un-utilized funds
-    const unutilizedFunds = Quantity.__div(scaledCash, notBorrowed);
-    // work out total amout pooled
-    const totalPooled = Quantity.__add(scaledTotalBorrows, unutilizedFunds);
-
-    // calculate the utilization rate and transform it
-    // into a number (since the maximum value is 1)
+    // Utilization Rate = Total Borrowed / Total Supply
     const utilizationRate = Quantity.__div(
       scaledTotalBorrows,
-      totalPooled,
+      scaledTotalSupply,
     ).toNumber();
 
-    // reserve factor in fractions
+    // Reserve factor in fractions
     const reserveFactorFract = Number(reserveFactor) / 100;
 
-    // ln(1+Borrow APY)
-    const lnRes = Math.log(1 + borrowAPY);
-
-    return Math.exp(lnRes * (1 - reserveFactorFract) * utilizationRate) - 1;
+    // Apply standard Compound V2 formula:
+    // Supply APY = Borrow APY × Utilization Rate × (1 - Reserve Factor)
+    return borrowAPY * utilizationRate * (1 - reserveFactorFract);
   } catch (error) {
     throw new Error("Error in getSupplyAPR function: " + error);
   }

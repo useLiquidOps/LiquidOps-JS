@@ -128,7 +128,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 //-------------------------------
 
 // const getSupplyAPR = await client.getSupplyAPR({
-//   token: "QAR",
+//   token: "WUSDC",
 // });
 
 // console.log(getSupplyAPR);
