@@ -38,12 +38,8 @@ export async function getSupplyAPR({
       getInfoRes = await getInfo({ token });
     }
 
-    const {
-      totalBorrows,
-      collateralDenomination,
-      reserveFactor,
-      totalSupply,
-    } = getInfoRes;
+    const { totalBorrows, collateralDenomination, reserveFactor, totalSupply } =
+      getInfoRes;
 
     const scaledCollateralDenomination = BigInt(collateralDenomination);
 

@@ -85,7 +85,7 @@ export async function getLiquidations(
     });
 
     // add dry run await to not get rate limited
-    await dryRunAwait(1)
+    await dryRunAwait(1);
 
     // Get positions for each token
     const positionsList = [];
@@ -96,7 +96,7 @@ export async function getLiquidations(
         positions,
       });
       // add dry run await to not get rate limited
-      await dryRunAwait(1)
+      await dryRunAwait(1);
     }
 
     // get discovered liquidations
@@ -105,7 +105,7 @@ export async function getLiquidations(
       Action: "Get-Auctions",
     });
     // add dry run await to not get rate limited
-    await dryRunAwait(1)
+    await dryRunAwait(1);
 
     // parse prices and auctions
     const prices: RedstonePrices = JSON.parse(
