@@ -40,7 +40,7 @@ export const tokenData: Record<string, TokenData> = {
     oAddress: "4MW7uLFtttSLWM-yWEqV9TGD6fSIDrqa4lbTgYL2qHg",
     controllerAddress,
     cleanTicker: "wUSDC",
-    denomination: BigInt(12),
+    denomination: BigInt(6),
     collateralEnabled: true,
     baseDenomination: BigInt(6),
   },
