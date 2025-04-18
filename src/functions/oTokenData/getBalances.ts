@@ -5,9 +5,7 @@ export interface GetBalances {
   token: TokenInput;
 }
 
-export interface GetBalancesRes {
-  [address: string]: BigInt;
-}
+export type GetBalancesRes = Record<string, bigint>;
 
 export async function getBalances({
   token,
@@ -28,16 +26,17 @@ export async function getBalances({
       throw new Error("Invalid response format from getData");
     }
 
-    const balance: { [key: string]: string } = JSON.parse(res.Messages[0].Data);
+    const balances = JSON.parse(res.Messages[0].Data);
 
-    const key = Object.keys(balance)[0];
-    const value = Object.values(balance)[0];
+    const result: GetBalancesRes = {};
 
-    if (!key || !value) {
-      throw new Error("Invalid balance data format");
+    for (const key in balances) {
+      if (Object.prototype.hasOwnProperty.call(balances, key)) {
+        result[key] = BigInt(balances[key]);
+      }
     }
 
-    return { [key]: BigInt(value) };
+    return result;
   } catch (error) {
     throw new Error(`Error in getBalances function: ${error}`);
   }
