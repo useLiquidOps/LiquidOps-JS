@@ -7,6 +7,7 @@ import {
 } from "../../ao/utils/tokenAddressData";
 import { collateralEnabledTickers } from "../../ao/utils/tokenAddressData";
 import { getPosition } from "./getPosition";
+import { dryRunAwait } from "../../ao/utils/dryRunAwait";
 
 // Base token position with the core metrics
 interface TokenPosition {
@@ -63,6 +64,8 @@ export async function getGlobalPosition({
         }),
       ),
     });
+    // add dry run await to not get rate limited
+    await dryRunAwait(1);
 
     // Parse prices
     const prices: RedstonePrices = JSON.parse(
@@ -76,6 +79,8 @@ export async function getGlobalPosition({
           token,
           recipient: walletAddress,
         });
+        // add dry run await to not get rate limited
+        await dryRunAwait(1);
 
         return {
           token,
