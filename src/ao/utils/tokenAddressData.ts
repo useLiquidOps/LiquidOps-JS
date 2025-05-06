@@ -44,7 +44,41 @@ export const tokenData: Record<string, TokenData> = {
     collateralEnabled: true,
     baseDenomination: BigInt(6),
   },
+  WAR: {
+    name: "Wrapped Arweave",
+    icon: "ICMLzIKdVMedibwgOy014I4yan_F8h2ZhORhRG5dgzs",
+    ticker: "WAR",
+    address: "xU9zFkq3X2ZQ6olwNVvr1vUWIjc3kXTWr7xKQD6dh10",
+    oTicker: "oWAR",
+    oAddress: "", // TODO
+    controllerAddress,
+    cleanTicker: "wAR",
+    denomination: BigInt(12),
+    collateralEnabled: true,
+    baseDenomination: BigInt(12),
+  },
+  WUSDT: {
+    name: "Wrapped USD Tether",
+    icon: "JaxupVYerLRZWLd32llz_3CG8sCQaNhn2hAWm51U_7s",
+    ticker: "WUSDT",
+    address: "7j3jUyFpTuepg_uu_sJnwLE6KiTVuA9cLrkfOp2MFlo",
+    oTicker: "oWUSDT",
+    oAddress: "", // TODO
+    controllerAddress,
+    cleanTicker: "wUSDT",
+    denomination: BigInt(12),
+    collateralEnabled: true,
+    baseDenomination: BigInt(12),
+  },
 };
+
+export function convertTicker(ticker: string): string {
+  if (ticker === "QAR") return "AR";
+  if (ticker === "WUSDC") return "USDC";
+  if (ticker === "WAR") return "AR";
+  if (ticker === "WUSDT") return "USDT";
+  return ticker;
+}
 
 export type SupportedTokensTickers = keyof typeof tokenData;
 export type SupportedTokensAddresses = TokenData["address"];
