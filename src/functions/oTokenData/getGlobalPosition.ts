@@ -8,6 +8,7 @@ import {
 import { collateralEnabledTickers } from "../../ao/utils/tokenAddressData";
 import { getPosition } from "./getPosition";
 import { dryRunAwait } from "../../ao/utils/dryRunAwait";
+import { convertTicker } from "../../ao/utils/tokenAddressData";
 
 // Base token position with the core metrics
 interface TokenPosition {
@@ -56,13 +57,7 @@ export async function getGlobalPosition({
     const redstonePriceFeedRes = await getData({
       Target: redstoneOracleAddress,
       Action: "v2.Request-Latest-Data",
-      Tickers: JSON.stringify(
-        collateralEnabledTickers.map((ticker) => {
-          if (ticker === "QAR") return "AR";
-          if (ticker === "WUSDC") return "USDC";
-          return ticker;
-        }),
-      ),
+      Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
     });
     // add dry run await to not get rate limited
     await dryRunAwait(1);
@@ -128,8 +123,7 @@ export async function getGlobalPosition({
       globalPosition.tokenPositions[token] = tokenPosition;
 
       // Get token price and denomination for USD conversion
-      const tokenPrice =
-        prices[token === "QAR" ? "AR" : token === "WUSDC" ? "USDC" : token].v;
+      const tokenPrice = prices[convertTicker(token)].v;
       const tokenDenomination =
         tokenData[token as SupportedTokensTickers].baseDenomination;
 

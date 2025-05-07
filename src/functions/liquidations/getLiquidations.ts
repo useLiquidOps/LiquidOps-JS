@@ -9,6 +9,7 @@ import {
 import { redstoneOracleAddress } from "../../ao/utils/tokenAddressData";
 import { getAllPositions } from "../protocolData/getAllPositions";
 import { dryRunAwait } from "../../ao/utils/dryRunAwait";
+import { convertTicker } from "../../ao/utils/tokenAddressData";
 
 export interface GetLiquidationsRes {
   liquidations: Map<string, QualifyingPosition>;
@@ -58,12 +59,6 @@ interface GlobalPosition {
   tokenPositions: {
     [token: string]: TokenPosition;
   };
-}
-
-function convertTicker(ticker: string): string {
-  if (ticker === "QAR") return "AR";
-  if (ticker === "WUSDC") return "USDC";
-  return ticker;
 }
 
 export async function getLiquidations(
