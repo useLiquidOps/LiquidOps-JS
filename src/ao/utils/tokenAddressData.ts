@@ -50,7 +50,7 @@ export const tokenData: Record<string, TokenData> = {
     ticker: "WAR",
     address: "xU9zFkq3X2ZQ6olwNVvr1vUWIjc3kXTWr7xKQD6dh10",
     oTicker: "oWAR",
-    oAddress: "", // TODO
+    oAddress: "rAc0aP0g9NXYUXAbvlLjPH_XxyQy6eYmwSuIcf6ukuw",
     controllerAddress,
     cleanTicker: "wAR",
     denomination: BigInt(12),
@@ -63,12 +63,12 @@ export const tokenData: Record<string, TokenData> = {
     ticker: "WUSDT",
     address: "7j3jUyFpTuepg_uu_sJnwLE6KiTVuA9cLrkfOp2MFlo",
     oTicker: "oWUSDT",
-    oAddress: "", // TODO
+    oAddress: "9B9J1O5FDoMsFZGJUSOa6TwivsH7LYIfiaizPn7fUHs",
     controllerAddress,
     cleanTicker: "wUSDT",
-    denomination: BigInt(12),
+    denomination: BigInt(18),
     collateralEnabled: true,
-    baseDenomination: BigInt(12),
+    baseDenomination: BigInt(18),
   },
 };
 
