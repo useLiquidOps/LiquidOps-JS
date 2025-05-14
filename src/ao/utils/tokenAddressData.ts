@@ -70,6 +70,19 @@ export const tokenData: Record<string, TokenData> = {
     collateralEnabled: true,
     baseDenomination: BigInt(18),
   },
+  WETH: {
+    name: "Wrapped Ethereum",
+    icon: "z1nnBgzGpt-eXHrjD5A9KrQX6dK8E1ONDuBIqB94VTA",
+    ticker: "WETH",
+    address: "cBgS-V_yGhOe9P1wCIuNSgDA_JS8l4sE5iFcPTr0TD0",
+    oTicker: "oWETH",
+    oAddress: "rNa0hdxEZjz_TAUoI85OcPRul_BzoS6Py_3vamJKpr4",
+    controllerAddress,
+    cleanTicker: "wETH",
+    denomination: BigInt(18),
+    collateralEnabled: true,
+    baseDenomination: BigInt(18),
+  },
 };
 
 export function convertTicker(ticker: string): string {
@@ -77,6 +90,7 @@ export function convertTicker(ticker: string): string {
   if (ticker === "WUSDC") return "USDC";
   if (ticker === "WAR") return "AR";
   if (ticker === "WUSDT") return "USDT";
+  if (ticker === "WETH") return "ETH";
   return ticker;
 }
 
