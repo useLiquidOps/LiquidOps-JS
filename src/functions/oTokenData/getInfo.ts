@@ -21,6 +21,12 @@ export interface GetInfoRes {
   denomination: string;
   collateralId: string;
   ticker: string;
+  kinkParam: string;
+  jumpRate: string;
+  baseRate: string;
+  utilization: string;
+  initRate: string;
+  oracleDelayTolerance: string;
 }
 
 interface Tag {
@@ -42,26 +48,13 @@ export async function getInfo({ token }: GetInfo): Promise<GetInfoRes> {
     });
 
     const tagsObject = Object.fromEntries(
-      res.Messages[0].Tags.map((tag: Tag) => [tag.name, tag.value]),
+      res.Messages[0].Tags.map((tag: Tag) => [
+        (tag.name[0].toLowerCase() + tag.name.slice(1)).replace(/-/g, ""),
+        tag.value
+      ]),
     );
 
-    return {
-      collateralDenomination: tagsObject["Collateral-Denomination"],
-      liquidationThreshold: tagsObject["Liquidation-Threshold"],
-      totalSupply: tagsObject["Total-Supply"],
-      totalBorrows: tagsObject["Total-Borrows"],
-      valueLimit: tagsObject["Value-Limit"],
-      name: tagsObject["Name"],
-      collateralFactor: tagsObject["Collateral-Factor"],
-      totalReserves: tagsObject["Total-Reserves"],
-      cash: tagsObject["Cash"],
-      oracle: tagsObject["Oracle"],
-      logo: tagsObject["Logo"],
-      reserveFactor: tagsObject["Reserve-Factor"],
-      denomination: tagsObject["Denomination"],
-      collateralId: tagsObject["Collateral-Id"],
-      ticker: tagsObject["Ticker"],
-    };
+    return tagsObject as GetInfoRes;
   } catch (error) {
     throw new Error("Error in getInfo function: " + error);
   }
