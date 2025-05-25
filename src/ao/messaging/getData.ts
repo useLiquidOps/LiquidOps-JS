@@ -14,6 +14,7 @@ interface MessageTags {
   Token?: string;
   "Fill-Gaps"?: string;
   Tickers?: string;
+  Owner?: string;
 }
 
 type GetDataRes = DryRunResult;
@@ -24,6 +25,8 @@ export async function getData(messageTags: MessageTags): Promise<GetDataRes> {
       name,
       value,
     }),
+  ).filter(
+    t => t.name !== "Owner"
   );
   convertedMessageTags.push({ name: "Protocol-Name", value: "LiquidOps" });
 
@@ -34,6 +37,7 @@ export async function getData(messageTags: MessageTags): Promise<GetDataRes> {
       process: targetProcessID,
       data: "",
       tags: convertedMessageTags,
+      Owner: messageTags.Owner
     });
 
     return {
