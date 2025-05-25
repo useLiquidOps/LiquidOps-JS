@@ -63,6 +63,7 @@ import {
   GetSupplyAPR,
   GetSupplyAPRRes,
 } from "./functions/oTokenData/getSupplyAPR";
+import { getCooldown, GetCooldown, GetCooldownRes } from "./functions/oTokenData/getCooldown";
 
 // protocolData
 import {
@@ -176,6 +177,10 @@ class LiquidOps {
 
   async getBorrowAPR(params: GetBorrowAPR): Promise<GetBorrowAPRRes> {
     return getBorrowAPR(params);
+  }
+
+  async getCooldown(params: GetCooldown): Promise<GetCooldownRes> {
+    return getCooldown(params);
   }
 
   async getExchangeRate(params: GetExchangeRate): Promise<GetExchangeRateRes> {
