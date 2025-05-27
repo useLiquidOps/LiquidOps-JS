@@ -37,7 +37,7 @@ export async function getData(messageTags: MessageTags): Promise<GetDataRes> {
       process: targetProcessID,
       data: "",
       tags: convertedMessageTags,
-      // Owner: messageTags.Owner TODO: why is this undefined and here?
+      Owner: messageTags.Owner || "1234"
     });
 
     return {
