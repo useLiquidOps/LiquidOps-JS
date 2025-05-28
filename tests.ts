@@ -23,12 +23,12 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 //-------------------------------
 
-const cooldown = await client.getCooldown({
-  token: "WUSDC",
-  recipient: "ue2K9OhujdC8NXOf_q4HARXtEFHKhc_AbILNA85yvnU"
-});
+// const cooldown = await client.getCooldown({
+//   token: "WUSDC",
+//   recipient: "ue2K9OhujdC8NXOf_q4HARXtEFHKhc_AbILNA85yvnU"
+// });
 
-console.log(cooldown)
+// console.log(cooldown)
 
 //-------------------------------
 
