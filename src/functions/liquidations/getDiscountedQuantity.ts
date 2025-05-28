@@ -3,6 +3,7 @@ import {
   tokenData,
 } from "../../ao/utils/tokenAddressData";
 import { QualifyingPosition, RedstonePrices } from "./getLiquidations";
+import { convertTicker } from "../../ao/utils/tokenAddressData";
 
 /**
  * Get a token's value in another token, using the USD price feed provided
@@ -14,7 +15,7 @@ function getTokenValue(
 ) {
   // token datas
   const fromData = {
-    price: prices[from.token === "QAR" ? "AR" : from.token].v,
+    price: prices[convertTicker(from.token)].v,
     scale:
       BigInt(10) **
       tokenData[from.token as SupportedTokensTickers].denomination,
@@ -23,7 +24,7 @@ function getTokenValue(
     Math.round(fromData.price * Number(fromData.scale)),
   );
   const toData = {
-    price: prices[to === "QAR" ? "AR" : to].v,
+    price: prices[convertTicker(to)].v,
     scale: BigInt(10) ** tokenData[to as SupportedTokensTickers].denomination,
   };
   const toScaledPrice = BigInt(Math.round(toData.price * Number(toData.scale)));
