@@ -35,9 +35,9 @@ export async function liquidate(
   }: Liquidate,
 ): Promise<LiquidateRes> {
   try {
-    if (!token || !rewardToken || !targetUserAddress || !quantity) {
+    if (!token || !rewardToken || !targetUserAddress || !quantity || !minExpectedQuantity) {
       throw new Error(
-        "Please specify token, reward token, target address, and quantity.",
+        "Please specify token, reward token, target address, quantity and minExpectedQuantity.",
       );
     }
 
