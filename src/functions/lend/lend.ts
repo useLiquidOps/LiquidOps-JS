@@ -5,6 +5,7 @@ import {
   validateTransaction,
   findTransactionIds,
 } from "../../ao/messaging/validationUtils";
+import { WithResultOption } from "../utils/getResult";
 
 export const LEND_CONFIG = {
   action: "Mint",
@@ -14,17 +15,17 @@ export const LEND_CONFIG = {
   requiresCreditDebit: true,
 };
 
-export interface Lend {
+export type Lend = WithResultOption<{
   token: TokenInput;
   quantity: BigInt;
-}
+}>;
 
 export interface LendRes extends TransactionResult {}
 
-export async function lend(
+export async function lend<T extends Lend>(
   aoUtils: AoUtils,
-  { token, quantity }: Lend,
-): Promise<LendRes> {
+  { token, quantity, noResult = false }: T,
+): Promise<T["noResult"] extends true ? string : LendRes> {
   try {
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");
@@ -47,6 +48,10 @@ export async function lend(
       signer: aoUtils.signer,
     });
 
+    if (noResult) {
+      return transferID as any;
+    }
+
     const transferResult = await validateTransaction(
       aoUtils,
       transferID,
@@ -59,7 +64,7 @@ export async function lend(
         status: "pending",
         transferID,
         response: "Transaction pending.",
-      };
+      } as any;
     }
 
     if (!transferResult) {
@@ -76,7 +81,7 @@ export async function lend(
       status: true,
       ...transactionIds,
       transferID,
-    };
+    } as any;
   } catch (error) {
     throw new Error("Error in lend function: " + error);
   }

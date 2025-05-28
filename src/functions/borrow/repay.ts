@@ -5,6 +5,7 @@ import {
   validateTransaction,
   findTransactionIds,
 } from "../../ao/messaging/validationUtils";
+import { WithResultOption } from "../utils/getResult";
 
 export const REPAY_CONFIG = {
   action: "Repay",
@@ -14,18 +15,18 @@ export const REPAY_CONFIG = {
   requiresCreditDebit: true,
 };
 
-export interface Repay {
+export type Repay = WithResultOption<{
   token: TokenInput;
   quantity: BigInt;
   onBehalfOf?: string;
-}
+}>;
 
 export interface RepayRes extends TransactionResult {}
 
-export async function repay(
+export async function repay<T extends Repay>(
   aoUtils: AoUtils,
-  { token, quantity, onBehalfOf }: Repay,
-): Promise<RepayRes> {
+  { token, quantity, onBehalfOf, noResult = false }: T,
+): Promise<T["noResult"] extends true ? string : RepayRes> {
   try {
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");
@@ -49,6 +50,10 @@ export async function repay(
       signer: aoUtils.signer,
     });
 
+    if (noResult) {
+      return transferID as any;
+    }
+
     const transferResult = await validateTransaction(
       aoUtils,
       transferID,
@@ -61,7 +66,7 @@ export async function repay(
         status: "pending",
         transferID,
         response: "Transaction pending.",
-      };
+      } as any;
     }
 
     if (!transferResult) {
@@ -78,7 +83,7 @@ export async function repay(
       status: true,
       ...transactionIds,
       transferID,
-    };
+    } as any;
   } catch (error) {
     throw new Error("Error in repay function: " + error);
   }

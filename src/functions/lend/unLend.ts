@@ -4,6 +4,7 @@ import {
   TransactionResult,
   validateTransaction,
 } from "../../ao/messaging/validationUtils";
+import { WithResultOption } from "../utils/getResult";
 
 export const UNLEND_CONFIG = {
   action: "Redeem",
@@ -13,17 +14,17 @@ export const UNLEND_CONFIG = {
   requiresCreditDebit: false,
 };
 
-export interface UnLend {
+export type UnLend = WithResultOption<{
   token: TokenInput;
   quantity: BigInt;
-}
+}>;
 
 export interface UnLendRes extends TransactionResult {}
 
-export async function unLend(
+export async function unLend<T extends UnLend>(
   aoUtils: AoUtils,
-  { token, quantity }: UnLend,
-): Promise<UnLendRes> {
+  { token, quantity, noResult = false }: T,
+): Promise<T["noResult"] extends true ? string : UnLendRes> {
   try {
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");
@@ -45,6 +46,10 @@ export async function unLend(
       signer: aoUtils.signer,
     });
 
+    if (noResult) {
+      return transferID as any;
+    }
+
     const transferResult = await validateTransaction(
       aoUtils,
       transferID,
@@ -57,13 +62,13 @@ export async function unLend(
         status: "pending",
         transferID,
         response: "Transaction pending.",
-      };
+      } as any;
     }
 
     return {
       status: true,
       transferID,
-    };
+    } as any;
   } catch (error) {
     throw new Error("Error in unLend function: " + error);
   }
