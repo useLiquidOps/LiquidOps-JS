@@ -19,7 +19,7 @@ export interface Liquidate {
   rewardToken: TokenInput;
   targetUserAddress: string;
   quantity: BigInt;
-  minExpectedQuantity?: BigInt;
+  minExpectedQuantity: BigInt;
 }
 
 export interface LiquidateRes extends TransactionResult {}
