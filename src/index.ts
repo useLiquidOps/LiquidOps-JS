@@ -127,11 +127,11 @@ class LiquidOps {
 
   //--------------------------------------------------------------------------------------------------------------- borrow
 
-  async borrow(params: Borrow): Promise<BorrowRes> {
+  async borrow<T extends Borrow>(params: T): Promise<T["noResult"] extends true ? string : BorrowRes> {
     return borrow(this.aoUtils, params);
   }
 
-  async repay(params: Repay): Promise<RepayRes> {
+  async repay<T extends Repay>(params: T): Promise<T["noResult"] extends true ? string : RepayRes> {
     return repay(this.aoUtils, params);
   }
 
@@ -147,7 +147,7 @@ class LiquidOps {
     return lend(this.aoUtils, params);
   }
 
-  async unLend(params: UnLend): Promise<UnLendRes> {
+  async unLend<T extends UnLend>(params: T): Promise<T["noResult"] extends true ? string : UnLendRes> {
     return unLend(this.aoUtils, params);
   }
 
