@@ -143,7 +143,7 @@ class LiquidOps {
 
   //--------------------------------------------------------------------------------------------------------------- lend
 
-  async lend(params: Lend): Promise<LendRes> {
+  async lend<T extends Lend>(params: T): Promise<T["noResult"] extends true ? string : LendRes> {
     return lend(this.aoUtils, params);
   }
 
