@@ -6,6 +6,7 @@ import {
   findTransactionIds,
 } from "../../ao/messaging/validationUtils";
 import { getTags } from "../../arweave/getTags";
+import { WithResultOption } from "../utils/getResult";
 
 export const BORROW_CONFIG = {
   action: "Borrow",
@@ -15,17 +16,17 @@ export const BORROW_CONFIG = {
   requiresCreditDebit: true,
 };
 
-export interface Borrow {
+export type Borrow = WithResultOption<{
   token: TokenInput;
   quantity: BigInt;
-}
+}>;
 
 export interface BorrowRes extends TransactionResult {}
 
-export async function borrow(
+export async function borrow<T extends Borrow>(
   aoUtils: AoUtils,
-  { token, quantity }: Borrow,
-): Promise<BorrowRes> {
+  { token, quantity, noResult = false }: Borrow,
+): Promise<T["noResult"] extends true ? string : BorrowRes> {
   try {
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");
@@ -46,6 +47,10 @@ export async function borrow(
       signer: aoUtils.signer,
     });
 
+    if (noResult) {
+      return transferID as any;
+    }
+
     const transferResult = await validateTransaction(
       aoUtils,
       transferID,
@@ -58,7 +63,7 @@ export async function borrow(
         status: "pending",
         transferID,
         response: "Transaction pending.",
-      };
+      } as any;
     }
 
     if (!transferResult) {
@@ -77,7 +82,7 @@ export async function borrow(
         status: "pending",
         transferID,
         response: "Transfer transaction pending.",
-      };
+      } as any;
     }
 
     // Find credit/debit notices from the transfer, but using the old transaction ID
@@ -91,7 +96,7 @@ export async function borrow(
       status: true,
       ...transactionIds,
       transferID,
-    };
+    } as any;
   } catch (error) {
     throw new Error("Error in borrow function: " + error);
   }

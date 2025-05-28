@@ -17,7 +17,7 @@ export const UNLEND_CONFIG = {
 export type UnLend = WithResultOption<{
   token: TokenInput;
   quantity: BigInt;
-}>
+}>;
 
 export interface UnLendRes extends TransactionResult {}
 
