@@ -20,14 +20,12 @@ interface MessageTags {
 type GetDataRes = DryRunResult;
 
 export async function getData(messageTags: MessageTags): Promise<GetDataRes> {
-  const convertedMessageTags = Object.entries(messageTags).map(
-    ([name, value]) => ({
+  const convertedMessageTags = Object.entries(messageTags)
+    .map(([name, value]) => ({
       name,
       value,
-    }),
-  ).filter(
-    t => t.name !== "Owner"
-  );
+    }))
+    .filter((t) => t.name !== "Owner");
   convertedMessageTags.push({ name: "Protocol-Name", value: "LiquidOps" });
 
   const targetProcessID = messageTags["Target"];
@@ -37,7 +35,7 @@ export async function getData(messageTags: MessageTags): Promise<GetDataRes> {
       process: targetProcessID,
       data: "",
       tags: convertedMessageTags,
-      Owner: messageTags.Owner || "1234"
+      Owner: messageTags.Owner || "1234",
     });
 
     return {

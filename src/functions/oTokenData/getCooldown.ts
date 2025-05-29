@@ -6,13 +6,18 @@ export interface GetCooldown {
   token: string;
 }
 
-export type GetCooldownRes = { onCooldown: false; } | {
-  onCooldown: true;
-  expiryBlock: number;
-  remainingBlocks: number;
-}
+export type GetCooldownRes =
+  | { onCooldown: false }
+  | {
+      onCooldown: true;
+      expiryBlock: number;
+      remainingBlocks: number;
+    };
 
-export async function getCooldown({ recipient, token }: GetCooldown): Promise<GetCooldownRes> {
+export async function getCooldown({
+  recipient,
+  token,
+}: GetCooldown): Promise<GetCooldownRes> {
   if (!recipient) throw new Error("Please specify a recipient");
   if (!token) throw new Error("Please specify a token address");
 
@@ -21,7 +26,7 @@ export async function getCooldown({ recipient, token }: GetCooldown): Promise<Ge
   const cooldownRes = await getData({
     Target: oTokenAddress,
     Owner: recipient,
-    Action: "Is-Cooldown"
+    Action: "Is-Cooldown",
   });
 
   if (!cooldownRes?.Messages?.[0]?.Tags) {
@@ -29,9 +34,10 @@ export async function getCooldown({ recipient, token }: GetCooldown): Promise<Ge
   }
 
   const cooldownResTags = Object.fromEntries(
-    cooldownRes.Messages[0].Tags.map(
-      (tag: { name: string, value: string }) => [tag.name, tag.value]
-    )
+    cooldownRes.Messages[0].Tags.map((tag: { name: string; value: string }) => [
+      tag.name,
+      tag.value,
+    ]),
   );
 
   if (!cooldownResTags["Is-Cooldown"]) {
@@ -43,6 +49,7 @@ export async function getCooldown({ recipient, token }: GetCooldown): Promise<Ge
   return {
     onCooldown: true,
     expiryBlock: expiresOn,
-    remainingBlocks: expiresOn - parseInt(cooldownResTags["Request-Block-Height"])
+    remainingBlocks:
+      expiresOn - parseInt(cooldownResTags["Request-Block-Height"]),
   };
 }

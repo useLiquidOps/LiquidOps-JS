@@ -50,7 +50,7 @@ export async function getInfo({ token }: GetInfo): Promise<GetInfoRes> {
     const tagsObject = Object.fromEntries(
       res.Messages[0].Tags.map((tag: Tag) => [
         (tag.name[0].toLowerCase() + tag.name.slice(1)).replace(/-/g, ""),
-        tag.value
+        tag.value,
       ]),
     );
 

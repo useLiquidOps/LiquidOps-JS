@@ -13,7 +13,8 @@ export interface GetResult {
 
 export type GetResultRes = boolean | "pending";
 
-export type WithResultOption<T> = ({ noResult?: true } | { noResult?: false }) & T;
+export type WithResultOption<T> = ({ noResult?: true } | { noResult?: false }) &
+  T;
 
 export async function getResult(
   aoUtils: AoUtils,

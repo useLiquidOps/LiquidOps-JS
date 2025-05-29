@@ -33,11 +33,17 @@ export async function liquidate<T extends Liquidate>(
     targetUserAddress,
     quantity,
     minExpectedQuantity,
-     noResult = false
+    noResult = false,
   }: T,
 ): Promise<T["noResult"] extends true ? string : LiquidateRes> {
   try {
-    if (!token || !rewardToken || !targetUserAddress || !quantity || !minExpectedQuantity) {
+    if (
+      !token ||
+      !rewardToken ||
+      !targetUserAddress ||
+      !quantity ||
+      !minExpectedQuantity
+    ) {
       throw new Error(
         "Please specify token, reward token, target address, quantity and minExpectedQuantity.",
       );
@@ -85,7 +91,7 @@ export async function liquidate<T extends Liquidate>(
         transferID,
         response: "Transaction pending.",
       } as any;
-    } 
+    }
 
     if (!transferResult) {
       throw new Error("Transaction validation failed");
@@ -101,7 +107,7 @@ export async function liquidate<T extends Liquidate>(
       status: true,
       ...transactionIds,
       transferID,
-      } as any;
+    } as any;
   } catch (error) {
     throw new Error("Error in liquidate function: " + error);
   }

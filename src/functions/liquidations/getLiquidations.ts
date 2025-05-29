@@ -2,14 +2,19 @@ import { getData } from "../../ao/messaging/getData";
 import {
   collateralEnabledTickers,
   tokens,
-  tokenData,
-  SupportedTokensTickers,
   controllerAddress,
 } from "../../ao/utils/tokenAddressData";
 import { redstoneOracleAddress } from "../../ao/utils/tokenAddressData";
-import { getAllPositions } from "../protocolData/getAllPositions";
+import {
+  getAllPositions,
+  GetAllPositionsRes,
+} from "../protocolData/getAllPositions";
 import { dryRunAwait } from "../../ao/utils/dryRunAwait";
 import { convertTicker } from "../../ao/utils/tokenAddressData";
+import {
+  calculateGlobalPositions,
+  TokenPosition,
+} from "../../ao/sharedLogic/globalPositionUtils";
 
 export interface GetLiquidationsRes {
   liquidations: Map<string, QualifyingPosition>;
@@ -42,25 +47,6 @@ interface Tag {
   value: string;
 }
 
-// Base token position with the core metrics
-interface TokenPosition {
-  borrowBalance: BigInt;
-  capacity: BigInt;
-  collateralization: BigInt;
-  liquidationLimit: BigInt;
-}
-
-// Global position across all tokens
-interface GlobalPosition {
-  borrowBalanceUSD: BigInt;
-  capacityUSD: BigInt;
-  collateralizationUSD: BigInt;
-  liquidationLimitUSD: BigInt;
-  tokenPositions: {
-    [token: string]: TokenPosition;
-  };
-}
-
 export async function getLiquidations(
   precisionFactor: number,
 ): Promise<GetLiquidationsRes> {
@@ -85,13 +71,43 @@ export async function getLiquidations(
     // Get positions for each token
     const positionsList = [];
     for (const token of tokensList) {
-      const positions = await getAllPositions({ token });
+      const maxRetries = 3;
+      const retryDelay = 3000; // 3 seconds
+
+      let positions: GetAllPositionsRes | null = null;
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          positions = await getAllPositions({ token });
+          // add dry run await to not get rate limited
+          await dryRunAwait(1);
+          break; // Success, exit retry loop
+        } catch (error) {
+          console.log(
+            `Attempt ${attempt} failed for getAllPositions with token ${token}:`,
+            error,
+          );
+
+          if (attempt === maxRetries) {
+            // Final attempt failed, throw error
+            throw new Error(
+              `Failed to get all positions for token ${token} after ${maxRetries} attempts: ${error}`,
+            );
+          }
+
+          // Wait 3 seconds before retrying
+          await new Promise((resolve) => setTimeout(resolve, retryDelay));
+        }
+      }
+
+      // At this point, positions should never be null because we either succeeded or threw an error
+      if (!positions) {
+        throw new Error(`Unexpected: positions is null for token ${token}`);
+      }
+
       positionsList.push({
         token,
         positions,
       });
-      // add dry run await to not get rate limited
-      await dryRunAwait(1);
     }
 
     // get discovered liquidations
@@ -114,81 +130,33 @@ export async function getLiquidations(
     const auctionTags = Object.fromEntries(
       auctionsRes.Messages[0].Tags.map((tag: Tag) => [tag.name, tag.value]),
     );
-    const maxDiscount = parseFloat(auctionTags["Initial-Discount"] || "0");
-    const discountInterval = parseInt(auctionTags["Discount-Interval"] || "0");
+    const maxDiscount = parseFloat(auctionTags["Initial-Discount"]);
+    const discountInterval = parseInt(auctionTags["Discount-Interval"]);
 
-    // Create a map to store global positions by wallet address
-    const globalPositions = new Map<string, GlobalPosition>();
+    // Convert positions to the format expected by calculateGlobalPositions
+    const allPositions: Record<string, Record<string, TokenPosition>> = {};
 
-    // Highest denomination used
-    let highestDenomination = BigInt(0);
-
-    // Calculate global positions for all wallets across all tokens
     for (const { token, positions: localPositions } of positionsList) {
-      // token data
-      const tokenPrice = prices[convertTicker(token)].v;
-      const tokenDenomination =
-        tokenData[token as SupportedTokensTickers].denomination;
-
-      // Set the highest denomination
-      if (highestDenomination < tokenDenomination)
-        highestDenomination = tokenDenomination;
-
-      // Use the token's specific denomination for scaling
-      const scale = BigInt(10) ** highestDenomination;
-      const priceScaled = BigInt(Math.round(tokenPrice * Number(scale)));
-
-      // The scale difference caused by the different token denominations
-      const scaleDifference =
-        BigInt(10) ** (highestDenomination - tokenDenomination);
-
-      // loop through all positions, add them to the global positions
-      for (const [walletAddress, position] of Object.entries<TokenPosition>(
-        localPositions,
-      )) {
-        const posValueUSD = {
-          borrowBalanceUSD:
-            ((position.borrowBalance as bigint) *
-              scaleDifference *
-              priceScaled) /
-            scale,
-          capacityUSD:
-            ((position.capacity as bigint) * scaleDifference * priceScaled) /
-            scale,
-          collateralizationUSD:
-            ((position.collateralization as bigint) *
-              scaleDifference *
-              priceScaled) /
-            scale,
-          liquidationLimitUSD:
-            ((position.liquidationLimit as bigint) *
-              scaleDifference *
-              priceScaled) /
-            scale,
-        };
-
-        if (!globalPositions.has(walletAddress)) {
-          // no global position calculated for this user yet
-          globalPositions.set(walletAddress, {
-            ...posValueUSD,
-            tokenPositions: { [token]: position },
-          });
-        } else {
-          // update existing global position
-          const globalPos = globalPositions.get(walletAddress);
-
-          // @ts-expect-error
-          globalPos!.borrowBalanceUSD += posValueUSD.borrowBalanceUSD;
-          // @ts-expect-error
-          globalPos!.capacityUSD += posValueUSD.capacityUSD;
-          // @ts-expect-error
-          globalPos!.collateralizationUSD += posValueUSD.collateralizationUSD;
-          // @ts-expect-error
-          globalPos!.liquidationLimitUSD += posValueUSD.liquidationLimitUSD;
-          globalPos!.tokenPositions[token] = position;
+      for (const [walletAddress, position] of Object.entries(localPositions)) {
+        if (!allPositions[walletAddress]) {
+          allPositions[walletAddress] = {};
         }
+        // Convert the position to match our TokenPosition interface
+        allPositions[walletAddress][token] = {
+          borrowBalance: position.borrowBalance as bigint,
+          capacity: position.capacity as bigint,
+          collateralization: position.collateralization as bigint,
+          liquidationLimit: position.liquidationLimit as bigint,
+          ticker: token,
+        };
       }
     }
+
+    // Use shared calculation logic
+    const { globalPositions, highestDenomination } = calculateGlobalPositions({
+      positions: allPositions,
+      prices,
+    });
 
     // Initialize available liquidations object
     const res = new Map<string, QualifyingPosition>();

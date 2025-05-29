@@ -63,7 +63,11 @@ import {
   GetSupplyAPR,
   GetSupplyAPRRes,
 } from "./functions/oTokenData/getSupplyAPR";
-import { getCooldown, GetCooldown, GetCooldownRes } from "./functions/oTokenData/getCooldown";
+import {
+  getCooldown,
+  GetCooldown,
+  GetCooldownRes,
+} from "./functions/oTokenData/getCooldown";
 
 // protocolData
 import {
@@ -127,11 +131,15 @@ class LiquidOps {
 
   //--------------------------------------------------------------------------------------------------------------- borrow
 
-  async borrow<T extends Borrow>(params: T): Promise<T["noResult"] extends true ? string : BorrowRes> {
+  async borrow<T extends Borrow>(
+    params: T,
+  ): Promise<T["noResult"] extends true ? string : BorrowRes> {
     return borrow(this.aoUtils, params);
   }
 
-  async repay<T extends Repay>(params: T): Promise<T["noResult"] extends true ? string : RepayRes> {
+  async repay<T extends Repay>(
+    params: T,
+  ): Promise<T["noResult"] extends true ? string : RepayRes> {
     return repay(this.aoUtils, params);
   }
 
@@ -143,11 +151,15 @@ class LiquidOps {
 
   //--------------------------------------------------------------------------------------------------------------- lend
 
-  async lend<T extends Lend>(params: T): Promise<T["noResult"] extends true ? string : LendRes> {
+  async lend<T extends Lend>(
+    params: T,
+  ): Promise<T["noResult"] extends true ? string : LendRes> {
     return lend(this.aoUtils, params);
   }
 
-  async unLend<T extends UnLend>(params: T): Promise<T["noResult"] extends true ? string : UnLendRes> {
+  async unLend<T extends UnLend>(
+    params: T,
+  ): Promise<T["noResult"] extends true ? string : UnLendRes> {
     return unLend(this.aoUtils, params);
   }
 
