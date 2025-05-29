@@ -5,6 +5,7 @@ import {
   validateTransaction,
   findTransactionIds,
 } from "../../ao/messaging/validationUtils";
+import { WithResultOption } from "../utils/getResult";
 
 const LIQUIDATE_CONFIG = {
   action: "Liquidate",
@@ -14,17 +15,17 @@ const LIQUIDATE_CONFIG = {
   requiresCreditDebit: true,
 };
 
-export interface Liquidate {
+export type Liquidate = WithResultOption<{
   token: TokenInput;
   rewardToken: TokenInput;
   targetUserAddress: string;
   quantity: BigInt;
   minExpectedQuantity: BigInt;
-}
+}>;
 
 export interface LiquidateRes extends TransactionResult {}
 
-export async function liquidate(
+export async function liquidate<T extends Liquidate>(
   aoUtils: AoUtils,
   {
     token,
@@ -32,8 +33,9 @@ export async function liquidate(
     targetUserAddress,
     quantity,
     minExpectedQuantity,
-  }: Liquidate,
-): Promise<LiquidateRes> {
+     noResult = false
+  }: T,
+): Promise<T["noResult"] extends true ? string : LiquidateRes> {
   try {
     if (!token || !rewardToken || !targetUserAddress || !quantity || !minExpectedQuantity) {
       throw new Error(
@@ -66,6 +68,10 @@ export async function liquidate(
       signer: aoUtils.signer,
     });
 
+    if (noResult) {
+      return transferID as any;
+    }
+
     const transferResult = await validateTransaction(
       aoUtils,
       transferID,
@@ -78,8 +84,8 @@ export async function liquidate(
         status: "pending",
         transferID,
         response: "Transaction pending.",
-      };
-    }
+      } as any;
+    } 
 
     if (!transferResult) {
       throw new Error("Transaction validation failed");
@@ -95,7 +101,7 @@ export async function liquidate(
       status: true,
       ...transactionIds,
       transferID,
-    };
+      } as any;
   } catch (error) {
     throw new Error("Error in liquidate function: " + error);
   }
