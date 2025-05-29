@@ -1,5 +1,6 @@
 import { getData } from "../../ao/messaging/getData";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
+import { convertTicker } from "../../ao/utils/tokenAddressData";
 
 export interface GetPosition {
   token: TokenInput;
@@ -44,10 +45,7 @@ export async function getPosition({
     return {
       capacity: tagsObject["Capacity"],
       borrowBalance: tagsObject["Borrow-Balance"],
-      collateralTicker:
-        tagsObject["Collateral-Ticker"] === "AR"
-          ? "qAR"
-          : tagsObject["Collateral-Ticker"],
+      collateralTicker: convertTicker(tagsObject["Collateral-Ticker"]),
       collateralDenomination: tagsObject["Collateral-Denomination"],
       collateralization: tagsObject["Collateralization"],
       liquidationLimit: tagsObject["Liquidation-Limit"],
