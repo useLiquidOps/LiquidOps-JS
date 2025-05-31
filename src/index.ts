@@ -109,6 +109,7 @@ import { connectToAO, AoUtils } from "./ao/utils/connect";
 import { Services } from "./ao/utils/connect";
 type Configs = Services;
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
+import { getEarnings, GetEarnings, GetEarningsRes } from "./functions/lend/getEarnings";
 type Signer = AoConnectTypes["signer"];
 
 class LiquidOps {
@@ -161,6 +162,10 @@ class LiquidOps {
     params: T,
   ): Promise<T["noResult"] extends true ? string : UnLendRes> {
     return unLend(this.aoUtils, params);
+  }
+
+  async getEarnings(params: GetEarnings): Promise<GetEarningsRes> {
+    return getEarnings(this.aoUtils, params);
   }
 
   //--------------------------------------------------------------------------------------------------------------- liquidations
