@@ -69,7 +69,7 @@ export async function getEarnings(
   const sumIfSuccessfull = (confirmations: GQLTransactionsResultInterface) => {
     return (prev: bigint, curr: Transaction) => {
       // check if it was a successfull interaction (received confirmation)
-      if (!confirmations.edges.find((tx) => tx.node.id === curr.id)) {
+      if (!confirmations.edges.find((tx) => tx.node.tags.find(t => t.name === "Pushed-For")?.value === curr.id)) {
         return prev;
       }
 
