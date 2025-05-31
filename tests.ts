@@ -67,6 +67,16 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 // console.log(unLend);
 
+//-------------------------------
+
+// const earnings = await client.getEarnings({
+//   token: "WUSDC",
+//   collateralization: BigInt("10010931"),
+//   walletAddress: "h037Kd9sfjYn7KyDvzkdqG5LVhry1dkKMj8aOJDq1F8"
+// });
+
+// console.log(earnings);
+
 //--------------------------------------------------------------------------------------------------------------- liquidations
 
 // const getLiquidations = await client.getLiquidations();
