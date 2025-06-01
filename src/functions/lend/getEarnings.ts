@@ -12,6 +12,7 @@ export interface GetEarnings {
 export interface GetEarningsRes {
   base: bigint;
   profit: bigint;
+  startDate?: number;
 }
 
 export async function getEarnings(
@@ -95,8 +96,12 @@ export async function getEarnings(
   // they have deposited (without the interest!!)
   const base = sumDeposited - sumWithdrawn;
 
+  // the first mint date
+  const startDate = lendConfirmations?.edges?.[0]?.node?.block?.timestamp;
+
   return {
     base,
-    profit: collateralization - base
+    profit: collateralization - base,
+    startDate
   };
 }
