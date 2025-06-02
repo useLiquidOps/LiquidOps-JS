@@ -10,6 +10,7 @@ export interface TokenData {
   denomination: bigint;
   collateralEnabled: boolean;
   baseDenomination: bigint;
+  deprecated: boolean;
 }
 
 export const controllerAddress = "SmmMv0rJwfIDVM3RvY2-P729JFYwhdGSeGo2deynbfY";
@@ -30,6 +31,7 @@ export const tokenData: Record<string, TokenData> = {
     denomination: BigInt(12),
     collateralEnabled: true,
     baseDenomination: BigInt(12),
+    deprecated: true
   },
   WAR: {
     name: "Wrapped Arweave",
@@ -43,6 +45,7 @@ export const tokenData: Record<string, TokenData> = {
     denomination: BigInt(12),
     collateralEnabled: true,
     baseDenomination: BigInt(12),
+    deprecated: false
   },
   WUSDC: {
     name: "Wrapped USD Circle",
@@ -56,6 +59,7 @@ export const tokenData: Record<string, TokenData> = {
     denomination: BigInt(6),
     collateralEnabled: true,
     baseDenomination: BigInt(6),
+    deprecated: false
   },
   WUSDT: {
     name: "Wrapped USD Tether",
@@ -69,6 +73,7 @@ export const tokenData: Record<string, TokenData> = {
     denomination: BigInt(18),
     collateralEnabled: true,
     baseDenomination: BigInt(18),
+    deprecated: false
   },
   WETH: {
     name: "Wrapped Ethereum",
@@ -82,6 +87,7 @@ export const tokenData: Record<string, TokenData> = {
     denomination: BigInt(18),
     collateralEnabled: true,
     baseDenomination: BigInt(18),
+    deprecated: false
   },
 };
 
