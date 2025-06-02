@@ -77,7 +77,7 @@ export const tokenData: Record<string, TokenData> = {
   },
   WETH: {
     name: "Wrapped Ethereum",
-    icon: "z1nnBgzGpt-eXHrjD5A9KrQX6dK8E1ONDuBIqB94VTA",
+    icon: "Bi7iqzLQXN-wVD3nM8TYGfTI9g7HgGtiD0XuruoQTJk",
     ticker: "WETH",
     address: "cBgS-V_yGhOe9P1wCIuNSgDA_JS8l4sE5iFcPTr0TD0",
     oTicker: "oWETH",
