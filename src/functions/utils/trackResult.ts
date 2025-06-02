@@ -40,15 +40,16 @@ const SU_ROUTER = "https://su-router.ao-testnet.xyz";
 
 export async function trackResult(
   aoUtils: AoUtils,
-{
-  process,
-  message,
-  targetProcess,
-  match,
-  messageTimestamp,
-  strategy = "precise",
-  validUntil = 1000 * 60 * 45
-}: TrackResult): Promise<TrackResultRes | undefined> {
+  {
+    process,
+    message,
+    targetProcess,
+    match,
+    messageTimestamp,
+    strategy = "precise",
+    validUntil = 1000 * 60 * 45
+  }: TrackResult
+): Promise<TrackResultRes | undefined> {
   if (!process || !message) {
     throw new Error("Please specify a process and a message id");
   }
