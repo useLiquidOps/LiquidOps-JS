@@ -20,6 +20,11 @@ export interface TrackResult {
   };
 }
 
+export interface TrackResultRes {
+  match: "success" | "fail";
+  message: PlainMessage;
+}
+
 export interface PlainMessage {
   Anchor: string;
   Tags: {
@@ -39,7 +44,7 @@ export async function trackResult({
   match,
   messageTimestamp,
   validUntil = 1000 * 60 * 45
-}: TrackResult) {
+}: TrackResult): Promise<TrackResultRes | undefined> {
   if (!process || !message) {
     throw new Error("Please specify a process and a message id");
   }
@@ -106,7 +111,7 @@ export async function trackResult({
   let iterateNextPage = true;
   let cursor = messageTimestamp - 1;
 
-  let matchedResult: PlainMessage | undefined;
+  let matchedResult: TrackResultRes | undefined;
 
   while (!matchedResult && iterateNextPage && cursor <= untilTimestamp) {
     const res: MessagesList = await (
@@ -140,10 +145,16 @@ export async function trackResult({
 
         for (const msg of msgResult.Messages as PlainMessage[]) {
           if (match.success && matchMsg(msg, match.success)) {
-            matchedResult = msg;
+            matchedResult = {
+              match: "success",
+              message: msg
+            };
             break;
           } else if (match.fail && matchMsg(msg, match.fail)) {
-            matchedResult = msg;
+            matchedResult = {
+              match: "fail",
+              message: msg
+            };
             break;
           }
         }

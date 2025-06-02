@@ -110,7 +110,7 @@ import { Services } from "./ao/utils/connect";
 type Configs = Services;
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 import { getEarnings, GetEarnings, GetEarningsRes } from "./functions/lend/getEarnings";
-import { trackResult, TrackResult } from "./functions/utils/trackResult";
+import { trackResult, TrackResult, TrackResultRes } from "./functions/utils/trackResult";
 type Signer = AoConnectTypes["signer"];
 
 class LiquidOps {
@@ -249,7 +249,7 @@ class LiquidOps {
     return transfer(this.aoUtils, params);
   }
 
-  async trackResult(params: TrackResult) {
+  async trackResult(params: TrackResult): Promise<TrackResultRes | undefined> {
     return trackResult(params);
   }
 
