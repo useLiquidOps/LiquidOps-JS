@@ -3,6 +3,7 @@ import { SendMessage } from "@permaweb/aoconnect/dist/lib/message";
 import { ReadResult } from "@permaweb/aoconnect/dist/lib/result";
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 import * as aoConnect from "@permaweb/aoconnect";
+import { ReadResults } from "@permaweb/aoconnect/dist/lib/results";
 
 const DEFAULT_SERVICES: Services = {
   MODE: "legacy",
@@ -22,7 +23,7 @@ export function connectToAO(services?: Partial<Services>) {
     CU_URL = DEFAULT_SERVICES.CU_URL,
   } = services || {};
 
-  const { spawn, message, result } = aoConnect.connect({
+  const { spawn, message, result, results } = aoConnect.connect({
     // @ts-ignore, MODE is needed here but is not in the aoconnect type yet
     MODE,
     GATEWAY_URL,
@@ -33,13 +34,14 @@ export function connectToAO(services?: Partial<Services>) {
     CU_URL,
   });
 
-  return { spawn, message, result };
+  return { spawn, message, result, results };
 }
 
 export interface AoUtils {
   spawn: SpawnProcess;
   message: SendMessage;
   result: ReadResult;
+  results: ReadResults;
   signer: AoConnectTypes["signer"];
   configs: Services;
 }

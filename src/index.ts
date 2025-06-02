@@ -121,11 +121,12 @@ class LiquidOps {
       throw new Error("Please specify a ao createDataItemSigner signer");
     }
 
-    const { spawn, message, result } = connectToAO(configs);
+    const { spawn, message, result, results } = connectToAO(configs);
     this.aoUtils = {
       spawn,
       message,
       result,
+      results,
       signer,
       configs,
     };
@@ -250,7 +251,7 @@ class LiquidOps {
   }
 
   async trackResult(params: TrackResult): Promise<TrackResultRes | undefined> {
-    return trackResult(params);
+    return trackResult(this.aoUtils, params);
   }
 
   //--------------------------------------------------------------------------------------------------------------- process data
