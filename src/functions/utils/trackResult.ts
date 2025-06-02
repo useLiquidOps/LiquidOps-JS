@@ -1,6 +1,6 @@
-import { fetch } from "bun";
-import { AoUtils } from "../../ao/utils/connect";
+import { result } from "@permaweb/aoconnect/browser";
 import { Tag } from "../../arweave/getTags";
+import { fetch } from "bun";
 
 export interface ResultMatcher {
   id?: string;
@@ -15,17 +15,31 @@ export interface TrackResult {
   messageTimestamp?: number;
   validUntil?: number;
   match: {
-    success?: ResultMatcher;
-    fail?: ResultMatcher;
+    success?: Partial<PlainMessage>;
+    fail?: Partial<PlainMessage>;
   };
+}
+
+export interface PlainMessage {
+  Anchor: string;
+  Tags: {
+    name: string;
+    value: string;
+  }[];
+  Target: string;
+  Data: string;
 }
 
 const SU_ROUTER = "https://su-router.ao-testnet.xyz";
 
-export async function trackResult(
-  aoUtils: AoUtils,
-  { process, message, targetProcess, match, messageTimestamp, validUntil = 1000 * 60 * 45 }: TrackResult
-) {
+export async function trackResult({
+  process,
+  message,
+  targetProcess,
+  match,
+  messageTimestamp,
+  validUntil = 1000 * 60 * 45
+}: TrackResult) {
   if (!process || !message) {
     throw new Error("Please specify a process and a message id");
   }
@@ -51,15 +65,53 @@ export async function trackResult(
     }
   }
 
+  // check if an expected message matches another
+  const matchMsg = (msg: PlainMessage, expected: Partial<PlainMessage>) =>
+    (!expected.Anchor || expected.Anchor === msg.Anchor) &&
+    (!expected.Data || expected.Data === msg.Data) &&
+    (!expected.Target || expected.Target === msg.Target) &&
+    (!expected.Tags || expected.Tags
+      .every((tag1) => msg.Tags.find(
+        (tag2) => tag2.name === tag1.name && tag2.value === tag1.value)
+      )
+    );
+
+  // let cursor = messageTimestamp - 1;
+  // const untilTimestamp = messageTimestamp + validUntil + 1;
+
+  // let matchedResult: PlainMessage | undefined;
+
+  // while (!matchedResult && cursor <= untilTimestamp) {
+  //   const res = await aoUtils.results({
+  //     process: targetProcess || process,
+  //     from: cursor.toString(),
+  //     to: untilTimestamp.toString(),
+  //     sort: "DESC",
+  //     limit: 50
+  //   });
+
+  //   for (const result of res.edges) {
+  //     cursor = result.cursor;
+  //     matchedResult = (result.node.Messages as PlainMessage[]).find(
+  //       (msg) => (match.success && matchMsg(msg, match.success)) ||
+  //         (match.fail && matchMsg(msg, match.fail))
+  //     );
+  //   }
+  // }
+
   // find the final message pushed for this message on the SU
-  let iterateNextPage = true;
-  let cursor = messageTimestamp - 1;
+  const resultProcess = targetProcess || process;
   const untilTimestamp = messageTimestamp + validUntil + 1;
 
-  while (iterateNextPage && cursor <= untilTimestamp) {
+  let iterateNextPage = true;
+  let cursor = messageTimestamp - 1;
+
+  let matchedResult: PlainMessage | undefined;
+
+  while (!matchedResult && iterateNextPage && cursor <= untilTimestamp) {
     const res: MessagesList = await (
       await fetch(
-        `${SU_ROUTER}/${targetProcess || process}?from=${cursor}&to=${untilTimestamp}`
+        `${SU_ROUTER}/${resultProcess}?from=${cursor}&to=${untilTimestamp}`
       )
     ).json();
     const potentialResultMessages: MessageOrAssignment[] = [];
@@ -78,11 +130,32 @@ export async function trackResult(
 
     // now we read the result for all of the potential closing messages
     if (potentialResultMessages.length > 0) {
+      potentialResultMessages.reverse();
 
+      for (const generatingMsg of potentialResultMessages) {
+        const msgResult = await result({
+          process: resultProcess,
+          message: generatingMsg.id
+        });
+
+        for (const msg of msgResult.Messages as PlainMessage[]) {
+          if (match.success && matchMsg(msg, match.success)) {
+            matchedResult = msg;
+            break;
+          } else if (match.fail && matchMsg(msg, match.fail)) {
+            matchedResult = msg;
+            break;
+          }
+        }
+
+        if (matchedResult) break;
+      }
     }
 
     iterateNextPage = res.page_info.has_next_page;
   }
+
+  return matchedResult;
 }
 
 interface MessageOrAssignment {

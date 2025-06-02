@@ -250,7 +250,7 @@ class LiquidOps {
   }
 
   async trackResult(params: TrackResult) {
-    return trackResult(this.aoUtils, params);
+    return trackResult(params);
   }
 
   //--------------------------------------------------------------------------------------------------------------- process data
