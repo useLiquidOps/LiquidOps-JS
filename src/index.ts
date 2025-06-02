@@ -110,6 +110,7 @@ import { Services } from "./ao/utils/connect";
 type Configs = Services;
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 import { getEarnings, GetEarnings, GetEarningsRes } from "./functions/lend/getEarnings";
+import { trackResult, TrackResult } from "./functions/utils/trackResult";
 type Signer = AoConnectTypes["signer"];
 
 class LiquidOps {
@@ -246,6 +247,10 @@ class LiquidOps {
 
   async transfer(params: Transfer): Promise<TransferRes> {
     return transfer(this.aoUtils, params);
+  }
+
+  async trackResult(params: TrackResult) {
+    return trackResult(this.aoUtils, params);
   }
 
   //--------------------------------------------------------------------------------------------------------------- process data

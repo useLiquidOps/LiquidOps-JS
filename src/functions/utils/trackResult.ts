@@ -35,8 +35,8 @@ export async function trackResult(
 
   // first get scheduled message data
   if (!messageTimestamp) {
-    const res = await fetch(`${SU_ROUTER}/${message}?process-id${process}`);
-    if (res.status <= 400) {
+    const res = await fetch(`${SU_ROUTER}/${message}?process-id=${process}`);
+    if (res.status >= 400) {
       throw new Error(`Could not find message ${message} on process ${process}`);
     }
 
@@ -62,9 +62,23 @@ export async function trackResult(
         `${SU_ROUTER}/${targetProcess || process}?from=${cursor}&to=${untilTimestamp}`
       )
     ).json();
+    const potentialResultMessages: MessageOrAssignment[] = [];
 
     for (const interaction of res.edges) {
+      const { message: msg } = interaction.node;
+
+      // check if the iterated message was pushed for the original message.
+      // if it was, we store it to read it's result later
+      if (msg.tags.find((tag) => tag.name === "Pushed-For")?.value === message) {
+        potentialResultMessages.push(msg);
+      }
+
       cursor = parseInt(interaction.cursor);
+    }
+
+    // now we read the result for all of the potential closing messages
+    if (potentialResultMessages.length > 0) {
+
     }
 
     iterateNextPage = res.page_info.has_next_page;
