@@ -2,6 +2,7 @@ import LiquidOps from "./src";
 import createDataItemSignerBun from "./tests/testsHelpers/bunSigner/index";
 import { JWKInterface } from "./tests/testsHelpers/bunSigner/jwk-interface";
 import { ownerToAddress } from "./tests/testsHelpers/arweaveUtils";
+import { formatGlobalPosition } from "./src/ao/utils/formatGlobalPosition";
 
 if (!process.env.JWK) {
   throw new Error("Please specify a JWK in the .env file");
@@ -126,7 +127,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 //   walletAddress: walletAddress
 // });
 
-// console.log(getGlobalPosition);
+// console.log(formatGlobalPosition(getGlobalPosition));
 
 //-------------------------------
 
@@ -156,7 +157,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 //--------------------------------------------------------------------------------------------------------------- protocolData
 
 // const getAllPositions = await client.getAllPositions({
-//   token: "QAR",
+//   token: "WUSDC",
 // });
 
 // console.log(getAllPositions);

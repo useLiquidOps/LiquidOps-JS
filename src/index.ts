@@ -109,7 +109,11 @@ import { connectToAO, AoUtils } from "./ao/utils/connect";
 import { Services } from "./ao/utils/connect";
 type Configs = Services;
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
-import { getEarnings, GetEarnings, GetEarningsRes } from "./functions/lend/getEarnings";
+import {
+  getEarnings,
+  GetEarnings,
+  GetEarningsRes,
+} from "./functions/lend/getEarnings";
 type Signer = AoConnectTypes["signer"];
 
 class LiquidOps {
