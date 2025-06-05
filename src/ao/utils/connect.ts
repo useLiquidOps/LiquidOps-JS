@@ -3,6 +3,7 @@ import { SendMessage } from "@permaweb/aoconnect/dist/lib/message";
 import { ReadResult } from "@permaweb/aoconnect/dist/lib/result";
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 import * as aoConnect from "@permaweb/aoconnect";
+import { ReadResults } from "@permaweb/aoconnect/dist/lib/results";
 
 const DEFAULT_SERVICES: Services = {
   MODE: "legacy",
