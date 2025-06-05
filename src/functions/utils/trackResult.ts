@@ -14,7 +14,6 @@ export interface TrackResult {
   targetProcess?: string;
   messageTimestamp?: number;
   validUntil?: number;
-  strategy?: "precise" | "fast";
   match: {
     success?: Partial<PlainMessage>;
     fail?: Partial<PlainMessage>;
@@ -46,7 +45,6 @@ export async function trackResult(
     targetProcess,
     match,
     messageTimestamp,
-    strategy = "precise",
     validUntil = 1000 * 60 * 45
   }: TrackResult
 ): Promise<TrackResultRes | undefined> {
@@ -92,21 +90,40 @@ export async function trackResult(
   let matchedResult: TrackResultRes | undefined;
   let iterateNextPage = true;
 
-  if (strategy === "fast") {
-    let cursor: string | undefined;
+  const untilTimestamp = messageTimestamp + validUntil + 1;
+  let cursor = messageTimestamp - 1;
 
-    while (!matchedResult && iterateNextPage) {
-      const res = await aoUtils.results({
-        process: targetProcess || process,
-        from: cursor,
-        sort: "DESC",
-        limit: 50
-      });
+  while (!matchedResult && iterateNextPage && cursor <= untilTimestamp) {
+    const res: MessagesList = await (
+      await fetch(
+        `${SU_ROUTER}/${resultProcess}?from=${cursor}&to=${untilTimestamp}`
+      )
+    ).json();
+    const potentialResultMessages: MessageOrAssignment[] = [];
 
-      for (const result of res.edges) {
-        cursor = result.cursor;
+    for (const interaction of res.edges) {
+      const { message: msg } = interaction.node;
 
-        for (const msg of result.node.Messages as PlainMessage[]) {
+      // check if the iterated message was pushed for the original message.
+      // if it was, we store it to read it's result later
+      if (msg.tags.find((tag) => tag.name === "Pushed-For")?.value === message) {
+        potentialResultMessages.push(msg);
+      }
+
+      cursor = parseInt(interaction.cursor);
+    }
+
+    // now we read the result for all of the potential closing messages
+    if (potentialResultMessages.length > 0) {
+      potentialResultMessages.reverse();
+
+      for (const generatingMsg of potentialResultMessages) {
+        const msgResult = await result({
+          process: resultProcess,
+          message: generatingMsg.id
+        });
+
+        for (const msg of msgResult.Messages as PlainMessage[]) {
           if (match.success && matchMsg(msg, match.success)) {
             matchedResult = {
               match: "success",
@@ -124,65 +141,9 @@ export async function trackResult(
 
         if (matchedResult) break;
       }
-
-      iterateNextPage = res.pageInfo.hasNextPage;
     }
-  } else {
-    const untilTimestamp = messageTimestamp + validUntil + 1;
-    let cursor = messageTimestamp - 1;
 
-    while (!matchedResult && iterateNextPage && cursor <= untilTimestamp) {
-      const res: MessagesList = await (
-        await fetch(
-          `${SU_ROUTER}/${resultProcess}?from=${cursor}&to=${untilTimestamp}`
-        )
-      ).json();
-      const potentialResultMessages: MessageOrAssignment[] = [];
-
-      for (const interaction of res.edges) {
-        const { message: msg } = interaction.node;
-
-        // check if the iterated message was pushed for the original message.
-        // if it was, we store it to read it's result later
-        if (msg.tags.find((tag) => tag.name === "Pushed-For")?.value === message) {
-          potentialResultMessages.push(msg);
-        }
-
-        cursor = parseInt(interaction.cursor);
-      }
-
-      // now we read the result for all of the potential closing messages
-      if (potentialResultMessages.length > 0) {
-        potentialResultMessages.reverse();
-
-        for (const generatingMsg of potentialResultMessages) {
-          const msgResult = await result({
-            process: resultProcess,
-            message: generatingMsg.id
-          });
-
-          for (const msg of msgResult.Messages as PlainMessage[]) {
-            if (match.success && matchMsg(msg, match.success)) {
-              matchedResult = {
-                match: "success",
-                message: msg
-              };
-              break;
-            } else if (match.fail && matchMsg(msg, match.fail)) {
-              matchedResult = {
-                match: "fail",
-                message: msg
-              };
-              break;
-            }
-          }
-
-          if (matchedResult) break;
-        }
-      }
-
-      iterateNextPage = res.page_info.has_next_page;
-    }
+    iterateNextPage = res.page_info.has_next_page;
   }
 
   return matchedResult;
