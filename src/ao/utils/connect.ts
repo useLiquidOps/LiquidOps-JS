@@ -74,7 +74,6 @@ export interface AoUtils {
   spawn: SpawnProcess;
   message: SendMessage;
   result: ReadResult;
-  results: ReadResults;
   signer: AoConnectTypes["signer"];
   configs: Services;
 }

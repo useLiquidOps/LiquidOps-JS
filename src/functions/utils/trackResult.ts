@@ -1,5 +1,5 @@
 import { Tag } from "../../arweave/getTags";
-import { AoUtils } from "../../ao/utils/connect";
+import { AoUtils, connectToAO } from "../../ao/utils/connect";
 
 export interface TrackResult {
   process: string;
@@ -38,7 +38,7 @@ export interface ResultMatcher extends Omit<Partial<PlainMessage>, "Tags"> {
 const SU_ROUTER = "https://su-router.ao-testnet.xyz";
 
 export async function trackResult(
-  aoUtils: AoUtils,
+  aoUtilsInput: Pick<AoUtils, "signer" | "configs">,
   {
     process,
     message,
@@ -55,6 +55,8 @@ export async function trackResult(
   if (!match.success && !match.fail) {
     throw new Error("Please specify an expected success/fail result match");
   }
+
+  const aoUtils = await connectToAO(aoUtilsInput.configs);
 
   // check if a tag matches a result matcher
   const matchTag = (tag: SimpleTag, expected: Tag) => {

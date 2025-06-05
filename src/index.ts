@@ -251,7 +251,7 @@ class LiquidOps {
   }
 
   async trackResult(params: TrackResult): Promise<TrackResultRes | undefined> {
-    return trackResult(this.aoUtils, params);
+    return trackResult({ signer: this.signer, configs: this.configs }, params);
   }
 
   //--------------------------------------------------------------------------------------------------------------- process data
