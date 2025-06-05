@@ -1,4 +1,4 @@
-import { AoUtils } from "../../ao/utils/connect";
+import { AoUtils, connectToAO } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 import { getTags } from "../../arweave/getTags";
 
@@ -18,13 +18,23 @@ export interface GetTransactionsRes {
 }
 
 export async function getTransactions(
-  aoUtils: AoUtils,
+  aoUtilsInput: Pick<AoUtils, "signer" | "configs">,
   { token, action, walletAddress, cursor = "" }: GetTransactions,
 ): Promise<GetTransactionsRes> {
   try {
     if (!token || !action || !walletAddress) {
       throw new Error("Please specify a token, action and walletAddress.");
     }
+
+    const { spawn, message, result } = await connectToAO(aoUtilsInput.configs);
+
+    const aoUtils: AoUtils = {
+      spawn,
+      message,
+      result,
+      signer: aoUtilsInput.signer,
+      configs: aoUtilsInput.configs,
+    };
 
     const tags = [{ name: "Protocol-Name", values: ["LiquidOps"] }];
 

@@ -1,6 +1,9 @@
-import { AoUtils } from "../../ao/utils/connect";
+import { AoUtils, connectToAO } from "../../ao/utils/connect";
 import { getTags } from "../../arweave/getTags";
-import { getTransactions, Transaction } from "../getTransactions/getTransactions";
+import {
+  getTransactions,
+  Transaction,
+} from "../getTransactions/getTransactions";
 import { GQLTransactionsResultInterface } from "ar-gql/dist/faces";
 
 export interface GetEarnings {
@@ -15,17 +18,27 @@ export interface GetEarningsRes {
 }
 
 export async function getEarnings(
-  aoUtils: AoUtils,
-  { walletAddress, token, collateralization }: GetEarnings
+  aoUtilsInput: Pick<AoUtils, "signer" | "configs">,
+  { walletAddress, token, collateralization }: GetEarnings,
 ): Promise<GetEarningsRes> {
   if (!walletAddress || !token) {
     throw new Error("Please specify a token and a wallet address");
   }
 
+  const { spawn, message, result } = await connectToAO(aoUtilsInput.configs);
+
+  const aoUtils: AoUtils = {
+    spawn,
+    message,
+    result,
+    signer: aoUtilsInput.signer,
+    configs: aoUtilsInput.configs,
+  };
+
   if (!collateralization || collateralization === BigInt(0)) {
     return {
       base: BigInt(0),
-      profit: BigInt(0)
+      profit: BigInt(0),
     };
   }
 
@@ -34,13 +47,13 @@ export async function getEarnings(
     getTransactions(aoUtils, {
       token,
       action: "lend",
-      walletAddress
+      walletAddress,
     }),
     getTransactions(aoUtils, {
       token,
       action: "unLend",
-      walletAddress
-    })
+      walletAddress,
+    }),
   ]);
 
   // get lend and unlend confirmations
@@ -49,18 +62,18 @@ export async function getEarnings(
       aoUtils,
       tags: [
         { name: "Action", values: "Mint-Confirmation" },
-        { name: "Pushed-For", values: lends.transactions.map(t => t.id) }
+        { name: "Pushed-For", values: lends.transactions.map((t) => t.id) },
       ],
-      cursor: ""
+      cursor: "",
     }),
     getTags({
       aoUtils,
       tags: [
         { name: "Action", values: "Redeem-Confirmation" },
-        { name: "Pushed-For", values: unlends.transactions.map(t => t.id) }
+        { name: "Pushed-For", values: unlends.transactions.map((t) => t.id) },
       ],
-      cursor: ""
-    })
+      cursor: "",
+    }),
   ]);
 
   // reducer function for a list of lends/unlends based on a
@@ -69,25 +82,31 @@ export async function getEarnings(
   const sumIfSuccessfull = (confirmations: GQLTransactionsResultInterface) => {
     return (prev: bigint, curr: Transaction) => {
       // check if it was a successfull interaction (received confirmation)
-      if (!confirmations.edges.find((tx) => tx.node.tags.find(t => t.name === "Pushed-For")?.value === curr.id)) {
+      if (
+        !confirmations.edges.find(
+          (tx) =>
+            tx.node.tags.find((t) => t.name === "Pushed-For")?.value ===
+            curr.id,
+        )
+      ) {
         return prev;
       }
 
       // add together
       return prev + BigInt(curr.tags.Quantity || 0);
-    }
+    };
   };
 
   // deposited tokens (sum of successfull lends)
   const sumDeposited = lends.transactions.reduce(
     sumIfSuccessfull(lendConfirmations),
-    BigInt(0)
+    BigInt(0),
   );
 
   // withdrawn tokens (sum of successfull burns)
   const sumWithdrawn = unlends.transactions.reduce(
     sumIfSuccessfull(unlendConfirmations),
-    BigInt(0)
+    BigInt(0),
   );
 
   // the result of the total deposited and total withdrawn tokens
@@ -97,6 +116,6 @@ export async function getEarnings(
 
   return {
     base,
-    profit: collateralization - base
+    profit: collateralization - base,
   };
 }

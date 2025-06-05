@@ -1,4 +1,4 @@
-import { AoUtils } from "../../ao/utils/connect";
+import { connectToAO, AoUtils } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 import {
   TransactionResult,
@@ -24,13 +24,23 @@ export type Borrow = WithResultOption<{
 export interface BorrowRes extends TransactionResult {}
 
 export async function borrow<T extends Borrow>(
-  aoUtils: AoUtils,
+  aoUtilsInput: Pick<AoUtils, "signer" | "configs">,
   { token, quantity, noResult = false }: Borrow,
 ): Promise<T["noResult"] extends true ? string : BorrowRes> {
   try {
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");
     }
+
+    const { spawn, message, result } = await connectToAO(aoUtilsInput.configs);
+
+    const aoUtils: AoUtils = {
+      spawn,
+      message,
+      result,
+      signer: aoUtilsInput.signer,
+      configs: aoUtilsInput.configs,
+    };
 
     const { oTokenAddress, tokenAddress } = tokenInput(token);
 
