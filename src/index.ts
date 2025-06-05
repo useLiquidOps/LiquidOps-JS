@@ -105,7 +105,7 @@ import {
 import { TokenInput, tokenInput } from "./ao/utils/tokenInput";
 
 // Class needed types/funtions
-import { connectToAO, AoUtils } from "./ao/utils/connect";
+import { AoUtils } from "./ao/utils/connect";
 import { Services } from "./ao/utils/connect";
 type Configs = Services;
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
@@ -319,6 +319,8 @@ export type {
   GetResultRes,
   Transfer,
   TransferRes,
+  TrackResult,
+  TrackResultRes,
 
   // Utility types for constructor/setup
   AoUtils,
