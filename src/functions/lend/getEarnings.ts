@@ -1,4 +1,4 @@
-import { AoUtils } from "../../ao/utils/connect";
+import { AoUtils, connectToAO } from "../../ao/utils/connect";
 import { getTags } from "../../arweave/getTags";
 import {
   getTransactions,
@@ -18,12 +18,22 @@ export interface GetEarningsRes {
 }
 
 export async function getEarnings(
-  aoUtils: AoUtils,
+  aoUtilsInput: Pick<AoUtils, "signer" | "configs">,
   { walletAddress, token, collateralization }: GetEarnings,
 ): Promise<GetEarningsRes> {
   if (!walletAddress || !token) {
     throw new Error("Please specify a token and a wallet address");
   }
+
+  const { spawn, message, result } = await connectToAO(aoUtilsInput.configs);
+
+  const aoUtils: AoUtils = {
+    spawn,
+    message,
+    result,
+    signer: aoUtilsInput.signer,
+    configs: aoUtilsInput.configs,
+  };
 
   if (!collateralization || collateralization === BigInt(0)) {
     return {

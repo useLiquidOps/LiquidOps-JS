@@ -1,5 +1,5 @@
 import { validateTransaction } from "../../ao/messaging/validationUtils";
-import { AoUtils } from "../../ao/utils/connect";
+import { AoUtils, connectToAO } from "../../ao/utils/connect";
 import { LEND_CONFIG } from "../lend/lend";
 import { UNLEND_CONFIG } from "../lend/unLend";
 import { BORROW_CONFIG } from "../borrow/borrow";
@@ -17,10 +17,20 @@ export type WithResultOption<T> = ({ noResult?: true } | { noResult?: false }) &
   T;
 
 export async function getResult(
-  aoUtils: AoUtils,
+  aoUtilsInput: Pick<AoUtils, "signer" | "configs">,
   { transferID, tokenAddress, action }: GetResult,
 ): Promise<GetResultRes> {
   try {
+    const { spawn, message, result } = await connectToAO(aoUtilsInput.configs);
+
+    const aoUtils: AoUtils = {
+      spawn,
+      message,
+      result,
+      signer: aoUtilsInput.signer,
+      configs: aoUtilsInput.configs,
+    };
+
     let CONFIG;
     if (action === "lend") {
       CONFIG = LEND_CONFIG;
@@ -32,14 +42,14 @@ export async function getResult(
       CONFIG = REPAY_CONFIG;
     }
 
-    const result = validateTransaction(
+    const txResult = validateTransaction(
       aoUtils,
       transferID,
       tokenAddress,
       CONFIG,
     );
 
-    return result;
+    return txResult;
   } catch (error) {
     throw new Error("Error in getResult function: " + error);
   }

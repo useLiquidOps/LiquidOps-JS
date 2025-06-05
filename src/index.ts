@@ -114,24 +114,19 @@ import {
   GetEarnings,
   GetEarningsRes,
 } from "./functions/lend/getEarnings";
+
 type Signer = AoConnectTypes["signer"];
 
 class LiquidOps {
-  private aoUtils: AoUtils;
+  private signer: Signer;
+  private configs: Omit<Configs, "MODE">;
 
   constructor(signer: Signer, configs: Omit<Configs, "MODE"> = {}) {
     if (!signer) {
       throw new Error("Please specify a ao createDataItemSigner signer");
     }
-
-    const { spawn, message, result } = connectToAO(configs);
-    this.aoUtils = {
-      spawn,
-      message,
-      result,
-      signer,
-      configs,
-    };
+    this.signer = signer;
+    this.configs = configs;
   }
 
   //--------------------------------------------------------------------------------------------------------------- borrow
@@ -139,19 +134,22 @@ class LiquidOps {
   async borrow<T extends Borrow>(
     params: T,
   ): Promise<T["noResult"] extends true ? string : BorrowRes> {
-    return borrow(this.aoUtils, params);
+    return borrow({ signer: this.signer, configs: this.configs }, params);
   }
 
   async repay<T extends Repay>(
     params: T,
   ): Promise<T["noResult"] extends true ? string : RepayRes> {
-    return repay(this.aoUtils, params);
+    return repay({ signer: this.signer, configs: this.configs }, params);
   }
 
   //--------------------------------------------------------------------------------------------------------------- getTransactions
 
   async getTransactions(params: GetTransactions): Promise<GetTransactionsRes> {
-    return getTransactions(this.aoUtils, params);
+    return getTransactions(
+      { signer: this.signer, configs: this.configs },
+      params,
+    );
   }
 
   //--------------------------------------------------------------------------------------------------------------- lend
@@ -159,17 +157,17 @@ class LiquidOps {
   async lend<T extends Lend>(
     params: T,
   ): Promise<T["noResult"] extends true ? string : LendRes> {
-    return lend(this.aoUtils, params);
+    return lend({ signer: this.signer, configs: this.configs }, params);
   }
 
   async unLend<T extends UnLend>(
     params: T,
   ): Promise<T["noResult"] extends true ? string : UnLendRes> {
-    return unLend(this.aoUtils, params);
+    return unLend({ signer: this.signer, configs: this.configs }, params);
   }
 
   async getEarnings(params: GetEarnings): Promise<GetEarningsRes> {
-    return getEarnings(this.aoUtils, params);
+    return getEarnings({ signer: this.signer, configs: this.configs }, params);
   }
 
   //--------------------------------------------------------------------------------------------------------------- liquidations
@@ -187,11 +185,10 @@ class LiquidOps {
   }
 
   async liquidate(params: Liquidate): Promise<LiquidateRes> {
-    return liquidate(this.aoUtils, params);
+    return liquidate({ signer: this.signer, configs: this.configs }, params);
   }
 
   //--------------------------------------------------------------------------------------------------------------- oTokenData
-
   async getBalances(params: GetBalances): Promise<GetBalancesRes> {
     return getBalances(params);
   }
@@ -245,11 +242,11 @@ class LiquidOps {
   }
 
   async getResult(params: GetResult): Promise<GetResultRes> {
-    return getResult(this.aoUtils, params);
+    return getResult({ signer: this.signer, configs: this.configs }, params);
   }
 
   async transfer(params: Transfer): Promise<TransferRes> {
-    return transfer(this.aoUtils, params);
+    return transfer({ signer: this.signer, configs: this.configs }, params);
   }
 
   //--------------------------------------------------------------------------------------------------------------- process data

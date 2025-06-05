@@ -1,4 +1,4 @@
-import { AoUtils } from "../../ao/utils/connect";
+import { AoUtils, connectToAO } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 import {
   TransactionResult,
@@ -24,13 +24,23 @@ export type Repay = WithResultOption<{
 export interface RepayRes extends TransactionResult {}
 
 export async function repay<T extends Repay>(
-  aoUtils: AoUtils,
+  aoUtilsInput: Pick<AoUtils, "signer" | "configs">,
   { token, quantity, onBehalfOf, noResult = false }: T,
 ): Promise<T["noResult"] extends true ? string : RepayRes> {
   try {
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");
     }
+
+    const { spawn, message, result } = await connectToAO(aoUtilsInput.configs);
+
+    const aoUtils: AoUtils = {
+      spawn,
+      message,
+      result,
+      signer: aoUtilsInput.signer,
+      configs: aoUtilsInput.configs,
+    };
 
     const { tokenAddress, oTokenAddress } = tokenInput(token);
 
