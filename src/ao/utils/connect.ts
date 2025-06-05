@@ -44,7 +44,10 @@ export async function connectToAO(
         CU_URL,
       });
 
-      console.log(`✅ AO connected successfully on attempt ${attempt}`);
+      if (attempt !== 1) {
+        console.log(`✅ AO connected successfully on attempt ${attempt}`);
+      }
+
       return { spawn, message, result };
     } catch (error: unknown) {
       lastError = error instanceof Error ? error : new Error(String(error));
