@@ -209,13 +209,13 @@ const walletAddress = await ownerToAddress(JWK.n);
 //     success: {
 //       Target: "ljvCPN31XCLPkBo9FUeB7vAK0VC6-eY52-CS-6Iho8U",
 //       Tags: [
-//         { name: "Action", value: "Mint-Confirmation" }
+//         { name: "Action", values: "Mint-Confirmation" }
 //       ]
 //     },
 //     fail: {
 //       Target: "ljvCPN31XCLPkBo9FUeB7vAK0VC6-eY52-CS-6Iho8U",
 //       Tags: [
-//         { name: "Action", value: "Mint-Error" }
+//         { name: "Action", values: "Mint-Error" }
 //       ]
 //     }
 //   }
