@@ -1,5 +1,6 @@
 import { Tag } from "../../arweave/getTags";
 import { AoUtils, connectToAO } from "../../ao/utils/connect";
+import { dryRunAwait } from "../../ao/utils/dryRunAwait";
 
 export interface TrackResult {
   process: string;
@@ -126,62 +127,71 @@ export async function trackResult(
   }
 
   // find the final message pushed for this message on the SU
-  const resultProcess = targetProcess || process;
-  const untilTimestamp = messageTimestamp + validUntil + 1;
-  let iterateNextPage = true;
-  let cursor = messageTimestamp - 1;
+  const lookForResult = async () => {
+    const resultProcess = targetProcess || process;
+    const untilTimestamp = messageTimestamp + validUntil + 1;
+    let iterateNextPage = true;
+    let cursor = messageTimestamp - 1;
 
-  while (!matchedResult && iterateNextPage && cursor <= untilTimestamp) {
-    const res: MessagesList = await (
-      await fetch(
-        `${SU_ROUTER}/${resultProcess}?from=${cursor}&to=${untilTimestamp}`
-      )
-    ).json();
-    const potentialResultMessages: MessageOrAssignment[] = [];
+    while (!matchedResult && iterateNextPage && cursor <= untilTimestamp) {
+      const res: MessagesList = await (
+        await fetch(
+          `${SU_ROUTER}/${resultProcess}?from=${cursor}&to=${untilTimestamp}`
+        )
+      ).json();
+      const potentialResultMessages: MessageOrAssignment[] = [];
 
-    for (const interaction of res.edges) {
-      const { message: msg } = interaction.node;
+      for (const interaction of res.edges) {
+        const { message: msg } = interaction.node;
 
-      // check if the iterated message was pushed for the original message.
-      // if it was, we store it to read it's result later
-      if (msg.tags.find((tag) => tag.name === "Pushed-For")?.value === message) {
-        potentialResultMessages.push(msg);
-      }
-
-      cursor = parseInt(interaction.cursor);
-    }
-
-    // now we read the result for all of the potential closing messages
-    if (potentialResultMessages.length > 0) {
-      potentialResultMessages.reverse();
-
-      for (const generatingMsg of potentialResultMessages) {
-        const msgResult = await aoUtils.result({
-          process: resultProcess,
-          message: generatingMsg.id
-        });
-
-        for (const msg of msgResult.Messages as PlainMessage[]) {
-          if (match.success && matchMsg(msg, match.success)) {
-            matchedResult = {
-              match: "success",
-              message: msg
-            };
-            break;
-          } else if (match.fail && matchMsg(msg, match.fail)) {
-            matchedResult = {
-              match: "fail",
-              message: msg
-            };
-            break;
-          }
+        // check if the iterated message was pushed for the original message.
+        // if it was, we store it to read it's result later
+        if (msg.tags.find((tag) => tag.name === "Pushed-For")?.value === message) {
+          potentialResultMessages.push(msg);
         }
 
-        if (matchedResult) break;
+        cursor = parseInt(interaction.cursor);
       }
-    }
 
-    iterateNextPage = res.page_info.has_next_page;
+      // now we read the result for all of the potential closing messages
+      if (potentialResultMessages.length > 0) {
+        potentialResultMessages.reverse();
+
+        for (const generatingMsg of potentialResultMessages) {
+          const msgResult = await aoUtils.result({
+            process: resultProcess,
+            message: generatingMsg.id
+          });
+
+          for (const msg of msgResult.Messages as PlainMessage[]) {
+            if (match.success && matchMsg(msg, match.success)) {
+              matchedResult = {
+                match: "success",
+                message: msg
+              };
+              break;
+            } else if (match.fail && matchMsg(msg, match.fail)) {
+              matchedResult = {
+                match: "fail",
+                message: msg
+              };
+              break;
+            }
+          }
+
+          if (matchedResult) break;
+        }
+      }
+
+      iterateNextPage = res.page_info.has_next_page;
+    }
+  };
+
+  // try one more time if not found
+  await lookForResult();
+  if (typeof matchedResult === "undefined") {
+    await dryRunAwait(4);
+    await lookForResult();
   }
 
   return matchedResult;
