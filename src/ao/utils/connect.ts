@@ -3,6 +3,7 @@ import { SendMessage } from "@permaweb/aoconnect/dist/lib/message";
 import { ReadResult } from "@permaweb/aoconnect/dist/lib/result";
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 import * as aoConnect from "@permaweb/aoconnect";
+import { ReadResults } from "@permaweb/aoconnect/dist/lib/results";
 
 const DEFAULT_SERVICES: Services = {
   MODE: "legacy",
@@ -11,29 +12,62 @@ const DEFAULT_SERVICES: Services = {
   GATEWAY_URL: "https://arweave.net",
 };
 
-export function connectToAO(services?: Partial<Services>) {
-  const {
-    MODE = DEFAULT_SERVICES.MODE,
-    GRAPHQL_URL,
-    GRAPHQL_MAX_RETRIES,
-    GRAPHQL_RETRY_BACKOFF,
-    GATEWAY_URL = DEFAULT_SERVICES.GATEWAY_URL,
-    MU_URL = DEFAULT_SERVICES.MU_URL,
-    CU_URL = DEFAULT_SERVICES.CU_URL,
-  } = services || {};
+export async function connectToAO(
+  services?: Partial<Services>,
+  maxRetries = 3,
+  initialDelay = 1000,
+) {
+  let lastError: Error | null = null;
+  let delay = initialDelay;
 
-  const { spawn, message, result } = aoConnect.connect({
-    // @ts-ignore, MODE is needed here but is not in the aoconnect type yet
-    MODE,
-    GATEWAY_URL,
-    GRAPHQL_URL,
-    GRAPHQL_MAX_RETRIES,
-    GRAPHQL_RETRY_BACKOFF,
-    MU_URL,
-    CU_URL,
-  });
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`AO connection attempt ${attempt}/${maxRetries}`);
 
-  return { spawn, message, result };
+      const {
+        MODE = DEFAULT_SERVICES.MODE,
+        GRAPHQL_URL,
+        GRAPHQL_MAX_RETRIES,
+        GRAPHQL_RETRY_BACKOFF,
+        GATEWAY_URL = DEFAULT_SERVICES.GATEWAY_URL,
+        MU_URL = DEFAULT_SERVICES.MU_URL,
+        CU_URL = DEFAULT_SERVICES.CU_URL,
+      } = services || {};
+
+      const { spawn, message, result } = aoConnect.connect({
+        // @ts-ignore, MODE is needed here but is not in the aoconnect type yet
+        MODE,
+        GATEWAY_URL,
+        GRAPHQL_URL,
+        GRAPHQL_MAX_RETRIES,
+        GRAPHQL_RETRY_BACKOFF,
+        MU_URL,
+        CU_URL,
+      });
+
+      if (attempt !== 1) {
+        console.log(`✅ AO connected successfully on attempt ${attempt}`);
+      }
+
+      return { spawn, message, result };
+    } catch (error: unknown) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+
+      console.warn(`❌ Connection attempt ${attempt} failed:`, errorMessage);
+
+      if (attempt < maxRetries) {
+        console.log(`⏳ Waiting ${delay}ms before retry...`);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        delay *= 1.5;
+      }
+    }
+  }
+
+  throw new Error(
+    `Failed to connect to AO after ${maxRetries} attempts. Last error: ${lastError?.message}`,
+  );
 }
 
 export interface AoUtils {

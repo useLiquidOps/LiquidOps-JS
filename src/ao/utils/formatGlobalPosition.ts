@@ -74,7 +74,10 @@ export function formatGlobalPosition(globalPosition: GetGlobalPositionRes) {
     const collateral = formatQuantity(ticker, position.collateralization.raw);
     const borrowBalance = formatQuantity(ticker, position.borrowBalance.raw);
     const capacity = formatQuantity(ticker, position.capacity.raw);
-    const liquidationLimit = formatQuantity(ticker, position.liquidationLimit.raw);
+    const liquidationLimit = formatQuantity(
+      ticker,
+      position.liquidationLimit.raw,
+    );
     message += `  • ${position.ticker}: collateral: ${collateral}, borrowBalance: ${borrowBalance}, capacity: ${capacity}, liquidationLimit: ${liquidationLimit}\n`;
   });
 

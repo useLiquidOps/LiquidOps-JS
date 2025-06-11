@@ -2,6 +2,7 @@ import LiquidOps from "./src";
 import createDataItemSignerBun from "./tests/testsHelpers/bunSigner/index";
 import { JWKInterface } from "./tests/testsHelpers/bunSigner/jwk-interface";
 import { ownerToAddress } from "./tests/testsHelpers/arweaveUtils";
+import { formatGlobalPosition } from "./src/ao/utils/formatGlobalPosition";
 
 if (!process.env.JWK) {
   throw new Error("Please specify a JWK in the .env file");
@@ -126,7 +127,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 //   walletAddress: walletAddress
 // });
 
-// console.log(getGlobalPosition);
+// console.log(formatGlobalPosition(getGlobalPosition));
 
 //-------------------------------
 
@@ -156,7 +157,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 //--------------------------------------------------------------------------------------------------------------- protocolData
 
 // const getAllPositions = await client.getAllPositions({
-//   token: "QAR",
+//   token: "WUSDC",
 // });
 
 // console.log(getAllPositions);
@@ -199,3 +200,25 @@ const walletAddress = await ownerToAddress(JWK.n);
 // console.log(transfer)
 
 //-------------------------------
+
+// const result = await client.trackResult({
+//   process: "7zH9dlMNoxprab9loshv3Y7WG45DOny_Vrq9KrXObdQ",
+//   message: "bHjeHOic0GSOp4jMB9DbHs6ZXSWjCSNi_2iYTYjiKeg",
+//   targetProcess: "4MW7uLFtttSLWM-yWEqV9TGD6fSIDrqa4lbTgYL2qHg",
+//   match: {
+//     success: {
+//       Target: "ljvCPN31XCLPkBo9FUeB7vAK0VC6-eY52-CS-6Iho8U",
+//       Tags: [
+//         { name: "Action", values: "Mint-Confirmation" }
+//       ]
+//     },
+//     fail: {
+//       Target: "ljvCPN31XCLPkBo9FUeB7vAK0VC6-eY52-CS-6Iho8U",
+//       Tags: [
+//         { name: "Action", values: "Mint-Error" }
+//       ]
+//     }
+//   }
+// });
+
+// console.log(result);

@@ -1,5 +1,5 @@
 import { sendData } from "../../ao/messaging/sendData";
-import { AoUtils } from "../../ao/utils/connect";
+import { AoUtils, connectToAO } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface Transfer {
@@ -14,13 +14,22 @@ export interface TransferRes {
 }
 
 export async function transfer(
-  aoUtils: AoUtils,
+  aoUtilsInput: Pick<AoUtils, "signer" | "configs">,
   { token, recipient, quantity }: Transfer,
 ): Promise<TransferRes> {
   try {
     if (!token || !recipient || !quantity) {
       throw new Error("Please specify a token, recipient and quantity.");
     }
+    const { spawn, message, result } = await connectToAO(aoUtilsInput.configs);
+
+    const aoUtils: AoUtils = {
+      spawn,
+      message,
+      result,
+      signer: aoUtilsInput.signer,
+      configs: aoUtilsInput.configs,
+    };
 
     const { tokenAddress } = tokenInput(token);
 

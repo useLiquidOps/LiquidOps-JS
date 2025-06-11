@@ -1,4 +1,4 @@
-import { AoUtils } from "../../ao/utils/connect";
+import { AoUtils, connectToAO } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 import {
   TransactionResult,
@@ -26,7 +26,7 @@ export type Liquidate = WithResultOption<{
 export interface LiquidateRes extends TransactionResult {}
 
 export async function liquidate<T extends Liquidate>(
-  aoUtils: AoUtils,
+  aoUtilsInput: Pick<AoUtils, "signer" | "configs">,
   {
     token,
     rewardToken,
@@ -48,6 +48,16 @@ export async function liquidate<T extends Liquidate>(
         "Please specify token, reward token, target address, quantity and minExpectedQuantity.",
       );
     }
+
+    const { spawn, message, result } = await connectToAO(aoUtilsInput.configs);
+
+    const aoUtils: AoUtils = {
+      spawn,
+      message,
+      result,
+      signer: aoUtilsInput.signer,
+      configs: aoUtilsInput.configs,
+    };
 
     const { tokenAddress: repayTokenAddress, controllerAddress } =
       tokenInput(token);
