@@ -87,11 +87,11 @@ const walletAddress = await ownerToAddress(JWK.n);
 //-------------------------------
 
 // const liquidate = await client.liquidate({
-//   token: "WUSDT",
+//   token: "WUSDC",
 //   rewardToken: "WAR",
-//   targetUserAddress: "h037Kd9sfjYn7KyDvzkdqG5LVhry1dkKMj8aOJDq1F8",
-//   quantity: 5808318595551656000n,
-//   minExpectedQuantity: 4808318595551656000n,
+//   targetUserAddress: "tGphuPlhxV5ppY_z2pQ_2JaU3-UU_8nVlgMmz7v4zDs",
+//   quantity: 85101437n,
+//   minExpectedQuantity: 80846365n,
 // });
 
 // console.log(liquidate);
