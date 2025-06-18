@@ -116,11 +116,13 @@ export async function getEarnings(
   const base = sumDeposited - sumWithdrawn;
 
   // the first mint date
-  const startDate = lendConfirmations?.edges?.[lendConfirmations?.edges?.length - 1 || 0]?.node?.block?.timestamp;
+  const startDate =
+    lendConfirmations?.edges?.[lendConfirmations?.edges?.length - 1 || 0]?.node
+      ?.block?.timestamp;
 
   return {
     base,
     profit: collateralization - base,
-    startDate
+    startDate,
   };
 }

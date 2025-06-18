@@ -109,7 +109,11 @@ import { AoUtils } from "./ao/utils/connect";
 import { Services } from "./ao/utils/connect";
 type Configs = Services;
 import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
-import { trackResult, TrackResult, TrackResultRes } from "./functions/utils/trackResult";
+import {
+  trackResult,
+  TrackResult,
+  TrackResultRes,
+} from "./functions/utils/trackResult";
 import {
   getEarnings,
   GetEarnings,

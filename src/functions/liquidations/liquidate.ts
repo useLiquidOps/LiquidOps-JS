@@ -72,13 +72,10 @@ export async function liquidate<T extends Liquidate>(
         { name: "X-Target", value: targetUserAddress },
         { name: "X-Reward-Token", value: rewardTokenAddress },
         { name: "X-Action", value: "Liquidate" },
-        ...((minExpectedQuantity && [
-          {
-            name: "X-Min-Expected-Quantity",
-            value: minExpectedQuantity.toString(),
-          },
-        ]) ||
-          []),
+        {
+          name: "X-Min-Expected-Quantity",
+          value: minExpectedQuantity.toString(),
+        },
         { name: "Protocol-Name", value: "LiquidOps" },
       ],
       signer: aoUtils.signer,
