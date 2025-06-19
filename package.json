@@ -14,13 +14,18 @@
   },
   "peerDependencies": {
     "@permaweb/aoconnect": ">= 0.0.77 < 1",
-    "ao-tokens": ">= 0.0.6"
+    "ao-tokens": ">= 0.0.6",
+    "warp-arbundles": ">= 1.0.4"
+
   },
   "peerDependenciesMeta": {
     "@permaweb/aoconnect": {
       "optional": false
     },
     "ao-tokens": {
+      "optional": false
+    },
+    "warp-arbundles": {
       "optional": false
     }
   },
