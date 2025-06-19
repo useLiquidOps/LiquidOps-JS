@@ -1,26 +1,25 @@
 import LiquidOps from "./src";
-import createDataItemSignerBun from "./tests/testsHelpers/bunSigner/index";
-import { JWKInterface } from "./tests/testsHelpers/bunSigner/jwk-interface";
 import { ownerToAddress } from "./tests/testsHelpers/arweaveUtils";
+import { createDataItemSigner } from "@permaweb/aoconnect";
 import { formatGlobalPosition } from "./src/ao/utils/formatGlobalPosition";
 
 if (!process.env.JWK) {
   throw new Error("Please specify a JWK in the .env file");
 }
 
-const JWK: JWKInterface = JSON.parse(process.env.JWK);
-const signer = createDataItemSignerBun(JWK);
+const JWK: any = JSON.parse(process.env.JWK);
+const signer = createDataItemSigner(JWK);
 const client = new LiquidOps(signer);
 const walletAddress = await ownerToAddress(JWK.n);
 
 //--------------------------------------------------------------------------------------------------------------- borrow
 
-// const borrow = await client.borrow({
-//   token: "QAR",
-//   quantity: 1n,
-// });
+const borrow = await client.borrow({
+  token: "QAR",
+  quantity: 1n,
+});
 
-// console.log(borrow);
+console.log(borrow);
 
 //-------------------------------
 
