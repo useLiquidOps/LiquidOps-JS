@@ -87,6 +87,7 @@ import {
   GetBalance,
   GetBalanceRes,
 } from "./functions/utils/getBalance";
+import { getPrice, GetPrice, GetPriceRes } from "./functions/utils/getPrice";
 import {
   getResult,
   GetResult,
@@ -244,6 +245,10 @@ class LiquidOps {
 
   async getBalance(params: GetBalance): Promise<GetBalanceRes> {
     return getBalance(params);
+  }
+
+  async getPrice(params: GetPrice): Promise<GetPriceRes> {
+    return getPrice(params);
   }
 
   async getResult(params: GetResult): Promise<GetResultRes> {

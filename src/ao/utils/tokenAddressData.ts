@@ -98,6 +98,7 @@ export const tokenData: Record<string, TokenData> = {
 };
 
 export function convertTicker(ticker: string): string {
+  ticker = ticker.toUpperCase();
   if (ticker === "QAR") return "AR";
   if (ticker === "WUSDC") return "USDC";
   if (ticker === "WAR") return "AR";

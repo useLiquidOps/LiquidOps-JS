@@ -14,12 +14,12 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 //--------------------------------------------------------------------------------------------------------------- borrow
 
-const borrow = await client.borrow({
-  token: "QAR",
-  quantity: 1n,
-});
+// const borrow = await client.borrow({
+//   token: "QAR",
+//   quantity: 1n,
+// });
 
-console.log(borrow);
+// console.log(borrow);
 
 //-------------------------------
 
@@ -177,6 +177,14 @@ console.log(borrow);
 // });
 
 // console.log(getBalance);
+
+//-------------------------------
+
+// const getPrice = await client.getPrice({
+//   token: "wAR",
+// });
+
+// console.log(getPrice);
 
 //-------------------------------
 
