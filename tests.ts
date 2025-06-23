@@ -79,6 +79,12 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 //--------------------------------------------------------------------------------------------------------------- liquidations
 
+// const getLiquidationsMap = await client.getLiquidationsMap();
+
+// console.log(getLiquidationsMap);
+
+//-------------------------------
+
 // const getLiquidations = await client.getLiquidations();
 
 // console.log(getLiquidations);

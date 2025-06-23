@@ -20,6 +20,10 @@ import {
   GetDiscountedQuantityRes,
 } from "./functions/liquidations/getDiscountedQuantity";
 import {
+  getLiquidationsMap,
+  GetLiquidationsMapRes,
+} from "./functions/liquidations/getLiquidationsMap";
+import {
   getLiquidations,
   GetLiquidationsRes,
   QualifyingPosition,
@@ -178,13 +182,17 @@ class LiquidOps {
 
   //--------------------------------------------------------------------------------------------------------------- liquidations
 
+  static liquidationPrecisionFactor = 1000000;
+
   getDiscountedQuantity(
     params: GetDiscountedQuantity,
   ): GetDiscountedQuantityRes {
     return getDiscountedQuantity(params, LiquidOps.liquidationPrecisionFactor);
   }
 
-  static liquidationPrecisionFactor = 1000000;
+  async getLiquidationsMap(): Promise<GetLiquidationsMapRes[]> {
+    return getLiquidationsMap();
+  }
 
   async getLiquidations(): Promise<GetLiquidationsRes> {
     return getLiquidations(LiquidOps.liquidationPrecisionFactor);
