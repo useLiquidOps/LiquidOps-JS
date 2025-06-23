@@ -30,7 +30,7 @@ export interface GetLiquidationsMapRes {
   /** Additional amount this wallet can still borrow before hitting liquidation in USD (formatted) */
   remainingCapacity: number;
 }
- 
+
 export async function getLiquidationsMap(): Promise<GetLiquidationsMapRes[]> {
   try {
     // Get list of tokens to process
