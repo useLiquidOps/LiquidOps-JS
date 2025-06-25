@@ -1,7 +1,7 @@
-import { GetGlobalPositionRes } from "liquidops";
+import { GetGlobalPositionRes } from "../../functions/oTokenData/getGlobalPosition";
 import { Quantity } from "ao-tokens";
 import { getBaseDenomination } from "./getBaseDenomination";
-import { tokenData } from "liquidops";
+import { tokenData } from "./tokenAddressData";
 
 interface TokenPositionResult {
   borrowBalance: Quantity;
