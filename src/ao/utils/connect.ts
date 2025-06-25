@@ -23,7 +23,9 @@ export async function connectToAO(services?: Partial<Services>) {
   } = services || {};
 
   if (!connect) {
-    throw new Error('Unable to connect to AO node, please refresh the page/session.');
+    throw new Error(
+      "Unable to connect to AO node, please refresh the page/session.",
+    );
   }
 
   const { spawn, message, result } = connect({
