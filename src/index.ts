@@ -113,7 +113,6 @@ import { TokenInput, tokenInput } from "./ao/utils/tokenInput";
 import { AoUtils } from "./ao/utils/connect";
 import { Services } from "./ao/utils/connect";
 type Configs = Services;
-import { Types as AoConnectTypes } from "@permaweb/aoconnect/dist/dal";
 import {
   trackResult,
   TrackResult,
@@ -125,13 +124,11 @@ import {
   GetEarningsRes,
 } from "./functions/lend/getEarnings";
 
-type Signer = AoConnectTypes["signer"];
-
 class LiquidOps {
-  private signer: Signer;
+  private signer: any;
   private configs: Omit<Configs, "MODE">;
 
-  constructor(signer: Signer, configs: Omit<Configs, "MODE"> = {}) {
+  constructor(signer: any, configs: Omit<Configs, "MODE"> = {}) {
     if (!signer) {
       throw new Error("Please specify a ao createDataItemSigner signer");
     }
@@ -341,7 +338,6 @@ export type {
 
   // Utility types for constructor/setup
   AoUtils,
-  Signer,
   Configs,
   TokenInput,
   TokenData,
