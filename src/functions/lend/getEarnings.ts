@@ -2,9 +2,10 @@ import { AoUtils, connectToAO } from "../../ao/utils/connect";
 import { getTags } from "../../arweave/getTags";
 import {
   getTransactions,
+  GetTransactionsRes,
   Transaction,
 } from "../getTransactions/getTransactions";
-import { GQLTransactionsResultInterface } from "ar-gql/dist/faces";
+import { GQLEdgeInterface, GQLTransactionsResultInterface } from "ar-gql/dist/faces";
 
 export interface GetEarnings {
   walletAddress: string;
@@ -16,6 +17,11 @@ export interface GetEarningsRes {
   base: bigint;
   profit: bigint;
   startDate?: number;
+}
+
+interface Action {
+  action: "lend" | "unlend";
+  qty: bigint;
 }
 
 export async function getEarnings(
@@ -43,40 +49,130 @@ export async function getEarnings(
     };
   }
 
-  // get lends and unlends
-  const [lends, unlends] = await Promise.all([
-    getTransactions(aoUtils, {
-      token,
-      action: "lend",
-      walletAddress,
-    }),
-    getTransactions(aoUtils, {
-      token,
-      action: "unLend",
-      walletAddress,
-    }),
-  ]);
+  let actions: Action[] = [];
 
-  // get lend and unlend confirmations
-  const [lendConfirmations, unlendConfirmations] = await Promise.all([
-    getTags({
-      aoUtils,
-      tags: [
-        { name: "Action", values: "Mint-Confirmation" },
-        { name: "Pushed-For", values: lends.transactions.map((t) => t.id) },
-      ],
-      cursor: "",
-    }),
-    getTags({
-      aoUtils,
-      tags: [
-        { name: "Action", values: "Redeem-Confirmation" },
-        { name: "Pushed-For", values: unlends.transactions.map((t) => t.id) },
-      ],
-      cursor: "",
-    }),
-  ]);
+  let lendCursor: string | undefined;
+  let redeemCursor: string | undefined;
+  let hasNextPage = true;
+  // let cursor = "";
 
+  // while (hasNextPage) {
+  //   const res = await getTags({
+  //     aoUtils,
+  //     tags: [
+  //       { name: "Action", values: ["Transfer", "Redeem"] },
+  //       { name: "" }
+  //     ],
+  //     cursor,
+  //     owner: walletAddress
+  //   });
+
+
+  // }
+
+  while (hasNextPage) {
+    // get lends and unlends
+    const [lendRequests, unlendRequests]: [GetTransactionsRes, GetTransactionsRes] = await Promise.all([
+      getTransactions(aoUtils, {
+        token,
+        action: "lend",
+        walletAddress,
+        cursor: lendCursor
+      }),
+      getTransactions(aoUtils, {
+        token,
+        action: "unLend",
+        walletAddress,
+        cursor: redeemCursor
+      }),
+    ]);
+
+    // get lend and unlend confirmations
+    const [lendConfirmations, unlendConfirmations] = await Promise.all([
+      getTags({
+        aoUtils,
+        tags: [
+          { name: "Action", values: "Mint-Confirmation" },
+          { name: "Pushed-For", values: lendRequests.transactions.map((t) => t.id) },
+        ],
+        cursor: "",
+      }),
+      getTags({
+        aoUtils,
+        tags: [
+          { name: "Action", values: "Redeem-Confirmation" },
+          { name: "Pushed-For", values: unlendRequests.transactions.map((t) => t.id) },
+        ],
+        cursor: "",
+      }),
+    ]);
+
+    const hasConfirmationPredicate = (id: string, confirmations: GQLTransactionsResultInterface) =>
+      !!confirmations.edges.find(tx => tx.node.tags.find((t) => t.name === "Pushed-For")?.value === id);
+
+    const newActions: Action[] = [];
+    let i = 0, j = 0;
+
+    while (i < lendRequests.transactions.length && j < unlendRequests.transactions.length) {
+      if (lendRequests.transactions[i].block.timestamp >= unlendRequests.transactions[j].block.timestamp) {
+        const tx = lendRequests.transactions[i++];
+
+        if (hasConfirmationPredicate(tx.id, lendConfirmations)) {
+          newActions.push({
+            action: "lend",
+            qty: BigInt(tx.tags.Quantity || "0")
+          });
+        }
+      } else {
+        const tx = unlendRequests.transactions[j++];
+
+        if (hasConfirmationPredicate(tx.id, unlendConfirmations)) {
+          newActions.push({
+            action: "unlend",
+            qty: BigInt(tx.tags.Quantity || "0")
+          });
+        }
+      }
+    }
+
+    actions = actions.concat(
+      newActions
+    );
+
+    lendCursor = lendRequests.pageInfo.cursor;
+    redeemCursor = unlendRequests.pageInfo.cursor;
+    hasNextPage = lendRequests.pageInfo.hasNextPage || unlendRequests.pageInfo.hasNextPage;
+  }
+
+  // loop over user interactions from the very first interaction (reverse)
+  // and track deposits, withdraws and interest withdraws
+  let userPrincipal = BigInt(0);
+  let withdrawnInterest = BigInt(0);
+
+  for (let i = actions.length - 1; i >= 0; i--) {
+    const action = actions[i];
+
+    if (action.action === "lend") {
+      userPrincipal += action.qty;
+    } else {
+      if (action.qty <= userPrincipal) {
+        userPrincipal -= action.qty;
+      } else {
+        withdrawnInterest += action.qty - userPrincipal;
+        userPrincipal = BigInt(0);
+      }
+    }
+  }
+
+  const profit = collateralization - userPrincipal;
+  const totalEarnedInterest = profit + withdrawnInterest;
+
+  console.log("user principal", userPrincipal)
+  console.log("profit", profit)
+  console.log("total earned interest", totalEarnedInterest)
+
+
+/*
   // reducer function for a list of lends/unlends based on a
   // list of mint/redeem confirmations
   // it adds together the quantities if they have a confirmation
@@ -118,11 +214,11 @@ export async function getEarnings(
   // the first mint date
   const startDate =
     lendConfirmations?.edges?.[lendConfirmations?.edges?.length - 1 || 0]?.node
-      ?.block?.timestamp;
+      ?.block?.timestamp;*/
 
   return {
-    base,
-    profit: collateralization - base,
-    startDate,
+    base: BigInt(0),
+    profit: BigInt(0),
+    startDate: 0,
   };
 }
