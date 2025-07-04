@@ -3,9 +3,8 @@ import { getTags } from "../../arweave/getTags";
 import {
   getTransactions,
   GetTransactionsRes,
-  Transaction,
 } from "../getTransactions/getTransactions";
-import { GQLEdgeInterface, GQLTransactionsResultInterface } from "ar-gql/dist/faces";
+import { GQLTransactionsResultInterface } from "ar-gql/dist/faces";
 
 export interface GetEarnings {
   walletAddress: string;
@@ -16,12 +15,14 @@ export interface GetEarnings {
 export interface GetEarningsRes {
   base: bigint;
   profit: bigint;
+  totalEarnedInterest: bigint;
   startDate?: number;
 }
 
-interface Action {
-  action: "lend" | "unlend";
+interface Event {
+  type: "lend" | "unlend";
   qty: bigint;
+  date: number;
 }
 
 export async function getEarnings(
@@ -46,29 +47,15 @@ export async function getEarnings(
     return {
       base: BigInt(0),
       profit: BigInt(0),
+      totalEarnedInterest: BigInt(0),
     };
   }
 
-  let actions: Action[] = [];
+  let actions: Event[] = [];
 
   let lendCursor: string | undefined;
   let redeemCursor: string | undefined;
   let hasNextPage = true;
-  // let cursor = "";
-
-  // while (hasNextPage) {
-  //   const res = await getTags({
-  //     aoUtils,
-  //     tags: [
-  //       { name: "Action", values: ["Transfer", "Redeem"] },
-  //       { name: "" }
-  //     ],
-  //     cursor,
-  //     owner: walletAddress
-  //   });
-
-
-  // }
 
   while (hasNextPage) {
     // get lends and unlends
@@ -110,7 +97,7 @@ export async function getEarnings(
     const hasConfirmationPredicate = (id: string, confirmations: GQLTransactionsResultInterface) =>
       !!confirmations.edges.find(tx => tx.node.tags.find((t) => t.name === "Pushed-For")?.value === id);
 
-    const newActions: Action[] = [];
+    const newActions: Event[] = [];
     let i = 0, j = 0;
 
     while (i < lendRequests.transactions.length && j < unlendRequests.transactions.length) {
@@ -119,8 +106,9 @@ export async function getEarnings(
 
         if (hasConfirmationPredicate(tx.id, lendConfirmations)) {
           newActions.push({
-            action: "lend",
-            qty: BigInt(tx.tags.Quantity || "0")
+            type: "lend",
+            qty: BigInt(tx.tags.Quantity || "0"),
+            date: tx.block.timestamp
           });
         }
       } else {
@@ -128,8 +116,9 @@ export async function getEarnings(
 
         if (hasConfirmationPredicate(tx.id, unlendConfirmations)) {
           newActions.push({
-            action: "unlend",
-            qty: BigInt(tx.tags.Quantity || "0")
+            type: "unlend",
+            qty: BigInt(tx.tags.Quantity || "0"),
+            date: tx.block.timestamp
           });
         }
       }
@@ -152,7 +141,7 @@ export async function getEarnings(
   for (let i = actions.length - 1; i >= 0; i--) {
     const action = actions[i];
 
-    if (action.action === "lend") {
+    if (action.type === "lend") {
       userPrincipal += action.qty;
     } else {
       if (action.qty <= userPrincipal) {
@@ -167,58 +156,13 @@ export async function getEarnings(
   const profit = collateralization - userPrincipal;
   const totalEarnedInterest = profit + withdrawnInterest;
 
-  console.log("user principal", userPrincipal)
-  console.log("profit", profit)
-  console.log("total earned interest", totalEarnedInterest)
-
-
-/*
-  // reducer function for a list of lends/unlends based on a
-  // list of mint/redeem confirmations
-  // it adds together the quantities if they have a confirmation
-  const sumIfSuccessfull = (confirmations: GQLTransactionsResultInterface) => {
-    return (prev: bigint, curr: Transaction) => {
-      // check if it was a successfull interaction (received confirmation)
-      if (
-        !confirmations.edges.find(
-          (tx) =>
-            tx.node.tags.find((t) => t.name === "Pushed-For")?.value ===
-            curr.id,
-        )
-      ) {
-        return prev;
-      }
-
-      // add together
-      return prev + BigInt(curr.tags.Quantity || 0);
-    };
-  };
-
-  // deposited tokens (sum of successfull lends)
-  const sumDeposited = lends.transactions.reduce(
-    sumIfSuccessfull(lendConfirmations),
-    BigInt(0),
-  );
-
-  // withdrawn tokens (sum of successfull burns)
-  const sumWithdrawn = unlends.transactions.reduce(
-    sumIfSuccessfull(unlendConfirmations),
-    BigInt(0),
-  );
-
-  // the result of the total deposited and total withdrawn tokens
-  // is the amount of tokens that the user has in the pool, that
-  // they have deposited (without the interest!!)
-  const base = sumDeposited - sumWithdrawn;
-
   // the first mint date
-  const startDate =
-    lendConfirmations?.edges?.[lendConfirmations?.edges?.length - 1 || 0]?.node
-      ?.block?.timestamp;*/
+  const startDate = actions[actions.length - 1]?.date;
 
   return {
-    base: BigInt(0),
-    profit: BigInt(0),
-    startDate: 0,
+    base: userPrincipal,
+    profit,
+    totalEarnedInterest,
+    startDate,
   };
 }

@@ -42,7 +42,7 @@ export async function getTags({
 
     const query = `
       query GetTransactions(
-        $tags: [TagFilter!], 
+        $tags: [TagFilter!],
         $cursor: String
         ${owner ? ", $owner: String!" : ""}
         ${recipientValue ? ", $recipients: [String!]" : ""}
