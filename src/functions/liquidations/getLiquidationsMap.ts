@@ -21,6 +21,8 @@ export interface GetLiquidationsMapRes {
   walletAddress: string;
   /** Current amount borrowed by this wallet in USD (formatted) */
   borrowBalance: number;
+  /** Current collateral value for this wallet in USD (formatted) */
+  collateralizationUSD: number;
   /** Maximum amount this wallet can borrow before liquidation in USD (formatted) */
   liquidationLimit: number;
   /** How close to liquidation (0-100%): 0 = no debt, 100+ = liquidatable */
@@ -129,6 +131,7 @@ export async function getLiquidationsMap(): Promise<GetLiquidationsMapRes[]> {
     // Process each global position
     for (const [walletAddress, position] of globalPositions) {
       const borrowBalanceRaw = position.borrowBalanceUSD;
+      const collateralizationUSDRaw = position.collateralizationUSD;
       const liquidationLimitRaw = position.liquidationLimitUSD;
 
       // Skip positions with no borrow balance
@@ -143,6 +146,7 @@ export async function getLiquidationsMap(): Promise<GetLiquidationsMapRes[]> {
 
       // Format the values for display
       const borrowBalance = formatUSDValue(borrowBalanceRaw);
+      const collateralizationUSD = formatUSDValue(collateralizationUSDRaw);
       const liquidationLimit = formatUSDValue(liquidationLimitRaw);
 
       // Calculate proximity percentage
@@ -177,6 +181,7 @@ export async function getLiquidationsMap(): Promise<GetLiquidationsMapRes[]> {
       results.push({
         walletAddress,
         borrowBalance,
+        collateralizationUSD,
         liquidationLimit,
         proximityPercentage: Math.round(proximityPercentage * 100) / 100, // Round to 2 decimal places
         status,
