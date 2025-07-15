@@ -60,6 +60,7 @@ export async function getLiquidations(
 
     // Make a request to RedStone oracle process for prices (same used onchain)
     const redstonePriceFeedRes = await getData({
+      Owner: controllerAddress,
       Target: redstoneOracleAddress,
       Action: "v2.Request-Latest-Data",
       Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),

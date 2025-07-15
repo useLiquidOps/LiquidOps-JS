@@ -1,5 +1,5 @@
 import { getData } from "../../ao/messaging/getData";
-import { tokens, redstoneOracleAddress } from "../../ao/utils/tokenAddressData";
+import { tokens, redstoneOracleAddress, controllerAddress } from "../../ao/utils/tokenAddressData";
 import { collateralEnabledTickers } from "../../ao/utils/tokenAddressData";
 import { getPosition } from "./getPosition";
 import { dryRunAwait } from "../../ao/utils/dryRunAwait";
@@ -34,6 +34,7 @@ export async function getGlobalPosition({
 
     // Make a request to RedStone oracle for prices
     const redstonePriceFeedRes = await getData({
+      Owner: controllerAddress,
       Target: redstoneOracleAddress,
       Action: "v2.Request-Latest-Data",
       Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),

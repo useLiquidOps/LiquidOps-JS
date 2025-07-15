@@ -1,6 +1,7 @@
 import { getData } from "../../ao/messaging/getData";
 import {
   collateralEnabledTickers,
+  controllerAddress,
   tokens,
 } from "../../ao/utils/tokenAddressData";
 import { redstoneOracleAddress } from "../../ao/utils/tokenAddressData";
@@ -40,6 +41,7 @@ export async function getLiquidationsMap(): Promise<GetLiquidationsMapRes[]> {
 
     // Make a request to RedStone oracle process for prices (same used onchain)
     const redstonePriceFeedRes = await getData({
+      Owner: controllerAddress,
       Target: redstoneOracleAddress,
       Action: "v2.Request-Latest-Data",
       Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
