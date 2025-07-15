@@ -1,6 +1,6 @@
 import { TokenInput } from "../../ao/utils/tokenInput";
 import { getData } from "../../ao/messaging/getData";
-import { convertTicker } from "../../ao/utils/tokenAddressData";
+import { controllerAddress, convertTicker } from "../../ao/utils/tokenAddressData";
 import { redstoneOracleAddress } from "../../ao/utils/tokenAddressData";
 import { RedstonePrices } from "../liquidations/getLiquidations";
 
@@ -17,6 +17,7 @@ export async function getPrice({ token }: GetPrice): Promise<GetPriceRes> {
 
   try {
     const redstonePriceFeedRes = await getData({
+      Owner: controllerAddress,
       Target: redstoneOracleAddress,
       Action: "v2.Request-Latest-Data",
       Tickers: JSON.stringify([convertTicker(token)]),
