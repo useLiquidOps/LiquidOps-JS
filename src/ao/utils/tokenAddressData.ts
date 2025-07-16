@@ -12,6 +12,7 @@ export interface TokenData {
   baseDenomination: bigint;
   deprecated: boolean;
   oIcon: string;
+  frozen: boolean;
 }
 
 export const controllerAddress = "SmmMv0rJwfIDVM3RvY2-P729JFYwhdGSeGo2deynbfY";
@@ -34,6 +35,7 @@ export const tokenData: Record<string, TokenData> = {
     baseDenomination: BigInt(12),
     deprecated: true,
     oIcon: "i_U-jhdMMaib2hK51qPrKXbLo6cx2Nt58_gNz5FA4sw",
+    frozen: true
   },
   WAR: {
     name: "Wrapped Arweave",
@@ -49,6 +51,7 @@ export const tokenData: Record<string, TokenData> = {
     baseDenomination: BigInt(12),
     deprecated: false,
     oIcon: "lTWBOBtEZ2JvTAHfvoPq5aXRWTVouv7jZ-6B9HTwosU",
+    frozen: false
   },
   WUSDC: {
     name: "Wrapped USD Circle",
@@ -64,6 +67,7 @@ export const tokenData: Record<string, TokenData> = {
     baseDenomination: BigInt(6),
     deprecated: false,
     oIcon: "7EEISJIzxC-3RPhgvRc-lAZnP7st1b79_ER4Sc5P_MU",
+    frozen: false
   },
   WUSDT: {
     name: "Wrapped USD Tether",
@@ -79,6 +83,7 @@ export const tokenData: Record<string, TokenData> = {
     baseDenomination: BigInt(18),
     deprecated: false,
     oIcon: "bkAnKOF4NhqPHnccDhPyOzBws42zNE-u9WtxCPdaABU",
+    frozen: false
   },
   WETH: {
     name: "Wrapped Ethereum",
@@ -94,6 +99,7 @@ export const tokenData: Record<string, TokenData> = {
     baseDenomination: BigInt(18),
     deprecated: false,
     oIcon: "z1nnBgzGpt-eXHrjD5A9KrQX6dK8E1ONDuBIqB94VTA",
+    frozen: false
   },
 };
 
