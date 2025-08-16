@@ -20,7 +20,7 @@ export const controllerAddress = "SmmMv0rJwfIDVM3RvY2-P729JFYwhdGSeGo2deynbfY";
 export const redstoneOracleAddress =
   "R5rRjBFS90qIGaohtzd1IoyPwZD0qJZ25QXkP7_p5a0";
 export const APRAgentAddress = "D3AlSUAtbWKcozsrvckRuCY6TVkAY1rWtLYGoGf6KIA";
-export const lqdTokenAddress = "SmmMv0rJwfIDVM3RvY2-P729JFYwhdGSeGo2deynbfY";
+export const lqdTokenAddress = "n2MhPK0O3yEvY2zW73sqcmWqDktJxAifJDrri4qireI";
 
 export const tokenData: Record<string, TokenData> = {
   QAR: {
