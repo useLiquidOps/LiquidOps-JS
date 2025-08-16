@@ -13,13 +13,14 @@ export interface TokenData {
   deprecated: boolean;
   oIcon: string;
   borrowingDisabled: boolean;
-  borrowingDisabledReason: '' | 'Deprecated token.' | 'AO airdrop.'
+  borrowingDisabledReason: "" | "Deprecated token." | "AO airdrop.";
 }
 
 export const controllerAddress = "SmmMv0rJwfIDVM3RvY2-P729JFYwhdGSeGo2deynbfY";
 export const redstoneOracleAddress =
   "R5rRjBFS90qIGaohtzd1IoyPwZD0qJZ25QXkP7_p5a0";
 export const APRAgentAddress = "D3AlSUAtbWKcozsrvckRuCY6TVkAY1rWtLYGoGf6KIA";
+export const lqdTokenAddress = "SmmMv0rJwfIDVM3RvY2-P729JFYwhdGSeGo2deynbfY";
 
 export const tokenData: Record<string, TokenData> = {
   QAR: {
@@ -37,7 +38,7 @@ export const tokenData: Record<string, TokenData> = {
     deprecated: true,
     oIcon: "i_U-jhdMMaib2hK51qPrKXbLo6cx2Nt58_gNz5FA4sw",
     borrowingDisabled: true,
-    borrowingDisabledReason: 'Deprecated token.'
+    borrowingDisabledReason: "Deprecated token.",
   },
   WAR: {
     name: "Wrapped Arweave",
@@ -54,7 +55,7 @@ export const tokenData: Record<string, TokenData> = {
     deprecated: false,
     oIcon: "lTWBOBtEZ2JvTAHfvoPq5aXRWTVouv7jZ-6B9HTwosU",
     borrowingDisabled: true,
-    borrowingDisabledReason: 'AO airdrop.'
+    borrowingDisabledReason: "AO airdrop.",
   },
   WUSDC: {
     name: "Wrapped USD Circle",
@@ -71,7 +72,7 @@ export const tokenData: Record<string, TokenData> = {
     deprecated: false,
     oIcon: "7EEISJIzxC-3RPhgvRc-lAZnP7st1b79_ER4Sc5P_MU",
     borrowingDisabled: false,
-    borrowingDisabledReason: ''
+    borrowingDisabledReason: "",
   },
   WUSDT: {
     name: "Wrapped USD Tether",
@@ -88,7 +89,7 @@ export const tokenData: Record<string, TokenData> = {
     deprecated: false,
     oIcon: "bkAnKOF4NhqPHnccDhPyOzBws42zNE-u9WtxCPdaABU",
     borrowingDisabled: false,
-    borrowingDisabledReason: ''
+    borrowingDisabledReason: "",
   },
   WETH: {
     name: "Wrapped Ethereum",
@@ -105,7 +106,7 @@ export const tokenData: Record<string, TokenData> = {
     deprecated: false,
     oIcon: "z1nnBgzGpt-eXHrjD5A9KrQX6dK8E1ONDuBIqB94VTA",
     borrowingDisabled: false,
-    borrowingDisabledReason: ''
+    borrowingDisabledReason: "",
   },
 };
 

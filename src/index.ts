@@ -106,6 +106,7 @@ import {
   controllerAddress,
   tokenData,
   TokenData,
+  lqdTokenAddress,
 } from "./ao/utils/tokenAddressData";
 import { TokenInput, tokenInput } from "./ao/utils/tokenInput";
 
@@ -344,4 +345,11 @@ export type {
 };
 
 // Re-export static properties
-export { oTokens, tokens, controllerAddress, tokenInput, tokenData };
+export {
+  oTokens,
+  tokens,
+  controllerAddress,
+  tokenInput,
+  tokenData,
+  lqdTokenAddress,
+};
