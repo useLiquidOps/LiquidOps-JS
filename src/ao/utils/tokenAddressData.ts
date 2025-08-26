@@ -134,6 +134,7 @@ export function convertTicker(ticker: string): string {
   if (ticker === "WAR") return "AR";
   if (ticker === "WUSDT") return "USDT";
   if (ticker === "WETH") return "ETH";
+  if (ticker === "USDA") return "USDC";
   return ticker;
 }
 
