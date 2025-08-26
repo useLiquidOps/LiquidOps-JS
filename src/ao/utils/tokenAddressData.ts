@@ -127,16 +127,16 @@ export const tokenData: Record<string, TokenData> = {
   },
   VAR: {
     name: "Vento Arweave",
-    icon: "", //
+    icon: "XQKXtuxDGDn13z0JBqYvbkNXPu3Y3aE1WaK2XftQ3cA",
     ticker: "VAR",
-    address: "", //
+    address: "y-p7CPhs6JMUStAuE4KeTnMXN7qYBvEi2hiBFk8ZhjM",
     oTicker: "oVAR",
     oAddress: "", //
     controllerAddress,
     cleanTicker: "vAR",
-    denomination: BigInt(12),
+    denomination: BigInt(12), //
     collateralEnabled: false,
-    baseDenomination: BigInt(12),
+    baseDenomination: BigInt(12), //
     deprecated: false,
     oIcon: "", //
     borrowingDisabled: false,
@@ -144,16 +144,16 @@ export const tokenData: Record<string, TokenData> = {
   },
   VUSDC: {
     name: "Vento USD Circle",
-    icon: "", //
+    icon: "DbT_EMed2vx4MR7N03YJYLSNeNBvuSgIzjybw8TOqMg",
     ticker: "VUSDC",
-    address: "", //
+    address: "cxkFiGP89fEKOvbvl9SLs1lEaw0L-DWJiqQOuDPeDG8",
     oTicker: "oVUSDC",
     oAddress: "", //
     controllerAddress,
     cleanTicker: "vUSDC",
-    denomination: BigInt(12),
+    denomination: BigInt(12), //
     collateralEnabled: false,
-    baseDenomination: BigInt(12),
+    baseDenomination: BigInt(12), //
     deprecated: false,
     oIcon: "", //
     borrowingDisabled: false,
