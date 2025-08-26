@@ -125,6 +125,40 @@ export const tokenData: Record<string, TokenData> = {
     borrowingDisabled: false,
     borrowingDisabledReason: "",
   },
+  VAR: {
+    name: "Vento Arweave",
+    icon: "", //
+    ticker: "VAR",
+    address: "", //
+    oTicker: "oVAR",
+    oAddress: "", //
+    controllerAddress,
+    cleanTicker: "vAR",
+    denomination: BigInt(12),
+    collateralEnabled: false,
+    baseDenomination: BigInt(12),
+    deprecated: false,
+    oIcon: "", //
+    borrowingDisabled: false,
+    borrowingDisabledReason: "",
+  },
+  VUSDC: {
+    name: "Vento USD Circle",
+    icon: "", //
+    ticker: "VUSDC",
+    address: "", //
+    oTicker: "oVUSDC",
+    oAddress: "", //
+    controllerAddress,
+    cleanTicker: "vUSDC",
+    denomination: BigInt(12),
+    collateralEnabled: false,
+    baseDenomination: BigInt(12),
+    deprecated: false,
+    oIcon: "", //
+    borrowingDisabled: false,
+    borrowingDisabledReason: "",
+  },
 };
 
 export function convertTicker(ticker: string): string {
@@ -134,6 +168,9 @@ export function convertTicker(ticker: string): string {
   if (ticker === "WAR") return "AR";
   if (ticker === "WUSDT") return "USDT";
   if (ticker === "WETH") return "ETH";
+  if (ticker === "USDA") return "USDC";
+  if (ticker === "VAR") return "AR";
+  if (ticker === "VUSDC") return "USDC";
   return ticker;
 }
 
