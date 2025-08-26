@@ -108,6 +108,23 @@ export const tokenData: Record<string, TokenData> = {
     borrowingDisabled: false,
     borrowingDisabledReason: "",
   },
+  USDA: {
+    name: "Astro USD",
+    icon: "seXozJrsP0OgI0gvAnr8zmfxiHHb5iSlI9wMI8SdamE",
+    ticker: "USDA",
+    address: "FBt9A5GA_KXMMSxA2DJ0xZbAq8sLLU2ak-YJe9zDvg8",
+    oTicker: "oUSDA",
+    oAddress: "qX9KiT3p_KnV5RE7Dddghwc0uC5t-kvsVgjq2iLAi8s",
+    controllerAddress,
+    cleanTicker: "USDA",
+    denomination: BigInt(6),
+    collateralEnabled: false,
+    baseDenomination: BigInt(6),
+    deprecated: false,
+    oIcon: "p7iMD3X6iGYQ5Qw7dPU4ER7w678wEt2epwSA8t6-hu8",
+    borrowingDisabled: false,
+    borrowingDisabledReason: "",
+  },
 };
 
 export function convertTicker(ticker: string): string {
