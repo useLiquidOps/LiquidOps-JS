@@ -125,6 +125,40 @@ export const tokenData: Record<string, TokenData> = {
     borrowingDisabled: false,
     borrowingDisabledReason: "",
   },
+  VAR: {
+    name: "Vento Arweave",
+    icon: "XQKXtuxDGDn13z0JBqYvbkNXPu3Y3aE1WaK2XftQ3cA",
+    ticker: "VAR",
+    address: "y-p7CPhs6JMUStAuE4KeTnMXN7qYBvEi2hiBFk8ZhjM",
+    oTicker: "oVAR",
+    oAddress: "TYaFOOJUwUjSCTi_CFNZXYAEt4SYTx-HNjrV-cCmwNQ",
+    controllerAddress,
+    cleanTicker: "vAR",
+    denomination: BigInt(12),
+    collateralEnabled: false,
+    baseDenomination: BigInt(12),
+    deprecated: false,
+    oIcon: "kjybk2--iRY9vxo2eQtVu52vbT8iWJzwBslhGPtTMeM",
+    borrowingDisabled: false,
+    borrowingDisabledReason: "",
+  },
+  VUSDC: {
+    name: "Vento USD Circle",
+    icon: "DbT_EMed2vx4MR7N03YJYLSNeNBvuSgIzjybw8TOqMg",
+    ticker: "VUSDC",
+    address: "cxkFiGP89fEKOvbvl9SLs1lEaw0L-DWJiqQOuDPeDG8",
+    oTicker: "oVUSDC",
+    oAddress: "aKt8ZDDT43-3vwgqSEKx6aWd_3GA1paePP9EAOf3zcc",
+    controllerAddress,
+    cleanTicker: "vUSDC",
+    denomination: BigInt(6),
+    collateralEnabled: false,
+    baseDenomination: BigInt(6),
+    deprecated: false,
+    oIcon: "7EEISJIzxC-3RPhgvRc-lAZnP7st1b79_ER4Sc5P_MU",
+    borrowingDisabled: false,
+    borrowingDisabledReason: "",
+  },
 };
 
 export function convertTicker(ticker: string): string {
@@ -135,6 +169,8 @@ export function convertTicker(ticker: string): string {
   if (ticker === "WUSDT") return "USDT";
   if (ticker === "WETH") return "ETH";
   if (ticker === "USDA") return "USDC";
+  if (ticker === "VAR") return "AR";
+  if (ticker === "VUSDC") return "USDC";
   return ticker;
 }
 
