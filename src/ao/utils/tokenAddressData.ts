@@ -131,14 +131,14 @@ export const tokenData: Record<string, TokenData> = {
     ticker: "VAR",
     address: "y-p7CPhs6JMUStAuE4KeTnMXN7qYBvEi2hiBFk8ZhjM",
     oTicker: "oVAR",
-    oAddress: "", //
+    oAddress: "TYaFOOJUwUjSCTi_CFNZXYAEt4SYTx-HNjrV-cCmwNQ",
     controllerAddress,
     cleanTicker: "vAR",
-    denomination: BigInt(12), //
+    denomination: BigInt(12),
     collateralEnabled: false,
-    baseDenomination: BigInt(12), //
+    baseDenomination: BigInt(12),
     deprecated: false,
-    oIcon: "", //
+    oIcon: "kjybk2--iRY9vxo2eQtVu52vbT8iWJzwBslhGPtTMeM",
     borrowingDisabled: false,
     borrowingDisabledReason: "",
   },
@@ -148,14 +148,14 @@ export const tokenData: Record<string, TokenData> = {
     ticker: "VUSDC",
     address: "cxkFiGP89fEKOvbvl9SLs1lEaw0L-DWJiqQOuDPeDG8",
     oTicker: "oVUSDC",
-    oAddress: "", //
+    oAddress: "aKt8ZDDT43-3vwgqSEKx6aWd_3GA1paePP9EAOf3zcc",
     controllerAddress,
     cleanTicker: "vUSDC",
-    denomination: BigInt(12), //
+    denomination: BigInt(6),
     collateralEnabled: false,
-    baseDenomination: BigInt(12), //
+    baseDenomination: BigInt(6),
     deprecated: false,
-    oIcon: "", //
+    oIcon: "7EEISJIzxC-3RPhgvRc-lAZnP7st1b79_ER4Sc5P_MU",
     borrowingDisabled: false,
     borrowingDisabledReason: "",
   },
