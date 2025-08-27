@@ -9,7 +9,10 @@ if (!process.env.JWK) {
 
 const JWK: any = JSON.parse(process.env.JWK);
 const signer = createDataItemSigner(JWK);
-const client = new LiquidOps(signer);
+const client = new LiquidOps(signer, {
+  CU_URL: "https://cu.liquidops.io/",
+});
+
 const walletAddress = await ownerToAddress(JWK.n);
 
 //--------------------------------------------------------------------------------------------------------------- borrow
