@@ -1,4 +1,5 @@
 import { getData } from "../../ao/messaging/getData";
+import { Services } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetExchangeRate {
@@ -11,7 +12,7 @@ export type GetExchangeRateRes = BigInt;
 export async function getExchangeRate({
   token,
   quantity,
-}: GetExchangeRate): Promise<GetExchangeRateRes> {
+}: GetExchangeRate, config?: Services): Promise<GetExchangeRateRes> {
   try {
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");
@@ -23,7 +24,7 @@ export async function getExchangeRate({
       Target: oTokenAddress,
       Action: "Exchange-Rate-Current",
       ...(quantity && { Quantity: quantity.toString() }),
-    });
+    }, config);
 
     const valueTag = message.Messages[0].Tags.find(
       (tag: { name: string; value: string }) => tag.name === "Value",

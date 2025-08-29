@@ -15,6 +15,7 @@ import {
   calculateGlobalPositions,
   TokenPosition,
 } from "../../ao/sharedLogic/globalPositionUtils";
+import { Services } from "../../ao/utils/connect";
 
 export interface GetLiquidationsRes {
   liquidations: Map<string, QualifyingPosition>;
@@ -49,6 +50,7 @@ interface Tag {
 
 export async function getLiquidations(
   precisionFactor: number,
+  config?: Services,
 ): Promise<GetLiquidationsRes> {
   try {
     if (!Number.isInteger(precisionFactor)) {
@@ -64,7 +66,7 @@ export async function getLiquidations(
       Target: redstoneOracleAddress,
       Action: "v2.Request-Latest-Data",
       Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
-    });
+    }, config);
 
     // add dry run await to not get rate limited
     await dryRunAwait(1);
@@ -78,7 +80,7 @@ export async function getLiquidations(
       let positions: GetAllPositionsRes | null = null;
       for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
-          positions = await getAllPositions({ token });
+          positions = await getAllPositions({ token }, config);
           // add dry run await to not get rate limited
           await dryRunAwait(1);
           break; // Success, exit retry loop
@@ -115,7 +117,7 @@ export async function getLiquidations(
     const auctionsRes = await getData({
       Target: controllerAddress,
       Action: "Get-Auctions",
-    });
+    }, config);
     // add dry run await to not get rate limited
     await dryRunAwait(1);
 

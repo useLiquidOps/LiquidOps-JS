@@ -57,10 +57,10 @@ export function connectToAO(services?: Partial<Services>) {
     CU_URL,
   };
 
-  const { spawn, message, result } = connect({
+  const { spawn, message, result, dryrun } = connect({
     MODE: "legacy",
     ...configs,
   }) as LegacyConnectResult;
 
-  return { spawn, message, result, configs };
+  return { spawn, message, result, configs, dryrun };
 }

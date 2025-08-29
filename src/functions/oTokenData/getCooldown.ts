@@ -1,4 +1,5 @@
 import { getData } from "../../ao/messaging/getData";
+import { Services } from "../../ao/utils/connect";
 import { tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetCooldown {
@@ -17,7 +18,7 @@ export type GetCooldownRes =
 export async function getCooldown({
   recipient,
   token,
-}: GetCooldown): Promise<GetCooldownRes> {
+}: GetCooldown, config?: Services): Promise<GetCooldownRes> {
   if (!recipient) throw new Error("Please specify a recipient");
   if (!token) throw new Error("Please specify a token address");
 
@@ -27,7 +28,7 @@ export async function getCooldown({
     Target: oTokenAddress,
     Owner: recipient,
     Action: "Is-Cooldown",
-  });
+  }, config);
 
   if (!cooldownRes?.Messages?.[0]?.Tags) {
     return { onCooldown: false };

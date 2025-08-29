@@ -3,6 +3,7 @@ import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 import { getBorrowAPR, GetBorrowAPRRes } from "./getBorrowAPR";
 import { getInfo, GetInfoRes } from "./getInfo";
 import { dryRunAwait } from "../../ao/utils/dryRunAwait";
+import { Services } from "../../ao/utils/connect";
 
 export interface GetSupplyAPR {
   token: TokenInput;
@@ -16,14 +17,14 @@ export async function getSupplyAPR({
   token,
   getInfoRes,
   getBorrowAPRRes,
-}: GetSupplyAPR): Promise<GetSupplyAPRRes> {
+}: GetSupplyAPR, config?: Services): Promise<GetSupplyAPRRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
     }
 
     if (!getBorrowAPRRes) {
-      getBorrowAPRRes = await getBorrowAPR({ token });
+      getBorrowAPRRes = await getBorrowAPR({ token }, config);
       // add await for 1 second due to double dry run request
       await dryRunAwait(1);
     }
@@ -35,7 +36,7 @@ export async function getSupplyAPR({
       throw new Error("getInfoRes supplied does not match token supplied.");
     }
     if (!getInfoRes) {
-      getInfoRes = await getInfo({ token });
+      getInfoRes = await getInfo({ token }, config);
     }
 
     const { totalBorrows, collateralDenomination, reserveFactor, totalSupply } =

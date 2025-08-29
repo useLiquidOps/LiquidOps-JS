@@ -1,6 +1,7 @@
 import { getData } from "../../ao/messaging/getData";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 import { convertTicker } from "../../ao/utils/tokenAddressData";
+import { Services } from "../../ao/utils/connect";
 
 export interface GetPosition {
   token: TokenInput;
@@ -24,7 +25,7 @@ interface Tag {
 export async function getPosition({
   token,
   recipient,
-}: GetPosition): Promise<GetPositionRes> {
+}: GetPosition, config?: Services): Promise<GetPositionRes> {
   try {
     if (!token || !recipient) {
       throw new Error("Please specify a token and recipient.");
@@ -36,7 +37,7 @@ export async function getPosition({
       Target: oTokenAddress,
       Action: "Position",
       ...(recipient && { Recipient: recipient }),
-    });
+    }, config);
 
     const tagsObject = Object.fromEntries(
       res.Messages[0].Tags.map((tag: Tag) => [tag.name, tag.value]),

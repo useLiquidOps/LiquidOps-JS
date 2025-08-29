@@ -1,4 +1,5 @@
 import { getData } from "../../ao/messaging/getData";
+import { Services } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetBorrowAPR {
@@ -9,7 +10,7 @@ export type GetBorrowAPRRes = number;
 
 export async function getBorrowAPR({
   token,
-}: GetBorrowAPR): Promise<GetBorrowAPRRes> {
+}: GetBorrowAPR, config?: Services): Promise<GetBorrowAPRRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -20,7 +21,7 @@ export async function getBorrowAPR({
     const checkDataRes = await getData({
       Target: oTokenAddress,
       Action: "Get-APR",
-    });
+    }, config);
 
     const tags = checkDataRes.Messages[0].Tags;
     const aprResponse: {
