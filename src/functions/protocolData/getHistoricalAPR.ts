@@ -1,6 +1,7 @@
 import { getData } from "../../ao/messaging/getData";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 import { APRAgentAddress } from "../../ao/utils/tokenAddressData";
+import { Services } from "../../ao/utils/connect";
 
 export interface GetHistoricalAPR {
   token: TokenInput;
@@ -17,7 +18,7 @@ interface APR {
 export async function getHistoricalAPR({
   token,
   fillGaps = true,
-}: GetHistoricalAPR): Promise<GetHistoricalAPRRes> {
+}: GetHistoricalAPR, config?: Services): Promise<GetHistoricalAPRRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -30,7 +31,7 @@ export async function getHistoricalAPR({
       Action: "Get-Data",
       Token: oTokenAddress,
       "Fill-Gaps": fillGaps.toString(),
-    });
+    }, config);
 
     if (!response.Messages?.[0]?.Data) {
       const errorTag = response.Messages[0].Tags.find(

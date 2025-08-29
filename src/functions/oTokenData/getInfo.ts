@@ -1,4 +1,5 @@
 import { getData } from "../../ao/messaging/getData";
+import { Services } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetInfo {
@@ -34,7 +35,7 @@ interface Tag {
   value: string;
 }
 
-export async function getInfo({ token }: GetInfo): Promise<GetInfoRes> {
+export async function getInfo({ token }: GetInfo, config?: Services): Promise<GetInfoRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -45,7 +46,7 @@ export async function getInfo({ token }: GetInfo): Promise<GetInfoRes> {
     const res = await getData({
       Target: oTokenAddress,
       Action: "Info",
-    });
+    }, config);
 
     const tagsObject = Object.fromEntries(
       res.Messages[0].Tags.map((tag: Tag) => [

@@ -189,11 +189,11 @@ class LiquidOps {
   }
 
   async getLiquidationsMap(): Promise<GetLiquidationsMapRes[]> {
-    return getLiquidationsMap();
+    return getLiquidationsMap(this.configs);
   }
 
   async getLiquidations(): Promise<GetLiquidationsRes> {
-    return getLiquidations(LiquidOps.liquidationPrecisionFactor);
+    return getLiquidations(LiquidOps.liquidationPrecisionFactor, this.configs);
   }
 
   async liquidate(params: Liquidate): Promise<LiquidateRes> {
@@ -202,49 +202,49 @@ class LiquidOps {
 
   //--------------------------------------------------------------------------------------------------------------- oTokenData
   async getBalances(params: GetBalances): Promise<GetBalancesRes> {
-    return getBalances(params);
+    return getBalances(params, this.configs);
   }
 
   async getBorrowAPR(params: GetBorrowAPR): Promise<GetBorrowAPRRes> {
-    return getBorrowAPR(params);
+    return getBorrowAPR(params, this.configs);
   }
 
   async getCooldown(params: GetCooldown): Promise<GetCooldownRes> {
-    return getCooldown(params);
+    return getCooldown(params, this.configs);
   }
 
   async getExchangeRate(params: GetExchangeRate): Promise<GetExchangeRateRes> {
-    return getExchangeRate(params);
+    return getExchangeRate(params, this.configs);
   }
 
   async getGlobalPosition(
     params: GetGlobalPosition,
   ): Promise<GetGlobalPositionRes> {
-    return getGlobalPosition(params);
+    return getGlobalPosition(params, this.configs);
   }
 
   async getInfo(params: GetInfo): Promise<GetInfoRes> {
-    return getInfo(params);
+    return getInfo(params, this.configs);
   }
 
   async getPosition(params: GetPosition): Promise<GetPositionRes> {
-    return getPosition(params);
+    return getPosition(params, this.configs);
   }
 
   async getSupplyAPR(params: GetSupplyAPR): Promise<GetSupplyAPRRes> {
-    return getSupplyAPR(params);
+    return getSupplyAPR(params, this.configs);
   }
 
   //--------------------------------------------------------------------------------------------------------------- protocolData
 
   async getAllPositions(params: GetAllPositions): Promise<GetAllPositionsRes> {
-    return getAllPositions(params);
+    return getAllPositions(params, this.configs);
   }
 
   async getHistoricalAPR(
     params: GetHistoricalAPR,
   ): Promise<GetHistoricalAPRRes> {
-    return getHistoricalAPR(params);
+    return getHistoricalAPR(params, this.configs);
   }
 
   //--------------------------------------------------------------------------------------------------------------- utils
@@ -254,7 +254,7 @@ class LiquidOps {
   }
 
   async getPrice(params: GetPrice): Promise<GetPriceRes> {
-    return getPrice(params);
+    return getPrice(params, this.configs);
   }
 
   async getResult(params: GetResult): Promise<GetResultRes> {

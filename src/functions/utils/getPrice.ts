@@ -6,6 +6,7 @@ import {
 } from "../../ao/utils/tokenAddressData";
 import { redstoneOracleAddress } from "../../ao/utils/tokenAddressData";
 import { RedstonePrices } from "../liquidations/getLiquidations";
+import { Services } from "../../ao/utils/connect";
 
 export interface GetPrice {
   token: TokenInput | string;
@@ -13,7 +14,7 @@ export interface GetPrice {
 
 export type GetPriceRes = number;
 
-export async function getPrice({ token }: GetPrice): Promise<GetPriceRes> {
+export async function getPrice({ token }: GetPrice, config?: Services): Promise<GetPriceRes> {
   if (!token) {
     throw new Error("Please specify a token.");
   }
@@ -24,7 +25,7 @@ export async function getPrice({ token }: GetPrice): Promise<GetPriceRes> {
       Target: redstoneOracleAddress,
       Action: "v2.Request-Latest-Data",
       Tickers: JSON.stringify([convertTicker(token)]),
-    });
+    }, config);
 
     const prices: RedstonePrices = JSON.parse(
       redstonePriceFeedRes.Messages[0].Data,

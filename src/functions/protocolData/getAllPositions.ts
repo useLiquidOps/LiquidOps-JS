@@ -1,4 +1,5 @@
 import { getData } from "../../ao/messaging/getData";
+import { Services } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 
 export interface GetAllPositions {
@@ -16,7 +17,7 @@ export interface GetAllPositionsRes {
 
 export async function getAllPositions({
   token,
-}: GetAllPositions): Promise<GetAllPositionsRes> {
+}: GetAllPositions, config?: Services): Promise<GetAllPositionsRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -27,7 +28,7 @@ export async function getAllPositions({
     const res = await getData({
       Target: oTokenAddress,
       Action: "Positions",
-    });
+    }, config);
 
     const allPositions = JSON.parse(res.Messages[0].Data);
 

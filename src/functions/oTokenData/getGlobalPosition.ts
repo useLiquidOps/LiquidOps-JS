@@ -13,6 +13,7 @@ import {
   TokenPosition,
   GlobalPosition,
 } from "../../ao/sharedLogic/globalPositionUtils";
+import { Services } from "../../ao/utils/connect";
 
 type RedstonePrices = Record<string, { t: number; a: string; v: number }>;
 
@@ -27,7 +28,7 @@ export interface GetGlobalPosition {
 
 export async function getGlobalPosition({
   walletAddress,
-}: GetGlobalPosition): Promise<GetGlobalPositionRes> {
+}: GetGlobalPosition, config?: Services): Promise<GetGlobalPositionRes> {
   try {
     if (!walletAddress) {
       throw new Error("Please specify a wallet address.");
@@ -42,7 +43,7 @@ export async function getGlobalPosition({
       Target: redstoneOracleAddress,
       Action: "v2.Request-Latest-Data",
       Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
-    });
+    }, config);
     // add dry run await to not get rate limited
     await dryRunAwait(1);
 
@@ -61,7 +62,7 @@ export async function getGlobalPosition({
           const position = await getPosition({
             token,
             recipient: walletAddress,
-          });
+          }, config);
           // add dry run await to not get rate limited
           await dryRunAwait(1);
 

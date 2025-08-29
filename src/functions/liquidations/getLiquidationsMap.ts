@@ -16,6 +16,7 @@ import {
   TokenPosition,
 } from "../../ao/sharedLogic/globalPositionUtils";
 import { RedstonePrices } from "./getLiquidations";
+import { Services } from "../../ao/utils/connect";
 
 export interface GetLiquidationsMapRes {
   /** The wallet/user address that owns this position */
@@ -34,7 +35,7 @@ export interface GetLiquidationsMapRes {
   remainingCapacity: number;
 }
 
-export async function getLiquidationsMap(): Promise<GetLiquidationsMapRes[]> {
+export async function getLiquidationsMap(config?: Services): Promise<GetLiquidationsMapRes[]> {
   try {
     // Get list of tokens to process
     const tokensList = Object.keys(tokens);
@@ -45,7 +46,7 @@ export async function getLiquidationsMap(): Promise<GetLiquidationsMapRes[]> {
       Target: redstoneOracleAddress,
       Action: "v2.Request-Latest-Data",
       Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
-    });
+    }, config);
 
     // add dry run await to not get rate limited
     await dryRunAwait(1);
