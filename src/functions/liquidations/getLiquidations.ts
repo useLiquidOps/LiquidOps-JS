@@ -80,7 +80,7 @@ export async function getLiquidations(
       let positions: GetAllPositionsRes | null = null;
       for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
-          positions = await getAllPositions({ token });
+          positions = await getAllPositions({ token }, config);
           // add dry run await to not get rate limited
           await dryRunAwait(1);
           break; // Success, exit retry loop
