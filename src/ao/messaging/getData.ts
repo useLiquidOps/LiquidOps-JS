@@ -1,5 +1,5 @@
-import { dryrun } from "@permaweb/aoconnect";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
+import { connectToAO, Services } from "../utils/connect";
 
 interface MessageTags {
   Target: string;
@@ -19,7 +19,7 @@ interface MessageTags {
 
 type GetDataRes = DryRunResult;
 
-export async function getData(messageTags: MessageTags): Promise<GetDataRes> {
+export async function getData(messageTags: MessageTags, config?: Services): Promise<GetDataRes> {
   const convertedMessageTags = Object.entries(messageTags)
     .map(([name, value]) => ({
       name,
@@ -31,6 +31,7 @@ export async function getData(messageTags: MessageTags): Promise<GetDataRes> {
   const targetProcessID = messageTags["Target"];
 
   try {
+    const { dryrun } = connectToAO(config);
     const { Messages, Spawns, Output, Error } = await dryrun({
       process: targetProcessID,
       data: "",
