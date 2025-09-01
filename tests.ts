@@ -140,7 +140,7 @@ const walletAddress = await ownerToAddress(JWK.n);
 //-------------------------------
 
 // const getInfo = await client.getInfo({
-//   token: "QAR",
+//   token: "WUSDC",
 // });
 
 // console.log(getInfo);
