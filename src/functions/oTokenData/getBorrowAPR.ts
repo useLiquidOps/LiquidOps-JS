@@ -8,9 +8,10 @@ export interface GetBorrowAPR {
 
 export type GetBorrowAPRRes = number;
 
-export async function getBorrowAPR({
-  token,
-}: GetBorrowAPR, config?: Services): Promise<GetBorrowAPRRes> {
+export async function getBorrowAPR(
+  { token }: GetBorrowAPR,
+  config?: Services,
+): Promise<GetBorrowAPRRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -18,10 +19,13 @@ export async function getBorrowAPR({
 
     const { oTokenAddress } = tokenInput(token);
 
-    const checkDataRes = await getData({
-      Target: oTokenAddress,
-      Action: "Get-APR",
-    }, config);
+    const checkDataRes = await getData(
+      {
+        Target: oTokenAddress,
+        Action: "Get-APR",
+      },
+      config,
+    );
 
     const tags = checkDataRes.Messages[0].Tags;
     const aprResponse: {

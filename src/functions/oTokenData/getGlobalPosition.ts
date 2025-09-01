@@ -26,9 +26,10 @@ export interface GetGlobalPosition {
   walletAddress: string;
 }
 
-export async function getGlobalPosition({
-  walletAddress,
-}: GetGlobalPosition, config?: Services): Promise<GetGlobalPositionRes> {
+export async function getGlobalPosition(
+  { walletAddress }: GetGlobalPosition,
+  config?: Services,
+): Promise<GetGlobalPositionRes> {
   try {
     if (!walletAddress) {
       throw new Error("Please specify a wallet address.");
@@ -38,12 +39,15 @@ export async function getGlobalPosition({
     const tokensList = Object.keys(tokens);
 
     // Make a request to RedStone oracle for prices
-    const redstonePriceFeedRes = await getData({
-      Owner: controllerAddress,
-      Target: redstoneOracleAddress,
-      Action: "v2.Request-Latest-Data",
-      Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
-    }, config);
+    const redstonePriceFeedRes = await getData(
+      {
+        Owner: controllerAddress,
+        Target: redstoneOracleAddress,
+        Action: "v2.Request-Latest-Data",
+        Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
+      },
+      config,
+    );
     // add dry run await to not get rate limited
     await dryRunAwait(1);
 
@@ -59,10 +63,13 @@ export async function getGlobalPosition({
 
       for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
-          const position = await getPosition({
-            token,
-            recipient: walletAddress,
-          }, config);
+          const position = await getPosition(
+            {
+              token,
+              recipient: walletAddress,
+            },
+            config,
+          );
           // add dry run await to not get rate limited
           await dryRunAwait(1);
 

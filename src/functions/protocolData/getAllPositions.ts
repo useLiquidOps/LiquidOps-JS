@@ -15,9 +15,10 @@ export interface GetAllPositionsRes {
   };
 }
 
-export async function getAllPositions({
-  token,
-}: GetAllPositions, config?: Services): Promise<GetAllPositionsRes> {
+export async function getAllPositions(
+  { token }: GetAllPositions,
+  config?: Services,
+): Promise<GetAllPositionsRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -25,10 +26,13 @@ export async function getAllPositions({
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res = await getData({
-      Target: oTokenAddress,
-      Action: "Positions",
-    }, config);
+    const res = await getData(
+      {
+        Target: oTokenAddress,
+        Action: "Positions",
+      },
+      config,
+    );
 
     const allPositions = JSON.parse(res.Messages[0].Data);
 

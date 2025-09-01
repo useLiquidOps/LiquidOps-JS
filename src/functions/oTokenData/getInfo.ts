@@ -35,7 +35,10 @@ interface Tag {
   value: string;
 }
 
-export async function getInfo({ token }: GetInfo, config?: Services): Promise<GetInfoRes> {
+export async function getInfo(
+  { token }: GetInfo,
+  config?: Services,
+): Promise<GetInfoRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -43,10 +46,13 @@ export async function getInfo({ token }: GetInfo, config?: Services): Promise<Ge
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res = await getData({
-      Target: oTokenAddress,
-      Action: "Info",
-    }, config);
+    const res = await getData(
+      {
+        Target: oTokenAddress,
+        Action: "Info",
+      },
+      config,
+    );
 
     const tagsObject = Object.fromEntries(
       res.Messages[0].Tags.map((tag: Tag) => [

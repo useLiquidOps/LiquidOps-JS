@@ -13,11 +13,10 @@ export interface GetSupplyAPR {
 
 export type GetSupplyAPRRes = number;
 
-export async function getSupplyAPR({
-  token,
-  getInfoRes,
-  getBorrowAPRRes,
-}: GetSupplyAPR, config?: Services): Promise<GetSupplyAPRRes> {
+export async function getSupplyAPR(
+  { token, getInfoRes, getBorrowAPRRes }: GetSupplyAPR,
+  config?: Services,
+): Promise<GetSupplyAPRRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
