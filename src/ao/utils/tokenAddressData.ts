@@ -45,7 +45,7 @@ export const tokenData: Record<string, TokenData> = {
       return this.cleanTicker.toUpperCase();
     },
     get baseDenomination() {
-      return this.baseDenomination;
+      return this.denomination;
     },
     controllerAddress,
   },
@@ -71,7 +71,7 @@ export const tokenData: Record<string, TokenData> = {
       return this.cleanTicker.toUpperCase();
     },
     get baseDenomination() {
-      return this.baseDenomination;
+      return this.denomination;
     },
     controllerAddress,
   },
@@ -97,7 +97,7 @@ export const tokenData: Record<string, TokenData> = {
       return this.cleanTicker.toUpperCase();
     },
     get baseDenomination() {
-      return this.baseDenomination;
+      return this.denomination;
     },
     controllerAddress,
   },
@@ -123,7 +123,7 @@ export const tokenData: Record<string, TokenData> = {
       return this.cleanTicker.toUpperCase();
     },
     get baseDenomination() {
-      return this.baseDenomination;
+      return this.denomination;
     },
     controllerAddress,
   },
@@ -149,7 +149,7 @@ export const tokenData: Record<string, TokenData> = {
       return this.cleanTicker.toUpperCase();
     },
     get baseDenomination() {
-      return this.baseDenomination;
+      return this.denomination;
     },
     controllerAddress,
   },
@@ -175,7 +175,7 @@ export const tokenData: Record<string, TokenData> = {
       return this.cleanTicker.toUpperCase();
     },
     get baseDenomination() {
-      return this.baseDenomination;
+      return this.denomination;
     },
     controllerAddress,
   },
@@ -201,7 +201,7 @@ export const tokenData: Record<string, TokenData> = {
       return this.cleanTicker.toUpperCase();
     },
     get baseDenomination() {
-      return this.baseDenomination;
+      return this.denomination;
     },
     controllerAddress,
   },
@@ -227,7 +227,7 @@ export const tokenData: Record<string, TokenData> = {
       return this.cleanTicker.toUpperCase();
     },
     get baseDenomination() {
-      return this.baseDenomination;
+      return this.denomination;
     },
     controllerAddress,
   },
@@ -253,7 +253,7 @@ export const tokenData: Record<string, TokenData> = {
       return this.cleanTicker.toUpperCase();
     },
     get baseDenomination() {
-      return this.baseDenomination;
+      return this.denomination;
     },
     controllerAddress,
   },
@@ -279,7 +279,7 @@ export const tokenData: Record<string, TokenData> = {
       return this.cleanTicker.toUpperCase();
     },
     get baseDenomination() {
-      return this.baseDenomination;
+      return this.denomination;
     },
     controllerAddress,
   },
