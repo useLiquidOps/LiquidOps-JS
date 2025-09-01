@@ -22,10 +22,10 @@ interface Tag {
   value: string;
 }
 
-export async function getPosition({
-  token,
-  recipient,
-}: GetPosition, config?: Services): Promise<GetPositionRes> {
+export async function getPosition(
+  { token, recipient }: GetPosition,
+  config?: Services,
+): Promise<GetPositionRes> {
   try {
     if (!token || !recipient) {
       throw new Error("Please specify a token and recipient.");
@@ -33,11 +33,14 @@ export async function getPosition({
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res = await getData({
-      Target: oTokenAddress,
-      Action: "Position",
-      ...(recipient && { Recipient: recipient }),
-    }, config);
+    const res = await getData(
+      {
+        Target: oTokenAddress,
+        Action: "Position",
+        ...(recipient && { Recipient: recipient }),
+      },
+      config,
+    );
 
     const tagsObject = Object.fromEntries(
       res.Messages[0].Tags.map((tag: Tag) => [tag.name, tag.value]),

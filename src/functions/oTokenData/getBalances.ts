@@ -8,9 +8,10 @@ export interface GetBalances {
 
 export type GetBalancesRes = Record<string, bigint>;
 
-export async function getBalances({
-  token,
-}: GetBalances, config?: Services): Promise<GetBalancesRes> {
+export async function getBalances(
+  { token }: GetBalances,
+  config?: Services,
+): Promise<GetBalancesRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -18,10 +19,13 @@ export async function getBalances({
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res = await getData({
-      Target: oTokenAddress,
-      Action: "Balances",
-    }, config);
+    const res = await getData(
+      {
+        Target: oTokenAddress,
+        Action: "Balances",
+      },
+      config,
+    );
 
     if (!res.Messages || !res.Messages[0] || !res.Messages[0].Data) {
       throw new Error("Invalid response format from getData");

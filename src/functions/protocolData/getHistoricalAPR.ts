@@ -15,10 +15,10 @@ interface APR {
   timestamp: number;
 }
 
-export async function getHistoricalAPR({
-  token,
-  fillGaps = true,
-}: GetHistoricalAPR, config?: Services): Promise<GetHistoricalAPRRes> {
+export async function getHistoricalAPR(
+  { token, fillGaps = true }: GetHistoricalAPR,
+  config?: Services,
+): Promise<GetHistoricalAPRRes> {
   try {
     if (!token) {
       throw new Error("Please specify a token.");
@@ -26,12 +26,15 @@ export async function getHistoricalAPR({
 
     const { oTokenAddress } = tokenInput(token);
 
-    const response = await getData({
-      Target: APRAgentAddress,
-      Action: "Get-Data",
-      Token: oTokenAddress,
-      "Fill-Gaps": fillGaps.toString(),
-    }, config);
+    const response = await getData(
+      {
+        Target: APRAgentAddress,
+        Action: "Get-Data",
+        Token: oTokenAddress,
+        "Fill-Gaps": fillGaps.toString(),
+      },
+      config,
+    );
 
     if (!response.Messages?.[0]?.Data) {
       const errorTag = response.Messages[0].Tags.find(

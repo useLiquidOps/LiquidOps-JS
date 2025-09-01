@@ -61,12 +61,15 @@ export async function getLiquidations(
     const tokensList = Object.keys(tokens);
 
     // Make a request to RedStone oracle process for prices (same used onchain)
-    const redstonePriceFeedRes = await getData({
-      Owner: controllerAddress,
-      Target: redstoneOracleAddress,
-      Action: "v2.Request-Latest-Data",
-      Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
-    }, config);
+    const redstonePriceFeedRes = await getData(
+      {
+        Owner: controllerAddress,
+        Target: redstoneOracleAddress,
+        Action: "v2.Request-Latest-Data",
+        Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
+      },
+      config,
+    );
 
     // add dry run await to not get rate limited
     await dryRunAwait(1);
@@ -114,10 +117,13 @@ export async function getLiquidations(
     }
 
     // get discovered liquidations
-    const auctionsRes = await getData({
-      Target: controllerAddress,
-      Action: "Get-Auctions",
-    }, config);
+    const auctionsRes = await getData(
+      {
+        Target: controllerAddress,
+        Action: "Get-Auctions",
+      },
+      config,
+    );
     // add dry run await to not get rate limited
     await dryRunAwait(1);
 

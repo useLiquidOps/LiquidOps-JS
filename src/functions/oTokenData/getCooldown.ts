@@ -15,20 +15,23 @@ export type GetCooldownRes =
       remainingBlocks: number;
     };
 
-export async function getCooldown({
-  recipient,
-  token,
-}: GetCooldown, config?: Services): Promise<GetCooldownRes> {
+export async function getCooldown(
+  { recipient, token }: GetCooldown,
+  config?: Services,
+): Promise<GetCooldownRes> {
   if (!recipient) throw new Error("Please specify a recipient");
   if (!token) throw new Error("Please specify a token address");
 
   const { oTokenAddress } = tokenInput(token);
 
-  const cooldownRes = await getData({
-    Target: oTokenAddress,
-    Owner: recipient,
-    Action: "Is-Cooldown",
-  }, config);
+  const cooldownRes = await getData(
+    {
+      Target: oTokenAddress,
+      Owner: recipient,
+      Action: "Is-Cooldown",
+    },
+    config,
+  );
 
   if (!cooldownRes?.Messages?.[0]?.Tags) {
     return { onCooldown: false };

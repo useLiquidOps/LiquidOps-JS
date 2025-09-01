@@ -9,10 +9,10 @@ export interface GetExchangeRate {
 
 export type GetExchangeRateRes = BigInt;
 
-export async function getExchangeRate({
-  token,
-  quantity,
-}: GetExchangeRate, config?: Services): Promise<GetExchangeRateRes> {
+export async function getExchangeRate(
+  { token, quantity }: GetExchangeRate,
+  config?: Services,
+): Promise<GetExchangeRateRes> {
   try {
     if (!token || !quantity) {
       throw new Error("Please specify a token and quantity.");
@@ -20,11 +20,14 @@ export async function getExchangeRate({
 
     const { oTokenAddress } = tokenInput(token);
 
-    const message = await getData({
-      Target: oTokenAddress,
-      Action: "Exchange-Rate-Current",
-      ...(quantity && { Quantity: quantity.toString() }),
-    }, config);
+    const message = await getData(
+      {
+        Target: oTokenAddress,
+        Action: "Exchange-Rate-Current",
+        ...(quantity && { Quantity: quantity.toString() }),
+      },
+      config,
+    );
 
     const valueTag = message.Messages[0].Tags.find(
       (tag: { name: string; value: string }) => tag.name === "Value",
