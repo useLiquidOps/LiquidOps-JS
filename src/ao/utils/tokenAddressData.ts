@@ -205,58 +205,58 @@ export const tokenData: Record<string, TokenData> = {
     },
     controllerAddress,
   },
-  VDAI: {
-    name: "Vento DAI",
-    cleanTicker: "vDAI",
-    collateralEnabled: true,
-    address: "Q5Qk5W_AOUou2nRu1RlEpfr8yzKmWJ98tQb8QEyYqx4",
-    icon: "0hn3-PiE45LzIr9fYxSEXrQu8qk9arXt-FsVoN98grw",
-    denomination: BigInt(18),
-    //
-    oAddress: "UNj2195zpcrRcHdxWXq0zfsUMybbpfyFpyFpyaaLm03dW0",
-    oIcon: "rCEwGR-OYAft5mAYqMOur7icDpxNCttyAuRqwJUjKSM",
-    //
-    deprecated: false,
-    borrowingDisabled: false,
-    borrowingDisabledReason: "",
-    //
-    get oTicker() {
-      return `o${this.cleanTicker.toUpperCase()}`;
-    },
-    get ticker() {
-      return this.cleanTicker.toUpperCase();
-    },
-    get baseDenomination() {
-      return this.denomination;
-    },
-    controllerAddress,
-  },
-  VETH: {
-    name: "Vento Ethereum",
-    cleanTicker: "vETH",
-    collateralEnabled: true,
-    address: "SGUZMZ1toA4k5wlDNyDtHQThf1SEAOLNwiE8TzsnSgw",
-    icon: "zAQeInmLoCwtHfWzAebYWyrdb8Yh-s5H8_b4Ad2egSc",
-    denomination: BigInt(18),
-    //
-    oAddress: "Sipm0KlrxYR7Pr_sKgedjIt1yzEQ0R6Yfkkuhd7Q0Og",
-    oIcon: "z1nnBgzGpt-eXHrjD5A9KrQX6dK8E1ONDuBIqB94VTA",
-    //
-    deprecated: false,
-    borrowingDisabled: false,
-    borrowingDisabledReason: "",
-    //
-    get oTicker() {
-      return `o${this.cleanTicker.toUpperCase()}`;
-    },
-    get ticker() {
-      return this.cleanTicker.toUpperCase();
-    },
-    get baseDenomination() {
-      return this.denomination;
-    },
-    controllerAddress,
-  },
+  // VDAI: {
+  //   name: "Vento DAI",
+  //   cleanTicker: "vDAI",
+  //   collateralEnabled: true,
+  //   address: "Q5Qk5W_AOUou2nRu1RlEpfr8yzKmWJ98tQb8QEyYqx4",
+  //   icon: "0hn3-PiE45LzIr9fYxSEXrQu8qk9arXt-FsVoN98grw",
+  //   denomination: BigInt(18),
+  //   //
+  //   oAddress: "UNj2195zpcrRcHdxWXq0zfsUMybbpfyFpyFpyaaLm03dW0",
+  //   oIcon: "rCEwGR-OYAft5mAYqMOur7icDpxNCttyAuRqwJUjKSM",
+  //   //
+  //   deprecated: false,
+  //   borrowingDisabled: false,
+  //   borrowingDisabledReason: "",
+  //   //
+  //   get oTicker() {
+  //     return `o${this.cleanTicker.toUpperCase()}`;
+  //   },
+  //   get ticker() {
+  //     return this.cleanTicker.toUpperCase();
+  //   },
+  //   get baseDenomination() {
+  //     return this.denomination;
+  //   },
+  //   controllerAddress,
+  // },
+  // VETH: {
+  //   name: "Vento Ethereum",
+  //   cleanTicker: "vETH",
+  //   collateralEnabled: true,
+  //   address: "SGUZMZ1toA4k5wlDNyDtHQThf1SEAOLNwiE8TzsnSgw",
+  //   icon: "zAQeInmLoCwtHfWzAebYWyrdb8Yh-s5H8_b4Ad2egSc",
+  //   denomination: BigInt(18),
+  //   //
+  //   oAddress: "Sipm0KlrxYR7Pr_sKgedjIt1yzEQ0R6Yfkkuhd7Q0Og",
+  //   oIcon: "z1nnBgzGpt-eXHrjD5A9KrQX6dK8E1ONDuBIqB94VTA",
+  //   //
+  //   deprecated: false,
+  //   borrowingDisabled: false,
+  //   borrowingDisabledReason: "",
+  //   //
+  //   get oTicker() {
+  //     return `o${this.cleanTicker.toUpperCase()}`;
+  //   },
+  //   get ticker() {
+  //     return this.cleanTicker.toUpperCase();
+  //   },
+  //   get baseDenomination() {
+  //     return this.denomination;
+  //   },
+  //   controllerAddress,
+  // },
 };
 
 export function convertTicker(ticker: string): string {
