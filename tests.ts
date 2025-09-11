@@ -129,11 +129,11 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 //-------------------------------
 
-const getGlobalPosition = await client.getGlobalPosition({
-  walletAddress: "enMTr4rGpzcmno1W4RgihNfa2haOIuJoRD6OxSEvdH8",
-});
+// const getGlobalPosition = await client.getGlobalPosition({
+//   walletAddress: "enMTr4rGpzcmno1W4RgihNfa2haOIuJoRD6OxSEvdH8",
+// });
 
-console.log(formatGlobalPosition(getGlobalPosition));
+// console.log(formatGlobalPosition(getGlobalPosition));
 
 //-------------------------------
 
