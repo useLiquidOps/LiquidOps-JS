@@ -9,9 +9,7 @@ if (!process.env.JWK) {
 
 const JWK: any = JSON.parse(process.env.JWK);
 const signer = createDataItemSigner(JWK);
-const client = new LiquidOps(signer, {
-  CU_URL: "https://cu.liquidops.io/",
-});
+const client = new LiquidOps(signer);
 
 const walletAddress = await ownerToAddress(JWK.n);
 
@@ -131,11 +129,11 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 //-------------------------------
 
-// const getGlobalPosition = await client.getGlobalPosition({
-//   walletAddress: 'h037Kd9sfjYn7KyDvzkdqG5LVhry1dkKMj8aOJDq1F8'
-// });
+const getGlobalPosition = await client.getGlobalPosition({
+  walletAddress: "enMTr4rGpzcmno1W4RgihNfa2haOIuJoRD6OxSEvdH8",
+});
 
-// console.log(formatGlobalPosition(getGlobalPosition));
+console.log(formatGlobalPosition(getGlobalPosition));
 
 //-------------------------------
 
