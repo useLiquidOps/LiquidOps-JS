@@ -23,32 +23,6 @@ export const APRAgentAddress = "D3AlSUAtbWKcozsrvckRuCY6TVkAY1rWtLYGoGf6KIA";
 export const lqdTokenAddress = "n2MhPK0O3yEvY2zW73sqcmWqDktJxAifJDrri4qireI";
 
 export const tokenData: Record<string, TokenData> = {
-  QAR: {
-    name: "Quantum Arweave",
-    cleanTicker: "qAR",
-    collateralEnabled: true,
-    address: "NG-0lVX882MG5nhARrSzyprEK6ejonHpdUmaaMPsHE8",
-    icon: "8VLMb0c9NATl4iczfwpMDe1Eh8kFWIUpSlIkcGfDFzM",
-    denomination: BigInt(12),
-    //
-    oAddress: "fODpFVOb5weX9Yc-26AA82m2MhmT7N9L0TkynOsruK0",
-    oIcon: "i_U-jhdMMaib2hK51qPrKXbLo6cx2Nt58_gNz5FA4sw",
-    //
-    deprecated: true,
-    borrowingDisabled: true,
-    borrowingDisabledReason: "Deprecated token.",
-    //
-    get oTicker() {
-      return `o${this.cleanTicker.toUpperCase()}`;
-    },
-    get ticker() {
-      return this.cleanTicker.toUpperCase();
-    },
-    get baseDenomination() {
-      return this.denomination;
-    },
-    controllerAddress,
-  },
   WAR: {
     name: "Wrapped Arweave",
     cleanTicker: "wAR",
@@ -287,7 +261,6 @@ export const tokenData: Record<string, TokenData> = {
 
 export function convertTicker(ticker: string): string {
   ticker = ticker.toUpperCase();
-  if (ticker === "QAR") return "AR";
   if (ticker === "WUSDC") return "USDC";
   if (ticker === "WAR") return "AR";
   if (ticker === "WUSDT") return "USDT";
