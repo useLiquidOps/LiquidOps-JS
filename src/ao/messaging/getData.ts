@@ -19,7 +19,10 @@ interface MessageTags {
 
 type GetDataRes = DryRunResult;
 
-export async function getData(messageTags: MessageTags, config?: Services): Promise<GetDataRes> {
+export async function getData(
+  messageTags: MessageTags,
+  config?: Services,
+): Promise<GetDataRes> {
   const convertedMessageTags = Object.entries(messageTags)
     .map(([name, value]) => ({
       name,

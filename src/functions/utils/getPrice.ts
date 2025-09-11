@@ -14,18 +14,24 @@ export interface GetPrice {
 
 export type GetPriceRes = number;
 
-export async function getPrice({ token }: GetPrice, config?: Services): Promise<GetPriceRes> {
+export async function getPrice(
+  { token }: GetPrice,
+  config?: Services,
+): Promise<GetPriceRes> {
   if (!token) {
     throw new Error("Please specify a token.");
   }
 
   try {
-    const redstonePriceFeedRes = await getData({
-      Owner: controllerAddress,
-      Target: redstoneOracleAddress,
-      Action: "v2.Request-Latest-Data",
-      Tickers: JSON.stringify([convertTicker(token)]),
-    }, config);
+    const redstonePriceFeedRes = await getData(
+      {
+        Owner: controllerAddress,
+        Target: redstoneOracleAddress,
+        Action: "v2.Request-Latest-Data",
+        Tickers: JSON.stringify([convertTicker(token)]),
+      },
+      config,
+    );
 
     const prices: RedstonePrices = JSON.parse(
       redstonePriceFeedRes.Messages[0].Data,
