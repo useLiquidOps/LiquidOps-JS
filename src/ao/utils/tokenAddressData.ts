@@ -213,7 +213,7 @@ export const tokenData: Record<string, TokenData> = {
     icon: "0hn3-PiE45LzIr9fYxSEXrQu8qk9arXt-FsVoN98grw",
     denomination: BigInt(18),
     //
-    oAddress: "UNj2195zpcrRcHdxWXq0zfsUMybbpfyFpyFpyaaLm03dW0",
+    oAddress: "UNj2195zpcrRcHdxWXq0zfsUMybbpfyFpyaaLm03dW0",
     oIcon: "rCEwGR-OYAft5mAYqMOur7icDpxNCttyAuRqwJUjKSM",
     //
     deprecated: false,
