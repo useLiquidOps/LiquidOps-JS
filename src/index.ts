@@ -124,10 +124,13 @@ import {
   GetEarnings,
   GetEarningsRes,
 } from "./functions/lend/getEarnings";
+import { DryRunFIFO } from "./ao/messaging/getData";
 
 class LiquidOps {
   private signer: any;
   private configs: Omit<Configs, "MODE">;
+
+  static dryRunFifo = new DryRunFIFO();
 
   constructor(signer: any, configs: Omit<Configs, "MODE"> = {}) {
     if (!signer) {
