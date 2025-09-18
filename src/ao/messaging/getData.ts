@@ -37,17 +37,16 @@ export async function getData(
   const targetProcessID = messageTags["Target"];
 
   try {
-    let { dryrun } = connectToAO(config);
-    if (LiquidOps.dryRunFifo) {
-      dryrun = LiquidOps.dryRunFifo.put;
-    }
-
-    const { Messages, Spawns, Output, Error } = await dryrun({
+    const { dryrun } = connectToAO(config);
+    const msg = {
       process: targetProcessID,
       data: "",
       tags: convertedMessageTags,
       Owner: messageTags.Owner || "1234",
-    });
+    };
+    const { Messages, Spawns, Output, Error } = LiquidOps.dryRunFifo ?
+        await LiquidOps.dryRunFifo.put(msg) :
+        await dryrun(msg);
 
     return {
       Messages,
