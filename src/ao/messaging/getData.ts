@@ -1,7 +1,8 @@
-import { DryRunResult, MessageInput } from "@permaweb/aoconnect/dist/lib/dryrun";
+import { DryRun, DryRunResult, MessageInput } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { connectToAO, Services } from "../utils/connect";
-import { dryrun } from "@permaweb/aoconnect/browser";
 import { dryRunAwait } from "../utils/dryRunAwait";
+import { connect } from "@permaweb/aoconnect";
+import LiquidOps from "../..";
 
 interface MessageTags {
   Target: string;
@@ -36,7 +37,11 @@ export async function getData(
   const targetProcessID = messageTags["Target"];
 
   try {
-    const { dryrun } = connectToAO(config);
+    let { dryrun } = connectToAO(config);
+    if (LiquidOps.dryRunFifo) {
+      dryrun = LiquidOps.dryRunFifo.put;
+    }
+
     const { Messages, Spawns, Output, Error } = await dryrun({
       process: targetProcessID,
       data: "",
@@ -55,19 +60,50 @@ export async function getData(
   }
 }
 
+class DryRunList {
+  #list: DryRun[];
+  #delay: number;
+  #resolves: Array<(val: DryRun) => void>;
+
+  constructor(list: DryRun[] = [], delay: number) {
+    this.#list = list;
+    this.#delay = delay;
+    this.#resolves = [];
+  }
+
+  push(item: DryRun) {
+    setTimeout(() => {
+      const nextRequest = this.#resolves.shift();
+      if (nextRequest) nextRequest(item);
+      else this.#list.push(item);
+    }, this.#delay);
+  }
+
+  async waitForOne() {
+    const next = this.#list.shift();
+    if (next) return next;
+
+    return new Promise<DryRun>((resolve) => {
+      this.#resolves.push(resolve);
+    });
+  }
+}
+
 export class DryRunFIFO {
-  #queue: {
+  #queue: Array<{
     msg: MessageInput;
     resolve: (result: DryRunResult) => void;
     reject: (reason?: any) => void;
-  }[];
-  #delay: number;
+  }>;
   #running: boolean;
+  #availableDryRuns: DryRunList;
 
-  constructor(delay = 1200) {
+  constructor(delay = 1200, CUs: string[]) {
     this.#queue = [];
-    this.#delay = delay;
     this.#running = false;
+    this.#availableDryRuns = new DryRunList(CUs.map(
+      (CU_URL) => connect({ MODE: "legacy", CU_URL }).dryrun
+    ), delay);
   }
 
   put(msg: MessageInput) {
@@ -82,6 +118,7 @@ export class DryRunFIFO {
     this.#running = true;
 
     while (this.#queue.length > 0) {
+      const dryrun = await this.#availableDryRuns.waitForOne();
       const { msg, resolve, reject } = this.#queue.shift()!;
 
       try {
@@ -91,9 +128,7 @@ export class DryRunFIFO {
         reject(e);
       }
 
-      if (this.#queue.length > 0) {
-        await dryRunAwait(this.#delay);
-      }
+      this.#availableDryRuns.push(dryrun)
     }
 
     this.#running = false;

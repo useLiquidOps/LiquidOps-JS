@@ -130,7 +130,7 @@ class LiquidOps {
   private signer: any;
   private configs: Omit<Configs, "MODE">;
 
-  static dryRunFifo = new DryRunFIFO();
+  static dryRunFifo?: DryRunFIFO;
 
   constructor(signer: any, configs: Omit<Configs, "MODE"> = {}) {
     if (!signer) {
