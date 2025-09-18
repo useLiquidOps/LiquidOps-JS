@@ -98,7 +98,7 @@ export class DryRunFIFO {
   #running: boolean;
   #availableDryRuns: DryRunList;
 
-  constructor(delay = 1200, CUs: string[]) {
+  constructor(CUs: string[], delay = 1200) {
     this.#queue = [];
     this.#running = false;
     this.#availableDryRuns = new DryRunList(CUs.map(
