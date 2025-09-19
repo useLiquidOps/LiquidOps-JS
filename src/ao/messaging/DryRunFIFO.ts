@@ -1,12 +1,14 @@
 import { DryRun, DryRunResult, MessageInput } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { connect } from "@permaweb/aoconnect";
 
+interface DryRunQueueItem {
+  msg: MessageInput;
+  resolve: (result: DryRunResult) => void;
+  reject: (reason?: any) => void;
+}
+
 export class DryRunFIFO {
-  #queue: Array<{
-    msg: MessageInput;
-    resolve: (result: DryRunResult) => void;
-    reject: (reason?: any) => void;
-  }>;
+  #queue: DryRunQueueItem[];
   #running: boolean;
   #availableDryRuns: DryRunList;
 
@@ -33,14 +35,10 @@ export class DryRunFIFO {
       const dryrun = await this.#availableDryRuns.waitForOne();
       const { msg, resolve, reject } = this.#queue.shift()!;
 
-      try {
-        const res = await dryrun(msg);
-        resolve(res);
-      } catch (e) {
-        reject(e);
-      }
-
-      this.#availableDryRuns.push(dryrun);
+      dryrun(msg)
+        .then(resolve)
+        .catch(reject)
+        .finally(() => this.#availableDryRuns.push(dryrun))
     }
 
     this.#running = false;
