@@ -124,7 +124,7 @@ import {
   GetEarnings,
   GetEarningsRes,
 } from "./functions/lend/getEarnings";
-import { DryRunFIFO } from "./ao/messaging/DryRunFIFO";
+import { DryRunFIFO, DryRunQueue } from "./ao/messaging/DryRunFIFO";
 
 class LiquidOps {
   private signer: any;
@@ -356,4 +356,5 @@ export {
   tokenData,
   lqdTokenAddress,
   DryRunFIFO,
+  DryRunQueue,
 };
