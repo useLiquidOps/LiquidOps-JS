@@ -40,7 +40,7 @@ export class DryRunFIFO {
         reject(e);
       }
 
-      this.#availableDryRuns.push(dryrun)
+      this.#availableDryRuns.push(dryrun);
     }
 
     this.#running = false;
