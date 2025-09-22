@@ -124,10 +124,13 @@ import {
   GetEarnings,
   GetEarningsRes,
 } from "./functions/lend/getEarnings";
+import { DryRunFIFO } from "./ao/messaging/DryRunFIFO";
 
 class LiquidOps {
   private signer: any;
   private configs: Omit<Configs, "MODE">;
+
+  static dryRunFifo?: DryRunFIFO;
 
   constructor(signer: any, configs: Omit<Configs, "MODE"> = {}) {
     if (!signer) {
@@ -352,4 +355,5 @@ export {
   tokenInput,
   tokenData,
   lqdTokenAddress,
+  DryRunFIFO,
 };

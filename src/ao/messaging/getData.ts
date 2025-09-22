@@ -1,5 +1,8 @@
-import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
+import { DryRun, DryRunResult, MessageInput } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { connectToAO, Services } from "../utils/connect";
+import { dryRunAwait } from "../utils/dryRunAwait";
+import { connect } from "@permaweb/aoconnect";
+import LiquidOps from "../..";
 
 interface MessageTags {
   Target: string;
@@ -35,12 +38,15 @@ export async function getData(
 
   try {
     const { dryrun } = connectToAO(config);
-    const { Messages, Spawns, Output, Error } = await dryrun({
+    const msg = {
       process: targetProcessID,
       data: "",
       tags: convertedMessageTags,
       Owner: messageTags.Owner || "1234",
-    });
+    };
+    const { Messages, Spawns, Output, Error } = LiquidOps.dryRunFifo ?
+        await LiquidOps.dryRunFifo.put(msg) :
+        await dryrun(msg);
 
     return {
       Messages,
