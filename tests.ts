@@ -1,4 +1,4 @@
-import LiquidOps from "./src";
+import LiquidOps, { DryRunFIFO } from "./src";
 import { ownerToAddress } from "./tests/testsHelpers/arweaveUtils";
 import { createDataItemSigner } from "@permaweb/aoconnect";
 import { formatGlobalPosition } from "./src/ao/utils/formatGlobalPosition";
@@ -9,6 +9,16 @@ if (!process.env.JWK) {
 
 const JWK: any = JSON.parse(process.env.JWK);
 const signer = createDataItemSigner(JWK);
+
+LiquidOps.dryRunFifo = new DryRunFIFO([
+  "https://cu1.ao-testnet.xyz",
+  "https://cu24.ao-testnet.xyz",
+  "https://cu-af.dataos.so",
+  "https://cu.perplex.finance",
+  "https://cu.arweave.asia",
+  "https://cu.ardrive.io",
+]);
+
 const client = new LiquidOps(signer);
 
 const walletAddress = await ownerToAddress(JWK.n);
@@ -80,9 +90,9 @@ const walletAddress = await ownerToAddress(JWK.n);
 
 //--------------------------------------------------------------------------------------------------------------- liquidations
 
-// const getLiquidationsMap = await client.getLiquidationsMap();
+const getLiquidationsMap = await client.getLiquidationsMap();
 
-// console.log(getLiquidationsMap);
+console.log(getLiquidationsMap);
 
 //-------------------------------
 

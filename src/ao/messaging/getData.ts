@@ -1,4 +1,8 @@
-import { DryRun, DryRunResult, MessageInput } from "@permaweb/aoconnect/dist/lib/dryrun";
+import {
+  DryRun,
+  DryRunResult,
+  MessageInput,
+} from "@permaweb/aoconnect/dist/lib/dryrun";
 import { connectToAO, Services } from "../utils/connect";
 import { dryRunAwait } from "../utils/dryRunAwait";
 import { connect } from "@permaweb/aoconnect";
@@ -44,9 +48,9 @@ export async function getData(
       tags: convertedMessageTags,
       Owner: messageTags.Owner || "1234",
     };
-    const { Messages, Spawns, Output, Error } = LiquidOps.dryRunFifo ?
-        await LiquidOps.dryRunFifo.put(msg) :
-        await dryrun(msg);
+    const { Messages, Spawns, Output, Error } = LiquidOps.dryRunFifo
+      ? await LiquidOps.dryRunFifo.put(msg)
+      : await dryrun(msg);
 
     return {
       Messages,

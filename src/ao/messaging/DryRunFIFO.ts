@@ -1,4 +1,8 @@
-import { DryRun, DryRunResult, MessageInput } from "@permaweb/aoconnect/dist/lib/dryrun";
+import {
+  DryRun,
+  DryRunResult,
+  MessageInput,
+} from "@permaweb/aoconnect/dist/lib/dryrun";
 import { connect } from "@permaweb/aoconnect";
 
 interface DryRunQueueItem {
@@ -15,9 +19,10 @@ export class DryRunFIFO {
   constructor(CUs: string[], delay = 500) {
     this.#queue = [];
     this.#running = false;
-    this.#availableDryRuns = new DryRunList(CUs.map(
-      (CU_URL) => connect({ MODE: "legacy", CU_URL }).dryrun
-    ), delay);
+    this.#availableDryRuns = new DryRunList(
+      CUs.map((CU_URL) => connect({ MODE: "legacy", CU_URL }).dryrun),
+      delay,
+    );
   }
 
   put(msg: MessageInput) {
