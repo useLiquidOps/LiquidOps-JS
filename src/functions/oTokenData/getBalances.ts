@@ -19,19 +19,9 @@ export async function getBalances(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res = await getData(
-      {
-        Target: oTokenAddress,
-        Action: "Balances",
-      },
-      config,
-    );
-
-    if (!res.Messages || !res.Messages[0] || !res.Messages[0].Data) {
-      throw new Error("Invalid response format from getData");
-    }
-
-    const balances = JSON.parse(res.Messages[0].Data);
+    const balances = await (
+      await fetch(`${config?.HB_NODE_URL}/${oTokenAddress}~process@1.0/now/balances~json@1.0/serialize?bundle`)
+    ).json();
 
     const result: GetBalancesRes = {};
 

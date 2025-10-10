@@ -117,30 +117,21 @@ export async function getLiquidations(
     }
 
     // get discovered liquidations
-    const auctionsRes = await getData(
-      {
-        Target: controllerAddress,
-        Action: "Get-Auctions",
-      },
-      config,
-    );
-    // add dry run await to not get rate limited
-    await dryRunAwait(1);
+    const auctions: Record<string, number> = await (
+      await fetch(`${config?.HB_NODE_URL}/${controllerAddress}~process@1.0/now/auctions~json@1.0/serialize?bundle`)
+    ).json();
+    const discountConfig = await (
+      await fetch(`${config?.HB_NODE_URL}/${controllerAddress}~process@1.0/now/discount-config~json@1.0/serialize?bundle`)
+    ).json();
 
     // parse prices and auctions
     const prices: RedstonePrices = JSON.parse(
       redstonePriceFeedRes.Messages[0].Data,
     );
-    const auctions: Record<string, number> = JSON.parse(
-      auctionsRes.Messages[0].Data,
-    );
 
     // maximum discount percentage and discount period
-    const auctionTags = Object.fromEntries(
-      auctionsRes.Messages[0].Tags.map((tag: Tag) => [tag.name, tag.value]),
-    );
-    const maxDiscount = parseFloat(auctionTags["Initial-Discount"]);
-    const discountInterval = parseInt(auctionTags["Discount-Interval"]);
+    const maxDiscount = parseFloat(discountConfig.max);
+    const discountInterval = parseInt(discountConfig.interval);
 
     // Convert positions to the format expected by calculateGlobalPositions
     const allPositions: Record<string, Record<string, TokenPosition>> = {};

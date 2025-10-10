@@ -18,37 +18,11 @@ export async function getBorrowAPR(
     }
 
     const { oTokenAddress } = tokenInput(token);
+    const res = await (
+      await fetch(`${config?.HB_NODE_URL}/${oTokenAddress}~process@1.0/compute/pool-state/rates/borrow`)
+    ).text();
 
-    const checkDataRes = await getData(
-      {
-        Target: oTokenAddress,
-        Action: "Get-APR",
-      },
-      config,
-    );
-
-    const tags = checkDataRes.Messages[0].Tags;
-    const aprResponse: {
-      "Annual-Percentage-Rate": string;
-      "Rate-Multiplier": string;
-    } = {
-      "Annual-Percentage-Rate": "",
-      "Rate-Multiplier": "",
-    };
-
-    tags.forEach((tag: { name: string; value: string }) => {
-      if (
-        tag.name === "Annual-Percentage-Rate" ||
-        tag.name === "Rate-Multiplier"
-      ) {
-        aprResponse[tag.name] = tag.value;
-      }
-    });
-
-    const apr = parseFloat(aprResponse["Annual-Percentage-Rate"]);
-    const rateMultiplier = parseFloat(aprResponse["Rate-Multiplier"]);
-
-    return apr / rateMultiplier;
+    return parseFloat(res);
   } catch (error) {
     throw new Error("Error in getBorrowAPR function: " + error);
   }
