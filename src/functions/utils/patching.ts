@@ -78,7 +78,7 @@ interface Friend {
   denomination: number;
 }
 
-interface PatchStateoToken {
+export interface PatchStateoToken {
   "token-info": {
     name: string;
     ticker: string;

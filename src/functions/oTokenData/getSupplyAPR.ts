@@ -24,8 +24,6 @@ export async function getSupplyAPR(
 
     if (!getBorrowAPRRes) {
       getBorrowAPRRes = await getBorrowAPR({ token }, config);
-      // add await for 1 second due to double dry run request
-      await dryRunAwait(1);
     }
     const borrowAPY = getBorrowAPRRes;
 

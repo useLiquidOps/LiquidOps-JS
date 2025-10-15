@@ -1,21 +1,17 @@
-import { getData } from "../../ao/messaging/getData";
 import {
   tokens,
   redstoneOracleAddress,
-  controllerAddress,
 } from "../../ao/utils/tokenAddressData";
-import { collateralEnabledTickers } from "../../ao/utils/tokenAddressData";
 import { getPosition } from "./getPosition";
 import { dryRunAwait } from "../../ao/utils/dryRunAwait";
-import { convertTicker } from "../../ao/utils/tokenAddressData";
 import {
   calculateGlobalPositions,
   TokenPosition,
   GlobalPosition,
 } from "../../ao/sharedLogic/globalPositionUtils";
 import { Services } from "../../ao/utils/connect";
-
-type RedstonePrices = Record<string, { t: number; a: string; v: number }>;
+import Patching from "../utils/patching";
+import { RedstonePrices } from "../liquidations/getLiquidations";
 
 export interface GetGlobalPositionRes {
   globalPosition: GlobalPosition;
@@ -35,25 +31,17 @@ export async function getGlobalPosition(
       throw new Error("Please specify a wallet address.");
     }
 
+    // setup patching
+    const patching = new Patching(config?.HB_NODE_URL);
+
     // Get list of tokens to process
     const tokensList = Object.keys(tokens);
 
     // Make a request to RedStone oracle for prices
-    const redstonePriceFeedRes = await getData(
-      {
-        Owner: controllerAddress,
-        Target: redstoneOracleAddress,
-        Action: "v2.Request-Latest-Data",
-        Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
-      },
-      config,
-    );
-    // add dry run await to not get rate limited
-    await dryRunAwait(1);
-
-    // Parse prices
-    const prices: RedstonePrices = JSON.parse(
-      redstonePriceFeedRes.Messages[0].Data,
+    const prices = await patching.now(
+      redstoneOracleAddress,
+      "/price",
+      { json: true }
     );
 
     // Fetch positions for each token
