@@ -1,6 +1,7 @@
 import { getData } from "../../ao/messaging/getData";
 import { Services } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
+import Patching from "../utils/patching";
 
 export interface GetBorrowAPR {
   token: TokenInput;
@@ -17,12 +18,15 @@ export async function getBorrowAPR(
       throw new Error("Please specify a token.");
     }
 
+    const patching = new Patching(config?.HB_NODE_URL);
     const { oTokenAddress } = tokenInput(token);
-    const res = await (
-      await fetch(`${config?.HB_NODE_URL}/${oTokenAddress}~process@1.0/compute/pool-state/rates/borrow`)
-    ).text();
+    const res = await patching.now(
+      oTokenAddress,
+      "/pool-state/rates",
+      { json: true }
+    );
 
-    return parseFloat(res);
+    return parseFloat(res.borrow);
   } catch (error) {
     throw new Error("Error in getBorrowAPR function: " + error);
   }

@@ -1,6 +1,6 @@
-import { getData } from "../../ao/messaging/getData";
 import { Services } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
+import Patching from "../utils/patching";
 
 export interface GetBalances {
   token: TokenInput;
@@ -19,9 +19,12 @@ export async function getBalances(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const balances = await (
-      await fetch(`${config?.HB_NODE_URL}/${oTokenAddress}~process@1.0/now/balances~json@1.0/serialize?bundle`)
-    ).json();
+    const patching = new Patching(config?.HB_NODE_URL);
+    const balances = await patching.compute(
+      oTokenAddress,
+      "/balances",
+      { json: true }
+    );
 
     const result: GetBalancesRes = {};
 

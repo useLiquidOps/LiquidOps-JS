@@ -1,5 +1,6 @@
 import { Services } from "../../ao/utils/connect";
 import { tokenInput } from "../../ao/utils/tokenInput";
+import Patching from "../utils/patching";
 
 export interface GetCooldown {
   recipient: string;
@@ -22,12 +23,12 @@ export async function getCooldown(
   if (!token) throw new Error("Please specify a token address");
 
   const { oTokenAddress } = tokenInput(token);
+  const patching = new Patching(config?.HB_NODE_URL);
 
-  const cooldownRes = await (
-    await fetch(
-      `${config?.HB_NODE_URL}/${oTokenAddress}~process@1.0/compute/cooldowns/${recipient}`
-    )
-  ).text();
+  const cooldownRes = (await patching.now(
+    oTokenAddress,
+    `/cooldowns/${recipient}`
+  )).toString();
 
   if (!cooldownRes || cooldownRes == "") {
     return { onCooldown: false };
