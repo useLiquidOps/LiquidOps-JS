@@ -25,12 +25,12 @@ export interface GlobalPosition {
   };
 }
 
-type RedstonePrices = Record<string, { t: number; a: string; v: number }>;
-
 // Shared utility for calculating global positions
 interface CalculateGlobalPositionParams {
   positions: Record<string, Record<string, TokenPosition>>; // walletAddress -> token -> position
-  prices: RedstonePrices;
+  prices: {
+    [ticker: string]: number;
+  };
 }
 
 interface CalculateGlobalPositionResult {
@@ -83,7 +83,7 @@ export function calculateGlobalPositions({
       globalPosition.tokenPositions[token] = tokenPosition;
 
       // Get token price and denomination for USD conversion
-      const tokenPrice = prices[convertTicker(token)].v;
+      const tokenPrice = prices[convertTicker(token)];
       const tokenDenomination =
         tokenData[token as SupportedTokensTickers].denomination;
 

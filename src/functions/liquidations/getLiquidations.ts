@@ -1,6 +1,4 @@
-import { getData } from "../../ao/messaging/getData";
 import {
-  collateralEnabledTickers,
   tokens,
   controllerAddress,
 } from "../../ao/utils/tokenAddressData";
@@ -9,13 +7,16 @@ import {
   getAllPositions,
   GetAllPositionsRes,
 } from "../protocolData/getAllPositions";
-import { dryRunAwait } from "../../ao/utils/dryRunAwait";
-import { convertTicker } from "../../ao/utils/tokenAddressData";
 import {
   calculateGlobalPositions,
   TokenPosition,
 } from "../../ao/sharedLogic/globalPositionUtils";
 import { Services } from "../../ao/utils/connect";
+import Patching from "../utils/patching";
+
+export interface RedstonePrices {
+  [ticker: string]: number;
+};
 
 export interface GetLiquidationsRes {
   liquidations: Map<string, QualifyingPosition>;
@@ -38,11 +39,6 @@ export interface QualifyingPosition {
   discount: BigInt;
 }
 
-export type RedstonePrices = Record<
-  string,
-  { t: number; a: string; v: number }
->;
-
 interface Tag {
   name: string;
   value: string;
@@ -60,19 +56,15 @@ export async function getLiquidations(
     // Get list of tokens to process
     const tokensList = Object.keys(tokens);
 
-    // Make a request to RedStone oracle process for prices (same used onchain)
-    const redstonePriceFeedRes = await getData(
-      {
-        Owner: controllerAddress,
-        Target: redstoneOracleAddress,
-        Action: "v2.Request-Latest-Data",
-        Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
-      },
-      config,
-    );
+    // patching config
+    const patching = new Patching(config?.HB_NODE_URL);
 
-    // add dry run await to not get rate limited
-    await dryRunAwait(1);
+    // Make a request to RedStone oracle process for prices (same used onchain)
+    const prices = await patching.now(
+      redstoneOracleAddress,
+      "/price",
+      { json: true }
+    );
 
     // Get positions for each token
     const positionsList = [];
@@ -84,8 +76,6 @@ export async function getLiquidations(
       for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
           positions = await getAllPositions({ token }, config);
-          // add dry run await to not get rate limited
-          await dryRunAwait(1);
           break; // Success, exit retry loop
         } catch (error) {
           console.log(
@@ -117,21 +107,22 @@ export async function getLiquidations(
     }
 
     // get discovered liquidations
-    const auctions: Record<string, number> = await (
-      await fetch(`${config?.HB_NODE_URL}/${controllerAddress}~process@1.0/now/auctions~json@1.0/serialize?bundle`)
-    ).json();
-    const discountConfig = await (
-      await fetch(`${config?.HB_NODE_URL}/${controllerAddress}~process@1.0/now/discount-config~json@1.0/serialize?bundle`)
-    ).json();
-
-    // parse prices and auctions
-    const prices: RedstonePrices = JSON.parse(
-      redstonePriceFeedRes.Messages[0].Data,
-    );
+    const [auctions, discountConfig] = await Promise.all([
+      patching.now(
+        controllerAddress,
+        "/auctions",
+        { json: true }
+      ),
+      patching.compute(
+        controllerAddress,
+        "/discount-config",
+        { json: true }
+      )
+    ]);
 
     // maximum discount percentage and discount period
-    const maxDiscount = parseFloat(discountConfig.max);
-    const discountInterval = parseInt(discountConfig.interval);
+    const maxDiscount = discountConfig.max;
+    const discountInterval = discountConfig.interval;
 
     // Convert positions to the format expected by calculateGlobalPositions
     const allPositions: Record<string, Record<string, TokenPosition>> = {};
