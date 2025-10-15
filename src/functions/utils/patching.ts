@@ -166,5 +166,15 @@ interface PatchStateController {
 }
 
 interface PatchStateOracle {
-
+  "token-info": {
+    name: string;
+    version: string;
+  };
+  whitelist: string[];
+  relayers: string[];
+  prices: Record<number, {
+    price: number;
+    timestamp: number;
+  }>;
+  price: Record<string, number>;
 }
