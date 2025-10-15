@@ -21,7 +21,7 @@ export async function getOrderResult(
   const { oTokenAddress } = tokenInput(token);
   const patching = new Patching(config?.HB_NODE_URL);
 
-  return await patching.compute(
+  return await patching.now(
     oTokenAddress,
     `/orders/${orderId}`,
     { json: true }
