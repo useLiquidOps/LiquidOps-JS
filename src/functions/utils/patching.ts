@@ -5,8 +5,8 @@ export default class Patching {
     this.#hbNode = node;
   }
 
-  async compute<Process extends string, Path extends string>(process: Process, path: Path, config?: GetPatchConfig) {
-    return await this.#get<Process, Path>(
+  async compute<Process extends string, Path extends string, Config extends GetPatchConfig>(process: Process, path: Path, config?: Config) {
+    return await this.#get<Process, Path, Config>(
       process,
       path,
       "compute",
@@ -14,8 +14,8 @@ export default class Patching {
     );
   }
 
-  async now<Process extends string, Path extends string>(process: Process, path: Path, config?: GetPatchConfig) {
-    return await this.#get<Process, Path>(
+  async now<Process extends string, Path extends string, Config extends GetPatchConfig>(process: Process, path: Path, config?: Config) {
+    return await this.#get<Process, Path, Config>(
       process,
       path,
       "now",
@@ -23,7 +23,7 @@ export default class Patching {
     );
   }
 
-  async #get<Process extends string, Path extends string>(process: Process, path: Path, method: "now" | "compute", config?: GetPatchConfig): Promise<PathValue<PatchState<Process>, Path>> {
+  async #get<Process extends string, Path extends string, Config extends GetPatchConfig>(process: Process, path: Path, method: "now" | "compute", config?: Config): Promise<Config["json"] extends true ? PathValue<PatchState<Process>, Path> : string> {
     const searchParams = new URLSearchParams();
 
     if (config?.json) {

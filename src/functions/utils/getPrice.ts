@@ -7,6 +7,7 @@ import {
 import { redstoneOracleAddress } from "../../ao/utils/tokenAddressData";
 import { RedstonePrices } from "../liquidations/getLiquidations";
 import { Services } from "../../ao/utils/connect";
+import Patching from "./patching";
 
 export interface GetPrice {
   token: TokenInput | string;
@@ -22,23 +23,12 @@ export async function getPrice(
     throw new Error("Please specify a token.");
   }
 
-  try {
-    const redstonePriceFeedRes = await getData(
-      {
-        Owner: controllerAddress,
-        Target: redstoneOracleAddress,
-        Action: "v2.Request-Latest-Data",
-        Tickers: JSON.stringify([convertTicker(token)]),
-      },
-      config,
-    );
+  const patching = new Patching(config?.HB_NODE_URL);
+  const prices = await patching.now(
+    redstoneOracleAddress,
+    "/price",
+    { json: true }
+  );
 
-    const prices: RedstonePrices = JSON.parse(
-      redstonePriceFeedRes.Messages[0].Data,
-    );
-
-    return prices[convertTicker(token)].v;
-  } catch (error) {
-    throw new Error("Error getting price: " + error);
-  }
+  return prices[convertTicker(token)] || 0;
 }

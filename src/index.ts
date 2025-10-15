@@ -263,7 +263,7 @@ class LiquidOps {
   //--------------------------------------------------------------------------------------------------------------- utils
 
   async getBalance(params: GetBalance): Promise<GetBalanceRes> {
-    return getBalance(params);
+    return getBalance(params, this.configs);
   }
 
   async getPrice(params: GetPrice): Promise<GetPriceRes> {

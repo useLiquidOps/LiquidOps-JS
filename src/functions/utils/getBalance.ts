@@ -1,5 +1,6 @@
 import { Token, Quantity } from "ao-tokens";
-import { getInfo } from "../oTokenData/getInfo";
+import Patching from "./patching";
+import { Services } from "../../ao/utils/connect";
 
 export interface GetBalance {
   tokenAddress: string;
@@ -11,16 +12,23 @@ export type GetBalanceRes = Quantity;
 export async function getBalance({
   tokenAddress,
   walletAddress,
-}: GetBalance): Promise<GetBalanceRes> {
+}: GetBalance, config?: Services): Promise<GetBalanceRes> {
   if (!tokenAddress || !walletAddress) {
     throw new Error("Please specify a tokenAddress and walletAddress.");
   }
 
-  try {
-    const tokenInstance = await Token(tokenAddress);
-    const balance = await tokenInstance.getBalance(walletAddress);
-    return new Quantity(balance.raw, tokenInstance.info.Denomination);
-  } catch (error) {
-    throw new Error("Error getting balance: " + error);
-  }
+  const patching = new Patching(config?.HB_NODE_URL);
+  const [rawBalance, tokenInfo] = await Promise.all([
+    patching.now(
+      tokenAddress,
+      `/balances/${walletAddress}`
+    ),
+    patching.compute(
+      tokenAddress,
+      "/token-info",
+      { json: true }
+    )
+  ]);
+
+  return new Quantity(rawBalance, BigInt(tokenInfo.denomination));
 }

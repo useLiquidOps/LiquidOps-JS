@@ -25,10 +25,10 @@ export async function getCooldown(
   const { oTokenAddress } = tokenInput(token);
   const patching = new Patching(config?.HB_NODE_URL);
 
-  const cooldownRes = (await patching.now(
+  const cooldownRes = await patching.now(
     oTokenAddress,
     `/cooldowns/${recipient}`
-  )).toString();
+  );
 
   if (!cooldownRes || cooldownRes == "") {
     return { onCooldown: false };
