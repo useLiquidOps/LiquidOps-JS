@@ -4,6 +4,9 @@ import { getBorrowAPR, GetBorrowAPRRes } from "./getBorrowAPR";
 import { getInfo, GetInfoRes } from "./getInfo";
 import { dryRunAwait } from "../../ao/utils/dryRunAwait";
 import { Services } from "../../ao/utils/connect";
+import { getEnvironment } from "./getEnvironment";
+import { getCurrentState } from "./getCurrentState";
+import { tokenData } from "../../ao/utils/tokenAddressData";
 
 export interface GetSupplyAPR {
   token: TokenInput;
@@ -27,26 +30,20 @@ export async function getSupplyAPR(
     }
     const borrowAPY = getBorrowAPRRes;
 
-    const { tokenAddress } = tokenInput(token);
-    // validate getInfoRes is for the correct token
-    if (getInfoRes && getInfoRes.collateralId !== tokenAddress) {
-      throw new Error("getInfoRes supplied does not match token supplied.");
-    }
-    if (!getInfoRes) {
-      getInfoRes = await getInfo({ token }, config);
-    }
+    const [environment, currentState, info] = await Promise.all([
+      getEnvironment({ token }, config),
+      getCurrentState({ token }, config),
+      getInfo({ token }, config)
+    ]);
 
-    const { totalBorrows, collateralDenomination, reserveFactor, totalSupply } =
-      getInfoRes;
-
-    const scaledCollateralDenomination = BigInt(collateralDenomination);
+    const scaledCollateralDenomination = tokenData[token].baseDenomination;
 
     const scaledTotalBorrows = new Quantity(
-      totalBorrows,
+      currentState["total-borrows"],
       scaledCollateralDenomination,
     );
     const scaledTotalSupply = new Quantity(
-      totalSupply,
+      info.supply,
       scaledCollateralDenomination,
     );
 
@@ -57,7 +54,7 @@ export async function getSupplyAPR(
     ).toNumber();
 
     // Reserve factor in fractions
-    const reserveFactorFract = Number(reserveFactor) / 100;
+    const reserveFactorFract = Number(environment["risk-parameters"]["reserve-factor"]) / 100;
 
     // Apply standard Compound V2 formula:
     // Supply APY = Borrow APY × Utilization Rate × (1 - Reserve Factor)

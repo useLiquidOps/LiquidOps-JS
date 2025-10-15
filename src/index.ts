@@ -125,6 +125,8 @@ import {
   GetEarningsRes,
 } from "./functions/lend/getEarnings";
 import { DryRunFIFO } from "./ao/messaging/DryRunFIFO";
+import { GetEnvironment, getEnvironment, GetEnvironmentRes } from "./functions/oTokenData/getEnvironment";
+import { getCurrentState, GetCurrentState, GetCurrentStateRes } from "./functions/oTokenData/getCurrentState";
 
 class LiquidOps {
   private signer: any;
@@ -230,6 +232,14 @@ class LiquidOps {
     return getInfo(params, this.configs);
   }
 
+  async getEnvironment(params: GetEnvironment): Promise<GetEnvironmentRes> {
+    return getEnvironment(params, this.configs);
+  }
+
+  async getCurrentState(params: GetCurrentState): Promise<GetCurrentStateRes> {
+    return getCurrentState(params, this.configs);
+  }
+
   async getPosition(params: GetPosition): Promise<GetPositionRes> {
     return getPosition(params, this.configs);
   }
@@ -323,6 +333,10 @@ export type {
   GetPositionRes,
   GetSupplyAPR,
   GetSupplyAPRRes,
+  GetCurrentState,
+  GetCurrentStateRes,
+  GetEnvironment,
+  GetEnvironmentRes,
 
   // protocol data
   GetAllPositions,
