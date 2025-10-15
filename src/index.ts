@@ -127,6 +127,7 @@ import {
 import { DryRunFIFO } from "./ao/messaging/DryRunFIFO";
 import { GetEnvironment, getEnvironment, GetEnvironmentRes } from "./functions/oTokenData/getEnvironment";
 import { getCurrentState, GetCurrentState, GetCurrentStateRes } from "./functions/oTokenData/getCurrentState";
+import { getOrderResult, GetOrderResult, GetOrderResultRes } from "./functions/utils/getOrderResult";
 
 class LiquidOps {
   private signer: any;
@@ -282,6 +283,10 @@ class LiquidOps {
     return trackResult({ signer: this.signer, configs: this.configs }, params);
   }
 
+  async getOrderResult(params: GetOrderResult): Promise<GetOrderResultRes | undefined> {
+    return getOrderResult(params, this.configs);
+  }
+
   //--------------------------------------------------------------------------------------------------------------- process data
 
   static oTokens = oTokens;
@@ -353,6 +358,8 @@ export type {
   TransferRes,
   TrackResult,
   TrackResultRes,
+  GetOrderResult,
+  GetOrderResultRes,
 
   // Utility types for constructor/setup
   AoUtils,
