@@ -1,4 +1,3 @@
-import { getData } from "../../ao/messaging/getData";
 import { Services } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
 import Patching from "../utils/patching";
