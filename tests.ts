@@ -1,4 +1,4 @@
-import LiquidOps, { DryRunFIFO } from "./src";
+import LiquidOps, { DryRunFIFO, lqdTokenAddress } from "./src";
 import { ownerToAddress } from "./tests/testsHelpers/arweaveUtils";
 import { createDataItemSigner } from "@permaweb/aoconnect";
 import { formatGlobalPosition } from "./src/ao/utils/formatGlobalPosition";

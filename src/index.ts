@@ -125,6 +125,9 @@ import {
   GetEarningsRes,
 } from "./functions/lend/getEarnings";
 import { DryRunFIFO } from "./ao/messaging/DryRunFIFO";
+import { GetEnvironment, getEnvironment, GetEnvironmentRes } from "./functions/oTokenData/getEnvironment";
+import { getCurrentState, GetCurrentState, GetCurrentStateRes } from "./functions/oTokenData/getCurrentState";
+import { getOrderResult, GetOrderResult, GetOrderResultRes } from "./functions/utils/getOrderResult";
 
 class LiquidOps {
   private signer: any;
@@ -230,6 +233,14 @@ class LiquidOps {
     return getInfo(params, this.configs);
   }
 
+  async getEnvironment(params: GetEnvironment): Promise<GetEnvironmentRes> {
+    return getEnvironment(params, this.configs);
+  }
+
+  async getCurrentState(params: GetCurrentState): Promise<GetCurrentStateRes> {
+    return getCurrentState(params, this.configs);
+  }
+
   async getPosition(params: GetPosition): Promise<GetPositionRes> {
     return getPosition(params, this.configs);
   }
@@ -253,7 +264,7 @@ class LiquidOps {
   //--------------------------------------------------------------------------------------------------------------- utils
 
   async getBalance(params: GetBalance): Promise<GetBalanceRes> {
-    return getBalance(params);
+    return getBalance(params, this.configs);
   }
 
   async getPrice(params: GetPrice): Promise<GetPriceRes> {
@@ -270,6 +281,10 @@ class LiquidOps {
 
   async trackResult(params: TrackResult): Promise<TrackResultRes | undefined> {
     return trackResult({ signer: this.signer, configs: this.configs }, params);
+  }
+
+  async getOrderResult(params: GetOrderResult): Promise<GetOrderResultRes | undefined> {
+    return getOrderResult(params, this.configs);
   }
 
   //--------------------------------------------------------------------------------------------------------------- process data
@@ -323,6 +338,10 @@ export type {
   GetPositionRes,
   GetSupplyAPR,
   GetSupplyAPRRes,
+  GetCurrentState,
+  GetCurrentStateRes,
+  GetEnvironment,
+  GetEnvironmentRes,
 
   // protocol data
   GetAllPositions,
@@ -339,6 +358,8 @@ export type {
   TransferRes,
   TrackResult,
   TrackResultRes,
+  GetOrderResult,
+  GetOrderResultRes,
 
   // Utility types for constructor/setup
   AoUtils,

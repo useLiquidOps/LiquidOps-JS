@@ -1,6 +1,6 @@
-import { getData } from "../../ao/messaging/getData";
 import { Services } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
+import Patching from "../utils/patching";
 
 export interface GetAllPositions {
   token: TokenInput;
@@ -25,16 +25,13 @@ export async function getAllPositions(
     }
 
     const { oTokenAddress } = tokenInput(token);
+    const patching = new Patching(config?.HB_NODE_URL);
 
-    const res = await getData(
-      {
-        Target: oTokenAddress,
-        Action: "Positions",
-      },
-      config,
+    const allPositions = await patching.now(
+      oTokenAddress,
+      "/positions",
+      { json: true }
     );
-
-    const allPositions = JSON.parse(res.Messages[0].Data);
 
     const transformedPositions: GetAllPositionsRes = {};
 
@@ -42,10 +39,10 @@ export async function getAllPositions(
       const originalPosition = allPositions[walletAddress];
 
       transformedPositions[walletAddress] = {
-        borrowBalance: BigInt(originalPosition["Borrow-Balance"]),
-        capacity: BigInt(originalPosition.Capacity),
-        collateralization: BigInt(originalPosition["Collateralization"]),
-        liquidationLimit: BigInt(originalPosition["Liquidation-Limit"]),
+        borrowBalance: BigInt(originalPosition.borrowBalance),
+        capacity: BigInt(originalPosition.capacity),
+        collateralization: BigInt(originalPosition.collateralization),
+        liquidationLimit: BigInt(originalPosition.liquidationLimit),
       };
     }
 

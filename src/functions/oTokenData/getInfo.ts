@@ -1,39 +1,12 @@
-import { getData } from "../../ao/messaging/getData";
 import { Services } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
+import Patching, { PatchStateoToken } from "../utils/patching";
 
 export interface GetInfo {
   token: TokenInput;
 }
 
-export interface GetInfoRes {
-  collateralDenomination: string;
-  liquidationThreshold: string;
-  totalSupply: string;
-  totalBorrows: string;
-  valueLimit: string;
-  name: string;
-  collateralFactor: string;
-  totalReserves: string;
-  cash: string;
-  oracle: string;
-  logo: string;
-  reserveFactor: string;
-  denomination: string;
-  collateralId: string;
-  ticker: string;
-  kinkParam: string;
-  jumpRate: string;
-  baseRate: string;
-  utilization: string;
-  initRate: string;
-  oracleDelayTolerance: string;
-}
-
-interface Tag {
-  name: string;
-  value: string;
-}
+export type GetInfoRes = PatchStateoToken["token-info"];
 
 export async function getInfo(
   { token }: GetInfo,
@@ -45,23 +18,13 @@ export async function getInfo(
     }
 
     const { oTokenAddress } = tokenInput(token);
+    const patching = new Patching(config?.HB_NODE_URL);
 
-    const res = await getData(
-      {
-        Target: oTokenAddress,
-        Action: "Info",
-      },
-      config,
+    return await patching.compute(
+      oTokenAddress,
+      "/token-info",
+      { json: true }
     );
-
-    const tagsObject = Object.fromEntries(
-      res.Messages[0].Tags.map((tag: Tag) => [
-        (tag.name[0].toLowerCase() + tag.name.slice(1)).replace(/-/g, ""),
-        tag.value,
-      ]),
-    );
-
-    return tagsObject as GetInfoRes;
   } catch (error) {
     throw new Error("Error in getInfo function: " + error);
   }

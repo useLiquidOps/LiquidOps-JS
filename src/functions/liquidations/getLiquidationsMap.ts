@@ -1,4 +1,3 @@
-import { getData } from "../../ao/messaging/getData";
 import {
   collateralEnabledTickers,
   controllerAddress,
@@ -17,6 +16,7 @@ import {
 } from "../../ao/sharedLogic/globalPositionUtils";
 import { RedstonePrices } from "./getLiquidations";
 import { Services } from "../../ao/utils/connect";
+import Patching from "../utils/patching";
 
 export interface GetLiquidationsMapRes {
   /** The wallet/user address that owns this position */
@@ -42,19 +42,15 @@ export async function getLiquidationsMap(
     // Get list of tokens to process
     const tokensList = Object.keys(tokens);
 
-    // Make a request to RedStone oracle process for prices (same used onchain)
-    const redstonePriceFeedRes = await getData(
-      {
-        Owner: controllerAddress,
-        Target: redstoneOracleAddress,
-        Action: "v2.Request-Latest-Data",
-        Tickers: JSON.stringify(collateralEnabledTickers.map(convertTicker)),
-      },
-      config,
-    );
+    // setup patching
+    const patching = new Patching(config?.HB_NODE_URL);
 
-    // add dry run await to not get rate limited
-    await dryRunAwait(1);
+    // Make a request to RedStone oracle process for prices (same used onchain)
+    const prices = await patching.now(
+      redstoneOracleAddress,
+      "/price",
+      { json: true }
+    );
 
     // Get positions for each token
     const positionsList = [];
@@ -97,11 +93,6 @@ export async function getLiquidationsMap(
         positions,
       });
     }
-
-    // parse prices
-    const prices: RedstonePrices = JSON.parse(
-      redstonePriceFeedRes.Messages[0].Data,
-    );
 
     // Convert positions to the format expected by calculateGlobalPositions
     const allPositions: Record<string, Record<string, TokenPosition>> = {};

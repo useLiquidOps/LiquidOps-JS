@@ -15,7 +15,7 @@ function getTokenValue(
 ) {
   // token datas
   const fromData = {
-    price: prices[convertTicker(from.token)].v,
+    price: prices[convertTicker(from.token)],
     scale:
       BigInt(10) **
       tokenData[from.token as SupportedTokensTickers].denomination,
@@ -24,7 +24,7 @@ function getTokenValue(
     Math.round(fromData.price * Number(fromData.scale)),
   );
   const toData = {
-    price: prices[convertTicker(to)].v,
+    price: prices[convertTicker(to)],
     scale: BigInt(10) ** tokenData[to as SupportedTokensTickers].denomination,
   };
   const toScaledPrice = BigInt(Math.round(toData.price * Number(toData.scale)));

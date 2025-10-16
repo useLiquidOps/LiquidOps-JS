@@ -16,6 +16,7 @@ export type Services = {
   GRAPHQL_RETRY_BACKOFF?: number;
   MU_URL?: string;
   CU_URL?: string;
+  HB_NODE_URL?: string;
 };
 
 export interface AoUtils {
@@ -30,6 +31,7 @@ const DEFAULT_SERVICES: Services = {
   MU_URL: "https://mu.ao-testnet.xyz",
   CU_URL: "https://cu.ao-testnet.xyz",
   GATEWAY_URL: "https://arweave.net",
+  HB_NODE_URL: "https://state-2.forward.computer",
 };
 
 export function connectToAO(services?: Partial<Services>) {
@@ -46,6 +48,7 @@ export function connectToAO(services?: Partial<Services>) {
     GATEWAY_URL = DEFAULT_SERVICES.GATEWAY_URL,
     MU_URL = DEFAULT_SERVICES.MU_URL,
     CU_URL = DEFAULT_SERVICES.CU_URL,
+    HB_NODE_URL = DEFAULT_SERVICES.HB_NODE_URL,
   } = services || {};
 
   const configs = {
@@ -55,6 +58,7 @@ export function connectToAO(services?: Partial<Services>) {
     GRAPHQL_RETRY_BACKOFF,
     MU_URL,
     CU_URL,
+    HB_NODE_URL,
   };
 
   const { spawn, message, result, dryrun } = connect({

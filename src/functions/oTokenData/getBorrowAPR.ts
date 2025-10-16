@@ -1,6 +1,6 @@
-import { getData } from "../../ao/messaging/getData";
 import { Services } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
+import Patching from "../utils/patching";
 
 export interface GetBorrowAPR {
   token: TokenInput;
@@ -17,38 +17,15 @@ export async function getBorrowAPR(
       throw new Error("Please specify a token.");
     }
 
+    const patching = new Patching(config?.HB_NODE_URL);
     const { oTokenAddress } = tokenInput(token);
-
-    const checkDataRes = await getData(
-      {
-        Target: oTokenAddress,
-        Action: "Get-APR",
-      },
-      config,
+    const res = await patching.now(
+      oTokenAddress,
+      "/pool-state/rates",
+      { json: true }
     );
 
-    const tags = checkDataRes.Messages[0].Tags;
-    const aprResponse: {
-      "Annual-Percentage-Rate": string;
-      "Rate-Multiplier": string;
-    } = {
-      "Annual-Percentage-Rate": "",
-      "Rate-Multiplier": "",
-    };
-
-    tags.forEach((tag: { name: string; value: string }) => {
-      if (
-        tag.name === "Annual-Percentage-Rate" ||
-        tag.name === "Rate-Multiplier"
-      ) {
-        aprResponse[tag.name] = tag.value;
-      }
-    });
-
-    const apr = parseFloat(aprResponse["Annual-Percentage-Rate"]);
-    const rateMultiplier = parseFloat(aprResponse["Rate-Multiplier"]);
-
-    return apr / rateMultiplier;
+    return parseFloat(res.borrow);
   } catch (error) {
     throw new Error("Error in getBorrowAPR function: " + error);
   }

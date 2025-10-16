@@ -1,21 +1,13 @@
-import { getData } from "../../ao/messaging/getData";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
-import { convertTicker } from "../../ao/utils/tokenAddressData";
 import { Services } from "../../ao/utils/connect";
+import Patching, { PatchStateoToken } from "../utils/patching";
 
 export interface GetPosition {
   token: TokenInput;
   recipient: string;
 }
 
-export interface GetPositionRes {
-  capacity: string;
-  borrowBalance: string;
-  collateralTicker: string;
-  collateralDenomination: string;
-  collateralization: string;
-  liquidationLimit: string;
-}
+export type GetPositionRes = PatchStateoToken["positions"][""];
 
 interface Tag {
   name: string;
@@ -32,28 +24,13 @@ export async function getPosition(
     }
 
     const { oTokenAddress } = tokenInput(token);
+    const patching = new Patching(config?.HB_NODE_URL);
 
-    const res = await getData(
-      {
-        Target: oTokenAddress,
-        Action: "Position",
-        ...(recipient && { Recipient: recipient }),
-      },
-      config,
-    );
-
-    const tagsObject = Object.fromEntries(
-      res.Messages[0].Tags.map((tag: Tag) => [tag.name, tag.value]),
-    );
-
-    return {
-      capacity: tagsObject["Capacity"],
-      borrowBalance: tagsObject["Borrow-Balance"],
-      collateralTicker: convertTicker(tagsObject["Collateral-Ticker"]),
-      collateralDenomination: tagsObject["Collateral-Denomination"],
-      collateralization: tagsObject["Collateralization"],
-      liquidationLimit: tagsObject["Liquidation-Limit"],
-    };
+    return await patching.now(
+      oTokenAddress,
+      `/positions/${recipient}`,
+      { json: true }
+    )
   } catch (error) {
     throw new Error("Error in getPosition function: " + error);
   }

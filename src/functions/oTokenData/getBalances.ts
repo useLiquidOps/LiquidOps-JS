@@ -1,6 +1,6 @@
-import { getData } from "../../ao/messaging/getData";
 import { Services } from "../../ao/utils/connect";
 import { TokenInput, tokenInput } from "../../ao/utils/tokenInput";
+import Patching from "../utils/patching";
 
 export interface GetBalances {
   token: TokenInput;
@@ -19,19 +19,12 @@ export async function getBalances(
 
     const { oTokenAddress } = tokenInput(token);
 
-    const res = await getData(
-      {
-        Target: oTokenAddress,
-        Action: "Balances",
-      },
-      config,
+    const patching = new Patching(config?.HB_NODE_URL);
+    const balances = await patching.compute(
+      oTokenAddress,
+      "/balances",
+      { json: true }
     );
-
-    if (!res.Messages || !res.Messages[0] || !res.Messages[0].Data) {
-      throw new Error("Invalid response format from getData");
-    }
-
-    const balances = JSON.parse(res.Messages[0].Data);
 
     const result: GetBalancesRes = {};
 
